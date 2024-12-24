@@ -1,0 +1,82 @@
+/*
+Theme Name: Nathalie Mota
+Theme URI: https://wordpress.org/themes/twentytwentyone/
+Template: twentytwentyone
+Author: the WordPress team
+Author URI: https://wordpress.org/
+Description: Twenty Twenty-One is a blank canvas for your ideas and it makes the block editor your best brush. With new block patterns, which allow you to create a beautiful layout in a matter of seconds, this theme’s soft colors and eye-catching — yet timeless — design will let your work shine. Take it for a spin! See how Twenty Twenty-One elevates your portfolio, business website, or personal blog.
+Tags: one-column,accessibility-ready,custom-colors,custom-menu,custom-logo,editor-style,featured-images,footer-widgets,block-patterns,rtl-language-support,sticky-post,threaded-comments,translation-ready,blog,portfolio
+Version: 2.4.1735051098
+Updated: 2024-12-24 14:38:18
+
+*/
+
+/* Style du header */
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.site-header .logo img {
+    max-height: 50px;
+}
+
+.site-header .main-navigation {
+    display: flex;
+}
+
+.site-header .menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.site-header .menu li {
+    display: inline;
+}
+
+.site-header .menu li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.site-header .menu li a:hover {
+    color: #0073e6;
+}
+
+/* Style du footer */
+.site-footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.site-footer .footer-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.site-footer .footer-menu li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.site-footer .footer-menu li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.site-footer .footer-menu li a:hover {
+    color: #0073e6;
+}
+
+.site-footer p {
+    margin-top: 20px;
+    font-size: 14px;
+}
