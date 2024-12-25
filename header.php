@@ -13,9 +13,9 @@ if ( !defined( 'ABSPATH' ) ) exit;
     <?php wp_head(); ?>
 </head>
 
-<body <?php body_class(); ?>>
-    <header id="site-header" class="site-header">
-        <div class="header-container">
+<header id="site-header" class="site-header">
+    <div class="header-container">
+        <nav class="main-navigation">
             <!-- Logo -->
             <div class="logo">
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>">
@@ -23,15 +23,16 @@ if ( !defined( 'ABSPATH' ) ) exit;
                 </a>
             </div>
 
-<!-- Menu -->
-<nav id="site-navigation" class="main-navigation">
-    <ul class="menu">
-        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Accueil</a></li>
-        <li><a href="<?php echo esc_url( home_url( '/a-propos' ) ); ?>">À propos</a></li>
-        <li><a href="<?php echo esc_url( home_url( '/contact' ) ); ?>">Contact</a></li>
-    </ul>
-</nav>
-        </div>
-    </header>
-
-    <div id="content" class="site-content">
+            <!-- Menu -->
+            <?php
+            if ( has_nav_menu( 'menu' ) ) {
+                wp_nav_menu( array(
+                    'theme_location' => 'menu',
+                    'menu_class'     => 'header-menu', 
+                    'container'      => 'ul',          
+                ) );
+            } 
+            ?>
+        </nav>
+    </div>
+</header>

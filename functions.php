@@ -23,14 +23,55 @@ endif;
 add_action( 'wp_enqueue_scripts', 'child_theme_configurator_css', 10 );
 // END ENQUEUE PARENT ACTION
 
-// Enregistrer les menus
-function my_theme_register_menus() {
+
+// Enregistrer le menu
+function register_my_menu() {
     register_nav_menus( array(
-        'main-menu'    => __( 'Main Menu', 'textdomain' ),
-        'footer-menu'  => __( 'Footer Menu', 'textdomain' ), // Menu pour le footer
+        'menu' => __( 'Menu Principal', 'text-domain' ), // Ajouter un text-domain pour la traduction
     ) );
 }
-add_action( 'after_setup_theme', 'my_theme_register_menus' );
+add_action( 'init', 'register_my_menu' );
+
+
+// Enqueue des polices personnalisées
+function enqueue_custom_fonts() {
+    echo '<style type="text/css">
+        @font-face {
+            font-family: "Space Mono";
+            src: url("' . get_stylesheet_directory_uri() . '/assets/fonts/SpaceMono-Regular.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: "Space Mono";
+            src: url("' . get_stylesheet_directory_uri() . '/assets/fonts/SpaceMono-Italic.ttf") format("truetype");
+            font-weight: normal;
+            font-style: italic;
+        }
+        @font-face {
+            font-family: "Space Mono";
+            src: url("' . get_stylesheet_directory_uri() . '/assets/fonts/SpaceMono-Bold.ttf") format("truetype");
+            font-weight: bold;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: "Space Mono";
+            src: url("' . get_stylesheet_directory_uri() . '/assets/fonts/SpaceMono-BoldItalic.ttf") format("truetype");
+            font-weight: bold;
+            font-style: italic;
+        }
+    </style>';
+}
+add_action( 'wp_head', 'enqueue_custom_fonts' );
+
+
+// Enqueue le style du thème enfant
+function child_theme_configurator_css() {
+    wp_enqueue_style( 'chld_thm_cfg_child', get_stylesheet_uri(), array( 'twenty-twenty-one-style' ) ); // Style du thème enfant
+}
+add_action( 'wp_enqueue_scripts', 'child_theme_configurator_css', 10 );
+
+
 
 // Créer un shortcode pour afficher les liens vers les mentions légales et la vie privée
 function my_custom_footer_links() {
