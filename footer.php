@@ -1,9 +1,9 @@
 <footer id="site-footer" class="site-footer">
-    <div class="footer-content">
-        <ul class="footer-menu">
-            <li><a href="<?php echo esc_url( home_url( '/mentions-legales' ) ); ?>">Mentions légales</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/vie-privee' ) ); ?>">Vie privée</a></li>
-            <li>&copy; Tous droits réservés</li>
-        </ul>
-    </div>
+    <?php wp_nav_menu( array(
+        'theme_location' => 'footer_menu',
+        'menu_class' => 'footer-links',
+        'container' => false,
+    ) ); ?>
+
+    <?php get_template_part('templates_part/modal'); ?> <!-- Appel au fichier modal.php -->
 </footer>

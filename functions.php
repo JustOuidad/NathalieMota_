@@ -92,5 +92,36 @@ function my_custom_footer_links() {
     return $html;
 }
 add_shortcode( 'footer_links', 'my_custom_footer_links' );
-?>
 
+
+function passer_donnees_acf_js() {
+    wp_localize_script(
+        'custom-script', 
+        'acfData', 
+        array(
+            'exampleField' => get_field('nom_du_champ_acf', 'option'), // Exemple de champ
+        )
+    );
+}
+add_action('wp_enqueue_scripts', 'passer_donnees_acf_js');
+
+
+function enregistrer_menus() {
+    register_nav_menus( array(
+        'footer_menu' => 'Menu du pied de page',
+    ) );
+}
+add_action( 'init', 'enregistrer_menus' );
+
+
+function ajouter_scripts_personnalises() {
+    wp_enqueue_script(
+        'custom-script',
+        get_stylesheet_directory_uri() . '/js/custom.js', // Chemin du fichier JS
+        array('jquery'), 
+        '1.0', 
+        true 
+    );
+}
+add_action('wp_enqueue_scripts', 'ajouter_scripts_personnalises');
+?>

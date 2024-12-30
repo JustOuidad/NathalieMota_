@@ -35,4 +35,5 @@ if ( !defined( 'ABSPATH' ) ) exit;
             ?>
         </nav>
     </div>
+    
 </header>
