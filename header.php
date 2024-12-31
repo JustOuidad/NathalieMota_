@@ -8,10 +8,10 @@ if ( !defined( 'ABSPATH' ) ) exit;
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="profile" href="http://gmpg.org/xfn/11">
-    <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
     <?php wp_head(); ?>
 </head>
+
+<body <?php body_class(); ?>>
 
 <header id="site-header" class="site-header">
     <div class="header-container">
@@ -25,15 +25,15 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
             <!-- Menu -->
             <?php
-            if ( has_nav_menu( 'menu' ) ) {
+            if ( has_nav_menu( 'Menu' ) ) {  
                 wp_nav_menu( array(
-                    'theme_location' => 'menu',
+                    'theme_location' => 'Menu',  
                     'menu_class'     => 'header-menu', 
                     'container'      => 'ul',          
                 ) );
             } 
             ?>
+
         </nav>
     </div>
-    
 </header>

@@ -1,29 +1,26 @@
-document.addEventListener("DOMContentLoaded", function() {
-    // Références aux éléments de la modale
-    var modal = document.getElementById("modal");
-    var closeBtn = document.querySelector(".close-btn");
-
-    // Trouver le lien "Contact" dans le menu
-    var contactLink = document.querySelector('.contact-link'); // Sélecteur mis à jour
-
-    // Si le lien existe
-    if (contactLink) {
-        // Lorsque l'utilisateur clique sur le lien "Contact", ouvrir la modale
-        contactLink.addEventListener("click", function(event) {
-            event.preventDefault(); // Empêche le comportement par défaut du lien (ne pas recharger la page)
-            modal.style.display = "block"; // Affiche la modale
+document.addEventListener('DOMContentLoaded', function() {
+    // Ouvre le modal quand on clique sur le lien "Contact"
+    const openContactModal = document.querySelector('a[href="#modal-contact"]');
+    
+    if (openContactModal) {
+        openContactModal.addEventListener('click', function(event) {
+            event.preventDefault(); // Empêche la redirection vers une autre page
+            document.getElementById('modal-contact').style.display = 'flex'; // Affiche le modal
         });
     }
 
-    // Lorsque l'utilisateur clique sur le bouton de fermeture, fermer la modale
-    closeBtn.onclick = function() {
-        modal.style.display = "none";
-    };
+    // Ferme le modal quand on clique sur l'icône de fermeture (×)
+    const closeModalButton = document.querySelector('.cross-icon-modale');
+    if (closeModalButton) {
+        closeModalButton.addEventListener('click', function() {
+            document.getElementById('modal-contact').style.display = 'none'; // Cache le modal
+        });
+    }
 
-    // Lorsque l'utilisateur clique à l'extérieur de la modale, la fermer
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+    // Ferme le modal si l'utilisateur clique en dehors du modal (sur le fond)
+    window.addEventListener('click', function(event) {
+        if (event.target === document.getElementById('modal-contact')) {
+            document.getElementById('modal-contact').style.display = 'none'; // Cache le modal
         }
-    };
+    });
 });

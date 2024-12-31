@@ -2,36 +2,23 @@
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-// BEGIN ENQUEUE PARENT ACTION
-// AUTO GENERATED - Do not modify or remove comment markers above or below:
-
-if ( !function_exists( 'chld_thm_cfg_locale_css' ) ) :
-    function chld_thm_cfg_locale_css( $uri ){
-        if ( empty( $uri ) && is_rtl() && file_exists( get_template_directory() . '/rtl.css' ) )
-            $uri = get_template_directory_uri() . '/rtl.css';
-        return $uri;
-    }
-endif;
-add_filter( 'locale_stylesheet_uri', 'chld_thm_cfg_locale_css' );
-
-// Fonction pour enqueuer le style du thème enfant
-if ( !function_exists( 'child_theme_configurator_css' ) ) :
-    function child_theme_configurator_css() {
-        wp_enqueue_style( 'chld_thm_cfg_child', get_stylesheet_uri(), array( 'twenty-twenty-one-style' ) ); // Style du thème enfant
-    }
-endif;
-add_action( 'wp_enqueue_scripts', 'child_theme_configurator_css', 10 );
-// END ENQUEUE PARENT ACTION
-
-
-// Enregistrer le menu
-function register_my_menu() {
+// Fonction pour enregistrer les menus
+function register_my_menus() {
+    // Enregistre le menu principal et le menu footer
     register_nav_menus( array(
-        'menu' => __( 'Menu Principal', 'text-domain' ), // Ajouter un text-domain pour la traduction
+        'Menu' => __( 'Menu Principal' ),   
+        'footer_menu' => __( 'Menu Footer' )
     ) );
 }
-add_action( 'init', 'register_my_menu' );
 
+// Ajouter l'action pour enregistrer les menus
+add_action( 'after_setup_theme', 'register_my_menus' );
+
+// Fonction pour enqueuer le style du thème enfant
+function child_theme_configurator_css() {
+    wp_enqueue_style( 'chld_thm_cfg_child', get_stylesheet_uri(), array( 'twenty-twenty-one-style' ) ); 
+}
+add_action( 'wp_enqueue_scripts', 'child_theme_configurator_css', 10 );
 
 // Enqueue des polices personnalisées
 function enqueue_custom_fonts() {
@@ -64,64 +51,10 @@ function enqueue_custom_fonts() {
 }
 add_action( 'wp_head', 'enqueue_custom_fonts' );
 
-
-// Enqueue le style du thème enfant
-function child_theme_configurator_css() {
-    wp_enqueue_style( 'chld_thm_cfg_child', get_stylesheet_uri(), array( 'twenty-twenty-one-style' ) ); // Style du thème enfant
+// Enqueue du script du modal
+function enqueue_modal_script() {
+    wp_enqueue_script( 'modal-script', get_stylesheet_directory_uri() . '/js/script.js', array(), null, true );
 }
-add_action( 'wp_enqueue_scripts', 'child_theme_configurator_css', 10 );
+add_action( 'wp_enqueue_scripts', 'enqueue_modal_script' );
 
-
-
-// Créer un shortcode pour afficher les liens vers les mentions légales et la vie privée
-function my_custom_footer_links() {
-    // Récupère les pages par titre
-    $mentions_legales = get_page_by_title( 'Mentions légales' );
-    $vie_privee = get_page_by_title( 'Vie privée' );
-
-    // Génère le HTML des liens uniquement si les pages existent
-    $html = '<ul class="footer-menu">';
-    if ( $mentions_legales ) {
-        $html .= '<li><a href="' . esc_url( get_permalink( $mentions_legales->ID ) ) . '">Mentions légales</a></li>';
-    }
-    if ( $vie_privee ) {
-        $html .= '<li><a href="' . esc_url( get_permalink( $vie_privee->ID ) ) . '">Vie privée</a></li>';
-    }
-    $html .= '</ul>';
-
-    return $html;
-}
-add_shortcode( 'footer_links', 'my_custom_footer_links' );
-
-
-function passer_donnees_acf_js() {
-    wp_localize_script(
-        'custom-script', 
-        'acfData', 
-        array(
-            'exampleField' => get_field('nom_du_champ_acf', 'option'), // Exemple de champ
-        )
-    );
-}
-add_action('wp_enqueue_scripts', 'passer_donnees_acf_js');
-
-
-function enregistrer_menus() {
-    register_nav_menus( array(
-        'footer_menu' => 'Menu du pied de page',
-    ) );
-}
-add_action( 'init', 'enregistrer_menus' );
-
-
-function ajouter_scripts_personnalises() {
-    wp_enqueue_script(
-        'custom-script',
-        get_stylesheet_directory_uri() . '/js/custom.js', // Chemin du fichier JS
-        array('jquery'), 
-        '1.0', 
-        true 
-    );
-}
-add_action('wp_enqueue_scripts', 'ajouter_scripts_personnalises');
 ?>

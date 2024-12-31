@@ -5,5 +5,5 @@
         'container' => false,
     ) ); ?>
 
-    <?php get_template_part('templates_part/modal'); ?> <!-- Appel au fichier modal.php -->
+    <?php get_template_part('templates_part/contact.php'); ?> <!-- Appel au fichier modal.php -->
 </footer>
