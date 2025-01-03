@@ -8,6 +8,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/script.js" type="text/javascript"></script>
     <?php wp_head(); ?>
 </head>
 

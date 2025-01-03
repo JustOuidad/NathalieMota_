@@ -179,3 +179,33 @@ ul.footer-menu, ul.footer-links {
     font-size: 30px;
     cursor: pointer;
 }
+/* Style pour le header personnalisé */
+.page-header {
+    width: 100%; /* S'assure que le header prend toute la largeur */
+    height: 80vh; 
+    background: url('http://localhost:10028/wp-content/uploads/2024/12/nathalie-6-scaled.jpeg') no-repeat center center;
+    background-size: cover; 
+    color: white; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center; 
+    padding: 0; 
+}
+
+.page-header .header-content {
+    z-index: 1; 
+}
+
+
+
+/* Rendre le header responsive sur les petits écrans */
+@media (max-width: 768px) {
+    .header-title {
+        max-width:30% !important;
+    }
+
+
+.page-header{
+    max-width: 70%;
+}}
