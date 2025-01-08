@@ -8,12 +8,13 @@ if ( !defined( 'ABSPATH' ) ) exit;
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/script.js" type="text/javascript"></script>
     <?php wp_head(); ?>
 </head>
 
 <body <?php body_class(); ?>>
 
-<header id="site-header" class="site-header">
+<header id="site-header" class="hero">
     <div class="header-container">
         <nav class="main-navigation">
             <!-- Logo -->
@@ -33,7 +34,10 @@ if ( !defined( 'ABSPATH' ) ) exit;
                 ) );
             } 
             ?>
-
+<!-- Lien ou bouton pour ouvrir la modale de contact -->
+<div class="modal-contact">
+                <button onclick="openModal()">Contact</button>
+            </div>
         </nav>
     </div>
 </header>

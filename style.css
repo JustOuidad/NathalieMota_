@@ -10,113 +10,171 @@ Version: 2.4.1735051098
 Updated: 2024-12-24 14:38:18
 
 */
-/* Déclaration des polices Space Mono */
 @font-face {
-    font-family: 'Space Mono';
-    src: url('<?php echo get_stylesheet_directory_uri(); ?>/assets/fonts/SpaceMono-Regular.ttf') format('truetype');
+    font-family: 'Poppins';
+    src: url('fonts/Poppins-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Space Mono';
-    src: url('<?php echo get_stylesheet_directory_uri(); ?>/assets/fonts/SpaceMono-Italic.ttf') format('truetype');
+    src: url('fonts/SpaceMono-Regular.ttf') format('truetype');
     font-weight: normal;
-    font-style: italic;
+    font-style: normal;
 }
 
 @font-face {
     font-family: 'Space Mono';
-    src: url('<?php echo get_stylesheet_directory_uri(); ?>/assets/fonts/SpaceMono-Bold.ttf') format('truetype');
+    src: url('fonts/SpaceMono-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Space Mono';
-    src: url('<?php echo get_stylesheet_directory_uri(); ?>/assets/fonts/SpaceMono-BoldItalic.ttf') format('truetype');
+    src: url('fonts/SpaceMono-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Space Mono';
+    src: url('fonts/SpaceMono-BoldItalic.ttf') format('truetype');
     font-weight: bold;
     font-style: italic;
 }
-html{
-    max-width:100%;
-}
-
-/* Appliquer la police Space Mono pour l'ensemble du site */
+/* Exemple d'utilisation */
 body {
-    font-family: 'Space Mono', sans-serif;
-    font-weight: normal;
-    font-style: normal;
+    font-family: 'Poppins', sans-serif;
 }
 
-h1, h2 {
-    font-family: 'Space Mono', sans-serif;
-    font-weight: bold; /* Utiliser la version Bold */
+h1, h2, h3 {
+    font-family: 'Space Mono', monospace;
+    font-weight: bold;
 }
 
 em, i {
     font-family: 'Space Mono', sans-serif;
-    font-style: italic; /* Utiliser la version Italic */
+    font-style: normal; /* Utiliser la version Regular */
 }
 
 strong, b {
     font-family: 'Space Mono', sans-serif;
-    font-weight: bold; /* Utiliser la version Bold */
+    font-weight: normal; /* Utiliser la version Regular */
 }
 
-ul, ol{
+ul, ol, li, a {
     font-family: 'Space Mono', sans-serif;
-    font-weight: bold; /* Utiliser la version Bold */
+    font-weight: normal; /* Utiliser la version Regular */
 }
+
 
 /* Styles du Header */
-.site-header {
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff; /* Fond blanc */
+    padding: 20px 50px; /* Espacement autour */
+    font-family: 'Space Mono', monospace; /* Police Space Mono */
+}
+
+.header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    width: 100%;
+    max-width: 1200px; /* Limite maximale pour centrer */
 }
 
-/* Menu dans la navigation */
+/* Logo */
+.logo img {
+    display: block;
+    height: auto; /* Garde les proportions originales */
+    max-height: 100%; /* Taille originale du logo */
+    margin-right: auto; /* Pousse le menu à droite */
+}
+
+/* Menu */
+.header-menu {
+    list-style: none;
+    display: flex;
+    gap: 30px; /* Espacement uniforme entre les liens du menu */
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.header-menu li {
+    display: inline-block;
+}
+
+.header-menu li a {
+    text-decoration: none;
+    font-family: 'Space Mono' !important;
+    font-size: 16px;
+    weight:400;
+    color: black;
+    text-transform: uppercase; 
+    font-weight: normal;
+    letter-spacing: 2px; 
+    
+}
+
+#menu-menu {
+    display: flex;
+    justify-content: flex-end; /* Aligne les éléments à droite */
+    padding: 0; /* Optionnel, pour enlever tout padding du <ul> */
+  }
+  
+  #menu-menu li {
+    list-style: none; 
+  }
+  
+  #menu-menu li a {
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+  }
+  
+/* Bouton Contact */
+.modal-contact button {
+    border: none;
+    background: none !important;
+    font-family: 'Space Mono' !important;
+    font-size: 16px;
+    weight:400;
+    color: black !important;
+    text-transform: uppercase; 
+    cursor: pointer;
+    letter-spacing: 2px; 
+    padding: 0;
+  
+}
+
+/* Alignement global */
 .main-navigation {
     display: flex;
     align-items: center;
-    width: 100%;
-    justify-content: space-between; 
-    font-family: 'Space Mono', sans-serif !important;
+    gap: 50px; /* Espacement entre le logo et le menu */
+    font-family: 'space mono' !important;
 }
 
-/* Logo à gauche */
-.logo {
-    margin-right: 480px; 
-}
-
-/* Menu à droite */
 .header-menu {
     list-style: none;
+    display: flex;
+    gap: 30px; /* Espacement uniforme entre les liens du menu */
     margin: 0;
     padding: 0;
-    display: flex;
-    gap: 20px; 
-}
-
-/* Supprimer le soulignement des liens */
-.header-menu li a {
-    text-decoration: none;
-    color: black !important;
-    font-weight: bold;
-}
-
-/* Ajouter un effet de survol au lien */
-.header-menu li a:hover {
-    color: #e0072f;
+    align-items: center;
 }
 
 
 /* Style pour le footer */
-/* Supprimer les styles par défaut de la liste */
+
 ul {
-    list-style: none;
+    list-style: none !important;
     margin: 0;
     padding: 0;
 }
@@ -130,7 +188,7 @@ ul.footer-menu, ul.footer-links {
 
 /* Supprimer les styles des liens */
 ul.footer-menu li a, ul.footer-links li a {
-    text-decoration: none; 
+    text-decoration: none !important; 
     color: inherit; 
 }
 
@@ -140,9 +198,6 @@ ul.footer-menu, ul.footer-links {
 }
 
 
-/*.site-footer .footer-menu li a:hover {
-    color: #e0072f; 
-}
 /* Style de base pour le modal */
 .modal {
     position: fixed;
@@ -178,4 +233,12 @@ ul.footer-menu, ul.footer-links {
     right: 10px;
     font-size: 30px;
     cursor: pointer;
+}
+/* Style pour le header personnalisé */
+
+.hero-header img {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: block;
 }
