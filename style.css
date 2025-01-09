@@ -272,7 +272,7 @@ ul.footer-menu, ul.footer-links {
 
 .hero-text h1 {
     font-family: 'Space Mono', monospace;
-    font-style: italic;
+    font-style: italic !important;
     font-weight: 700;
     text-transform: uppercase;
     font-size: 96px;
