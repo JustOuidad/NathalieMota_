@@ -23,7 +23,12 @@ if ( !defined( 'ABSPATH' ) ) exit;
                     <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/image/Logo.png" alt="Logo">
                 </a>
             </div>
-
+	<!-- Menu toggle -->
+    <button class="menu-toggle" aria-controls="nav-menu" aria-expanded="false" aria-label="mobile menu" type="button">
+			<span class="line"></span>
+			<span class="line"></span>
+			<span class="line"></span>
+		</button>
             <!-- Menu -->
             <?php
             if ( has_nav_menu( 'Menu' ) ) {  

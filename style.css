@@ -236,9 +236,46 @@ ul.footer-menu, ul.footer-links {
 }
 /* Style pour le header personnalisé */
 
-.hero-header img {
+.hero-header {
+    position: relative;
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 1440px;  /* Optionnel: Limiter la largeur du conteneur */
+    height: 961px;  /* Hauteur fixe du conteneur */
+    overflow: hidden;  /* Cache les débordements si l'image est plus large */
+    background-color: #000;  /* Fond noir pour les espaces vides */
+    z-index:-1;
+}
+
+.hero-banner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.hero-banner .hero-image {
+    width: auto;  
+    height: 100%;  
+    object-fit: contain;  
     display: block;
+    margin: 0 auto;  
+}
+
+/* Ciblage du texte dans .hero-text */
+.hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1; 
+    text-align: center;
+}
+
+.hero-text h1 {
+    font-family: 'Space Mono', monospace;
+    font-style: italic;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 96px;
+    color: white;
+    margin: 0;
 }

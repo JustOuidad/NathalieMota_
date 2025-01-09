@@ -19,10 +19,10 @@ get_header(); ?>
 <?php get_header(); ?>
 
 <div id="content">
-    <!-- Autres éléments de contenu -->
 
     <!-- Inclure le widget hero-header -->
-    <?php include get_template_directory() . 'template-parts/hero-header.php'; ?>
+    <?php get_template_part('templates_part/hero-header');?>
+
 
     <!-- Autres éléments de contenu -->
 </div>
