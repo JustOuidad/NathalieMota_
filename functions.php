@@ -52,45 +52,21 @@ function utiliser_single_page_comme_home( $template ) {
 add_filter( 'template_include', 'utiliser_single_page_comme_home' );
 
 //taxonomie 
-
-function cptui_register_my_cpts() {
-
-	/**
-	 * Post Type: Catégories .
-	 */
-
-	$labels = [
-		"name" => esc_html__( "Catégories ", "custom-post-type-ui" ),
-		"singular_name" => esc_html__( "Catégorie", "custom-post-type-ui" ),
-	];
-
-	$args = [
-		"label" => esc_html__( "Catégories ", "custom-post-type-ui" ),
-		"labels" => $labels,
-		"description" => "",
-		"public" => true,
-		"publicly_queryable" => true,
-		"show_ui" => true,
-		"show_in_rest" => true,
-		"rest_base" => "",
-		"rest_controller_class" => "WP_REST_Posts_Controller",
-		"rest_namespace" => "wp/v2",
-		"has_archive" => false,
-		"show_in_menu" => true,
-		"show_in_nav_menus" => true,
-		"delete_with_user" => false,
-		"exclude_from_search" => false,
-		"capability_type" => "post",
-		"map_meta_cap" => true,
-		"hierarchical" => false,
-		"can_export" => false,
-		"rewrite" => [ "slug" => "categories", "with_front" => true ],
-		"query_var" => true,
-		"supports" => [ "title", "editor", "thumbnail" ],
-		"show_in_graphql" => false,
-	];
-
-	register_post_type( "categories", $args );
+function create_formats_taxonomy() {
+    register_taxonomy(
+        'formats',    // Nom de la taxonomie
+        'photo',      // Type de publication
+        array(
+            'label' => 'Formats',     // Label pour la taxonomie
+            'hierarchical' => true,   // Détermine si la taxonomie est hiérarchique (comme les catégories)
+            'show_in_rest' => true,   // Activer pour Gutenberg
+            'rewrite' => array(      // URL friendly
+                'slug' => 'formats',
+            ),
+        )
+    );
 }
+add_action( 'init', 'create_formats_taxonomy' );
+// Enregistrer la taxonomie "formats" pour le type de publication "photo"
 
-add_action( 'init', 'cptui_register_my_cpts' );
+
