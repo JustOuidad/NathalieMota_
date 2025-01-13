@@ -35,3 +35,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 console.log('Script.js chargé avec succès !');
+
+document.getElementById('load-more').addEventListener('click', function() {
+    // Récupère toutes les images cachées
+    const hiddenItems = document.querySelectorAll('.photo-item.hidden');
+
+    // Affiche les 8 premières images cachées
+    for (let i = 0; i < 8 && i < hiddenItems.length; i++) {
+        hiddenItems[i].classList.remove('hidden');
+    }
+
+    // Si toutes les images sont affichées, cache le bouton
+    if (document.querySelectorAll('.photo-item.hidden').length === 0) {
+        this.style.display = 'none';
+    }
+});

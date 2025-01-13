@@ -324,7 +324,7 @@ ul.footer-menu, ul.footer-links {
 
 
 .hero-image {
-    max-height: 89.07vh !important;  
+    max-height: 100vh !important;  
     margin: 0 auto;    
     object-fit: contain !important;
     position: relative;
@@ -353,3 +353,36 @@ ul.footer-menu, ul.footer-links {
     margin: 0;
 }
 
+.photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+    gap: 20px; /* Espacement entre les images */
+    max-width: 800px; /* Limiter la largeur */
+    margin: 0 auto; /* Centrer la grille */
+}
+
+.photo-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px; /* Optionnel : coins arrondis */
+}
+
+.load-more {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #0073e6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.load-more:hover {
+    background-color: #005bb5;
+}
+.photo-item.hidden {
+    display: none;
+}

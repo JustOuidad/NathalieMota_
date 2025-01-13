@@ -25,49 +25,40 @@ get_header(); ?>
 
 
     <!-- Autres éléments de contenu -->
-</div>
-<?
+    <?php
+// Récupérer les images du champ galerie "photo_champs"
+$photos = get_field('photo_champs'); // Remplacez 'photo_champs' par le nom exact de votre champ dans ACF
 
-// Initialisation de la tax_query pour les filtres (si vous voulez filtrer par catégorie)
-$tax_query = array('relation' => 'AND');
+if ($photos): ?>
+    <div class="photo-gallery">
+        <?php foreach ($photos as $photo): ?>
+            <div class="photo-item">
+                <!-- Affichez l'image -->
+                <img src="<?php echo esc_url($photo['url']); ?>" alt="<?php echo esc_attr($photo['alt']); ?>">
 
-// Filtre pour la taxonomie 'photo_champs' (vous pouvez ajouter des conditions pour d'autres taxonomies)
-if (!empty($_GET['Photo'])) {
-    $tax_query[] = array(
-        'taxonomy' => 'Photo',  
-        'field'    => 'id',            
-        'terms'    => $_GET['photo champs'], 
-        'operator' => 'IN',
-    );
-}
+                <!-- Optionnel : Ajoutez une légende si nécessaire -->
+                <?php if (!empty($photo['caption'])): ?>
+                    <p><?php echo esc_html($photo['caption']); ?></p>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php else: ?>
+    <p>Aucune photo trouvée.</p>
+<?php endif; ?>
+<?php
+if ($photos): ?>
+    <div class="photo-gallery">
+        <?php foreach ($photos as $index => $photo): ?>
+            <div class="photo-item<?php echo $index >= 8 ? ' hidden' : ''; ?>">
+                <img src="<?php echo esc_url($photo['url']); ?>" alt="<?php echo esc_attr($photo['alt']); ?>">
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <button id="load-more">Charger Plus</button>
+<?php else: ?>
+    <p>Aucune photo trouvée.</p>
+<?php endif; ?>
 
-// Définition de la requête WP_Query pour récupérer les photos
-$photos_showdown = new WP_Query(array(
-    'post_type'      => 'Photo',
-    'posts_per_page' => 8,
-    'orderby'        => 'date',
-    'order'          => 'ASC',
-    'paged'          => 1,
-    'tax_query'      => $tax_query,  
-));
-
-// Vérification si des posts ont été trouvés
-if ($photos_showdown->have_posts()) {
-    while ($photos_showdown->have_posts()) {
-        $photos_showdown->the_post();
-        // Inclure le template partiel pour chaque photo
-        get_template_part('template_parts/block_photo');
-    }
-    wp_reset_postdata();  
-} else {
-    echo 'Aucune photo avec les filtres sélectionnés';
-}
-?>
-
-<!-- Section pour le bouton "Charger plus" -->
-<div class="bouton-front">
-    <div id="total-photos-count"></div>
-    <button id="charger-plus" class="btn-chargerPlus">Charger plus</button>
-</div>
 
 <?php get_footer(); ?>
