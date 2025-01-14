@@ -353,36 +353,47 @@ ul.footer-menu, ul.footer-links {
     margin: 0;
 }
 
+/* Galerie de photos avec 2 images par ligne */
 .photo-gallery {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
-    gap: 20px; /* Espacement entre les images */
-    max-width: 800px; /* Limiter la largeur */
-    margin: 0 auto; /* Centrer la grille */
+    grid-template-columns: repeat(2, 1fr);  /* 2 colonnes */
+    grid-gap: 20px;  /* Espacement entre les images */
+    max-width: 1148px; /* Largeur totale de la grille */
+    margin: 0 auto;
 }
 
+/* Chaque photo */
+.photo-item {
+    width: 100%;
+    height: 495px; /* Hauteur fixe de 495px */
+    overflow: hidden;  /* Masque tout ce qui dépasse */
+    position: relative;
+}
+
+/* Forcer l'image à s'ajuster dans le cadre sans être étirée */
 .photo-item img {
     width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 8px; /* Optionnel : coins arrondis */
+    height: 100%;
+    object-fit: cover;  /* Recadre l'image pour qu'elle remplisse le cadre sans distorsion */
+    object-position: center;  /* Centre l'image dans son cadre */
 }
 
-.load-more {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #0073e6;
-    color: white;
-    border: none;
-    border-radius: 5px;
+/* Bouton "Afficher plus" */
+#load-more {
+    width: 272px;
+    height: 50px;
+    margin-top: 50px;
+    padding: 8px 15px;
+    background-color: #D8D8D8;
+    color:black!important;
     cursor: pointer;
+    font-size: 16px;
+    font-family:'space mono' !important;
+    text-align: center;
+    justify-content: center !important;  
 }
 
-.load-more:hover {
-    background-color: #005bb5;
-}
-.photo-item.hidden {
-    display: none;
+#load-more:hover {
+    background-color: #E00000;
+    color:#ffffff !important;
 }

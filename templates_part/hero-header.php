@@ -22,7 +22,7 @@ if ($banner->have_posts()) {
         $banner->the_post();
         // Affichage de l'image avec la classe CSS 'hero-image'
         echo '<div class="hero-image">';
-        the_post_thumbnail('large');  
+        the_post_thumbnail('full');  
         echo '</div>';
     }
     wp_reset_postdata();

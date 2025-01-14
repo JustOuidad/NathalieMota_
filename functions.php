@@ -70,3 +70,59 @@ add_action( 'init', 'create_formats_taxonomy' );
 // Enregistrer la taxonomie "formats" pour le type de publication "photo"
 
 
+function create_custom_post_type() {
+    register_post_type('Photo', array(
+        'labels' => array(
+            'name' => 'Photos',
+            'singular_name' => 'Photo',
+        ),
+        'public' => true,
+        'has_archive' => true,
+        'rewrite' => array('slug' => 'Photo'), // Important pour que l'URL soit bien "/Photo/"
+        'supports' => array('title', 'editor', 'thumbnail'), // Active les miniatures
+        'taxonomies' => array('photo_champs'), // Associe la taxonomie 'photo_champs'
+    ));
+}
+add_action('init', 'create_custom_post_type');
+
+function create_photo_taxonomy() {
+    register_taxonomy('photo_champs', 'Photo', array(
+        'labels' => array(
+            'name' => 'Champs de Photo',
+            'singular_name' => 'Champ de Photo',
+        ),
+        'hierarchical' => true,
+        'public' => true,
+        'rewrite' => array('slug' => 'photo_champs'),
+    ));
+}
+add_action('init', 'create_photo_taxonomy');
+
+function load_more_photos() {
+    $paged = isset($_POST['paged']) ? $_POST['paged'] : 1;
+
+    // Requête pour récupérer les photos
+    $photos_per_page = 8;
+    $photos_showdown = new WP_Query(array(
+        'post_type' => 'Photo',
+        'posts_per_page' => $photos_per_page,
+        'paged' => $paged,
+    ));
+
+    if ($photos_showdown->have_posts()) :
+        while ($photos_showdown->have_posts()) :
+            $photos_showdown->the_post();
+            ?>
+            <div class="photo-item">
+                <?php echo get_the_post_thumbnail(get_the_ID(), 'full'); ?>
+            </div>
+            <?php
+        endwhile;
+    endif;
+
+    wp_reset_postdata();
+    die();
+}
+
+add_action('wp_ajax_load_more_photos', 'load_more_photos');
+add_action('wp_ajax_nopriv_load_more_photos', 'load_more_photos');

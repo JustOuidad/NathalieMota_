@@ -26,39 +26,41 @@ get_header(); ?>
 
     <!-- Autres éléments de contenu -->
     <?php
-// Récupérer les images du champ galerie "photo_champs"
-$photos = get_field('photo_champs'); // Remplacez 'photo_champs' par le nom exact de votre champ dans ACF
 
-if ($photos): ?>
-    <div class="photo-gallery">
-        <?php foreach ($photos as $photo): ?>
-            <div class="photo-item">
-                <!-- Affichez l'image -->
-                <img src="<?php echo esc_url($photo['url']); ?>" alt="<?php echo esc_attr($photo['alt']); ?>">
+// Définir le nombre de photos par page et récupérer la page actuelle
+$photos_per_page = 8;
+$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
-                <!-- Optionnel : Ajoutez une légende si nécessaire -->
-                <?php if (!empty($photo['caption'])): ?>
-                    <p><?php echo esc_html($photo['caption']); ?></p>
-                <?php endif; ?>
-            </div>
-        <?php endforeach; ?>
-    </div>
-<?php else: ?>
-    <p>Aucune photo trouvée.</p>
-<?php endif; ?>
-<?php
-if ($photos): ?>
-    <div class="photo-gallery">
-        <?php foreach ($photos as $index => $photo): ?>
-            <div class="photo-item<?php echo $index >= 8 ? ' hidden' : ''; ?>">
-                <img src="<?php echo esc_url($photo['url']); ?>" alt="<?php echo esc_attr($photo['alt']); ?>">
-            </div>
-        <?php endforeach; ?>
-    </div>
-    <button id="load-more">Charger Plus</button>
-<?php else: ?>
-    <p>Aucune photo trouvée.</p>
-<?php endif; ?>
+// Requête pour récupérer les photos
+$photos_showdown = new WP_Query(array(
+    'post_type' => 'Photo',  // Type de publication personnalisé
+    'posts_per_page' => $photos_per_page,  // Nombre de photos par page
+    'paged' => $paged,  // Page courante
+));
+
+if ($photos_showdown->have_posts()) :
+    echo '<div class="photo-gallery">';
+    while ($photos_showdown->have_posts()) :
+        $photos_showdown->the_post();
+        ?>
+        <div class="photo-item">
+            <?php echo get_the_post_thumbnail(get_the_ID(), 'full'); ?>  <!-- Affiche l'image en pleine taille -->
+        </div>
+        <?php
+    endwhile;
+    echo '</div>'; // Fermeture de la galerie
+
+    // Pagination : Afficher le bouton "Afficher plus"
+    $total_pages = $photos_showdown->max_num_pages;
+    if ($paged < $total_pages) {
+        echo '<button id="load-more" class="btn-load-more">Charger plus</button>';
+    }
+
+    wp_reset_postdata();
+else :
+    echo 'Aucune photo trouvée';
+endif;
+?>
 
 
 <?php get_footer(); ?>

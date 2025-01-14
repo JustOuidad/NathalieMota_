@@ -50,3 +50,26 @@ document.getElementById('load-more').addEventListener('click', function() {
         this.style.display = 'none';
     }
 });
+
+document.getElementById('load-more').addEventListener('click', function() {
+    var paged = parseInt('<?php echo $paged; ?>') + 1;  // Page suivante
+    var data = {
+        'action': 'load_more_photos',
+        'paged': paged,
+    };
+
+    // Requête AJAX pour charger plus de photos
+    jQuery.ajax({
+        url: '<?php echo admin_url('admin-ajax.php'); ?>',
+        data: data,
+        type: 'POST',
+        success: function(response) {
+            if (response) {
+                jQuery('.photo-gallery').append(response);  // Ajouter les photos à la galerie
+                if (paged >= <?php echo $total_pages; ?>) {
+                    jQuery('#load-more').hide();  // Cacher le bouton si toutes les photos sont chargées
+                }
+            }
+        }
+    });
+});
