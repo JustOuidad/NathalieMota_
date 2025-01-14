@@ -73,3 +73,46 @@ document.getElementById('load-more').addEventListener('click', function() {
         }
     });
 });
+jQuery(document).ready(function ($) {
+    let currentCategorie = $('.filter-categorie').val();
+    let currentFormat = $('.filter-format').val();
+    let currentOrder = $('.filter-order').val();
+  
+    function loadMorePhotos(page) { //a travailler pour load more
+      $.ajax({
+        url: ajaxurl,
+        type: 'POST',
+        data: {
+          action: 'filter',
+          categorie: currentCategorie,
+          format: currentFormat,
+          order: currentOrder,
+          page: page,
+        },
+        success: function (response) {
+          if (page === 1) {
+            $('.photo-grid').html(response);
+          } else {
+            $('.photo-grid').append(response);
+          }
+  
+          if (
+            $('#no-more-posts').length > 0 ||
+            $(response).filter('.photo-item').length < 8
+          ) {
+            $('#load-more').hide();
+          } else {
+            $('#load-more').show().data('page', page);
+          }
+        },
+      });//logique element
+    }
+  
+      loadMorePhotos(1); // Réinitialiser et charger la première page
+    });
+  
+    $('#load-more').click(function () {
+      let page = $(this).data('page') + 1;
+      loadMorePhotos(page);
+    });
+  ;

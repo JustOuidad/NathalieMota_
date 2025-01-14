@@ -397,3 +397,26 @@ ul.footer-menu, ul.footer-links {
     background-color: #E00000;
     color:#ffffff !important;
 }
+/* Grille de photos */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 photos par ligne */
+    gap: 20px; /* Espacement entre les photos */
+}
+
+/* Style du bouton "Charger plus" */
+#load-more {
+    padding: 10px 20px;
+    background-color: #D8D8D8;
+    color: black;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    display: block;
+    margin: 20px auto;
+}
+
+#load-more:hover {
+    background-color: #E00000;
+}
