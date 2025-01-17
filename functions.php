@@ -54,13 +54,13 @@ add_filter( 'template_include', 'utiliser_single_page_comme_home' );
 //taxonomie 
 function create_formats_taxonomy() {
     register_taxonomy(
-        'formats',    // Nom de la taxonomie
-        'photo',      // Type de publication
+        'formats',    
+        'photo',      
         array(
-            'label' => 'Formats',     // Label pour la taxonomie
-            'hierarchical' => true,   // Détermine si la taxonomie est hiérarchique (comme les catégories)
-            'show_in_rest' => true,   // Activer pour Gutenberg
-            'rewrite' => array(      // URL friendly
+            'label' => 'Formats',    
+            'hierarchical' => true,   
+            'show_in_rest' => true,  
+            'rewrite' => array(     
                 'slug' => 'formats',
             ),
         )
@@ -78,9 +78,111 @@ function create_custom_post_type() {
         ),
         'public' => true,
         'has_archive' => true,
-        'rewrite' => array('slug' => 'Photo'), // Important pour que l'URL soit bien "/Photo/"
-        'supports' => array('title', 'editor', 'thumbnail'), // Active les miniatures
-        'taxonomies' => array('photo_champs'), // Associe la taxonomie 'photo_champs'
+        'rewrite' => array('slug' => 'Photo'), 
+        'supports' => array('title', 'editor', 'thumbnail'),
+        'taxonomies' => array('photo_champs'), 
     ));
 }
 add_action('init', 'create_custom_post_type');
+
+// integration AJAX url
+
+function charger_jquery_et_scripts() {
+    // Assurez-vous de charger jQuery (c'est la méthode recommandée par WordPress)
+    wp_enqueue_script('jquery');
+
+    // Charger votre script personnalisé après jQuery
+    wp_enqueue_script(
+        'script-ajax', // Nom de votre script
+        get_template_directory_uri() . '/script.js', // Lien vers votre script.js
+        array('jquery'), // Dépendance à jQuery (assurez-vous que jQuery se charge avant)
+        null, // Pas de version spécifique
+        true // Charger dans le footer pour éviter les conflits
+    );
+
+    // Passer des variables PHP à JavaScript
+    wp_localize_script(
+        'script-ajax', 
+        'ajax_params', 
+        array(
+            'ajaxurl' => admin_url('admin-ajax.php'), // URL de l'ajax
+            'paged' => 1 // Page initiale
+        )
+    );
+}
+add_action('wp_enqueue_scripts', 'charger_jquery_et_scripts');
+
+//enqueue jquery
+function charger_jquery_avec_cdn() {
+    // Annuler l'enregistrement de jQuery local
+    wp_deregister_script('jquery');
+
+    // Enregistrer jQuery depuis un CDN
+    wp_register_script('jquery', 'https://code.jquery.com/jquery-3.6.0.min.js', false, null, true);
+
+    // Enqueue jQuery à partir du CDN
+    wp_enqueue_script('jquery');
+}
+add_action('wp_enqueue_scripts', 'charger_jquery_avec_cdn', 1); // Le 1 assure qu'il est en file d'attente avant les autres scripts.
+
+// j query 
+
+function ajouter_jquery_migrate() {
+    wp_enqueue_script('jquery-migrate');
+}
+add_action('wp_enqueue_scripts', 'ajouter_jquery_migrate');
+
+
+//integration code ajax
+
+function charger_photos_via_ajax() {
+    $categorie = isset($_POST['categorie']) ? sanitize_text_field($_POST['categorie']) : '';
+    $format = isset($_POST['format']) ? sanitize_text_field($_POST['format']) : '';
+    $order = isset($_POST['order']) ? sanitize_text_field($_POST['order']) : 'ASC';
+    $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+
+    $args = array(
+        'post_type' => 'photo', // Remplacez par votre type de contenu (exemple : 'post', 'photo', etc.)
+        'posts_per_page' => 8, // Nombre de photos par page
+        'paged' => $page,
+        'orderby' => 'date',
+        'order' => $order,
+    );
+
+    // Si une catégorie est filtrée
+    if (!empty($categorie)) {
+        $args['tax_query'][] = array(
+            'taxonomy' => 'categorie', // Remplacez par votre taxonomie
+            'field' => 'slug',
+            'terms' => $categorie,
+        );
+    }
+
+    // Si un format est filtré
+    if (!empty($format)) {
+        $args['tax_query'][] = array(
+            'taxonomy' => 'format', // Remplacez par votre taxonomie
+            'field' => 'slug',
+            'terms' => $format,
+        );
+    }
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            echo '<div class="photo-item">';
+            echo '<h3>' . get_the_title() . '</h3>';
+            echo get_the_post_thumbnail(get_the_ID(), 'medium'); // Affiche la miniature
+            echo '</div>';
+        }
+    } else {
+        echo '<div id="no-more-posts">Aucune photo supplémentaire.</div>';
+    }
+
+    wp_die(); // Arrêter proprement l'exécution
+}
+add_action('wp_ajax_filter', 'charger_photos_via_ajax'); // Pour utilisateurs connectés
+add_action('wp_ajax_nopriv_filter', 'charger_photos_via_ajax'); // Pour utilisateurs non connectés
+

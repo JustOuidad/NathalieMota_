@@ -420,3 +420,8 @@ ul.footer-menu, ul.footer-links {
 #load-more:hover {
     background-color: #E00000;
 }
+
+/* Cacher initialement les éléments "photo-item" supplémentaires */
+.photo-item.hidden {
+    display: none;
+}

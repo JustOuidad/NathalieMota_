@@ -9,6 +9,9 @@ if ( !defined( 'ABSPATH' ) ) exit;
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/script.js" type="text/javascript"></script>
+        <!-- Charger jQuery via CDN -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <?php wp_head(); ?>
 </head>
 

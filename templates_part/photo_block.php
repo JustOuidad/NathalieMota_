@@ -13,3 +13,4 @@ function create_custom_post_type() {
     ));
 }
 add_action('init', 'create_custom_post_type');
+
