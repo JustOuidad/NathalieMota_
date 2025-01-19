@@ -1,41 +1,40 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const contactLink = document.querySelector('.menu-list li a[href="#contact"]');
-  if (contactLink) {
-      contactLink.addEventListener('click', function (e) {
-          e.preventDefault(); // Empêche le comportement par défaut (clic)
-      });
-  }
-});
-
-
 document.addEventListener('DOMContentLoaded', function() {
-  // Ouvre le modal quand on clique sur le lien "Contact"
-  const openContactModal = document.querySelector('#menu-item-14');
+    // Ouvre le modal quand on clique sur le bouton "Contact"
+    const openModalButton = document.querySelector('#openModalButton');
+    if (openModalButton) {
+        openModalButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Empêche la redirection vers une autre page
+            
+            const modal = document.getElementById('modal-contact');
+            if (modal) {
+                modal.style.display = 'flex'; // Affiche le modal
+            }
+        });
+    }
   
-  if (openContactModal) {
-      openContactModal.addEventListener('click', function(event) {
-          event.preventDefault(); // Empêche la redirection vers une autre page
-          document.getElementById('modal-contact').style.display = 'flex'; // Affiche le modal
-      });
-  }
-
-  // Ferme le modal quand on clique sur l'icône de fermeture (×)
-  const closeModalButton = document.querySelector('.cross-icon-modale');
-  if (closeModalButton) {
-      closeModalButton.addEventListener('click', function() {
-          document.getElementById('modal-contact').style.display = 'none'; // Cache le modal
-      });
-  }
-
-  // Ferme le modal si l'utilisateur clique en dehors du modal (sur le fond)
-  window.addEventListener('click', function(event) {
-      if (event.target === document.getElementById('modal-contact')) {
-          document.getElementById('modal-contact').style.display = 'none'; // Cache le modal
-      }
+    // Ferme le modal quand on clique sur l'icône de fermeture (×)
+    const closeModalButton = document.querySelector('.cross-icon-modale');
+    if (closeModalButton) {
+        closeModalButton.addEventListener('click', function() {
+            const modal = document.getElementById('modal-contact');
+            if (modal) {
+                modal.style.display = 'none'; // Cache le modal
+            }
+        });
+    }
+  
+    // Ferme le modal si l'utilisateur clique en dehors du modal (sur le fond)
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('modal-contact');
+        if (modal && event.target === modal) {
+            modal.style.display = 'none'; // Cache le modal
+        }
+    });
+  
+    // Affichage d'un message pour confirmer que le script est chargé
+    console.log('Script.js chargé avec succès !');
   });
-});
-console.log('Script.js chargé avec succès !');
-
+  
 //AJAX pour le LOAD MORE
 
 jQuery(document).ready(function ($) {

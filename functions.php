@@ -23,23 +23,46 @@ function enqueue_custom_fonts() {
 }
 add_action('wp_enqueue_scripts', 'enqueue_custom_fonts');
 
+// Enqueue jQuery depuis CDN
+function charger_jquery_avec_cdn() {
+    // Annuler l'enregistrement de jQuery local
+    wp_deregister_script('jquery');
 
-// Enqueue le script JavaScript
-function enqueue_custom_scripts() {
+    // Enregistrer jQuery depuis un CDN
+    wp_register_script('jquery', 'https://code.jquery.com/jquery-3.6.0.min.js', false, null, true);
+
+    // Enqueue jQuery à partir du CDN
+    wp_enqueue_script('jquery');
+}
+add_action('wp_enqueue_scripts', 'charger_jquery_avec_cdn', 1); // Le 1 assure qu'il est en file d'attente avant les autres scripts.
+
+// Enqueue le script JavaScript et jQuery
+function charger_jquery_et_scripts() {
+    // Charger jQuery à partir du CDN
+    wp_enqueue_script('jquery');
+
+    // Ajouter ton script personnalisé après jQuery
     wp_enqueue_script(
         'custom-script', 
-        get_stylesheet_directory_uri() . '/assets/js/script.js', 
-        array(), 
+        get_stylesheet_directory_uri() . '/js/script.js', // Ton fichier script.js
+        array('jquery'), // Dépendance à jQuery
         null, 
-        true 
+        true // Charger dans le footer pour éviter les conflits
+    );
+
+    // Passer des variables PHP à JavaScript
+    wp_localize_script(
+        'custom-script', 
+        'ajax_params', 
+        array(
+            'ajaxurl' => admin_url('admin-ajax.php'), 
+            'paged' => 1
+        )
     );
 }
-add_action( 'wp_enqueue_scripts', 'enqueue_custom_scripts' );
+add_action('wp_enqueue_scripts', 'charger_jquery_et_scripts');
 
-add_action('wp_enqueue_scripts', function() {
-    echo '<!-- wp_enqueue_scripts fonctionne -->';
-});
-//page d'accueil
+// Page d'accueil
 function utiliser_single_page_comme_home( $template ) {
     if ( is_front_page() ) {
         $custom_template = locate_template( 'single-page.php' );
@@ -51,7 +74,7 @@ function utiliser_single_page_comme_home( $template ) {
 }
 add_filter( 'template_include', 'utiliser_single_page_comme_home' );
 
-//taxonomie 
+// Taxonomie 
 function create_formats_taxonomy() {
     register_taxonomy(
         'formats',    
@@ -67,9 +90,8 @@ function create_formats_taxonomy() {
     );
 }
 add_action( 'init', 'create_formats_taxonomy' );
+
 // Enregistrer la taxonomie "formats" pour le type de publication "photo"
-
-
 function create_custom_post_type() {
     register_post_type('Photo', array(
         'labels' => array(
@@ -85,56 +107,7 @@ function create_custom_post_type() {
 }
 add_action('init', 'create_custom_post_type');
 
-// integration AJAX url
-
-function charger_jquery_et_scripts() {
-    // Assurez-vous de charger jQuery (c'est la méthode recommandée par WordPress)
-    wp_enqueue_script('jquery');
-
-    // Charger votre script personnalisé après jQuery
-    wp_enqueue_script(
-        'script-ajax', // Nom de votre script
-        get_template_directory_uri() . '/script.js', // Lien vers votre script.js
-        array('jquery'), // Dépendance à jQuery (assurez-vous que jQuery se charge avant)
-        null, // Pas de version spécifique
-        true // Charger dans le footer pour éviter les conflits
-    );
-
-    // Passer des variables PHP à JavaScript
-    wp_localize_script(
-        'script-ajax', 
-        'ajax_params', 
-        array(
-            'ajaxurl' => admin_url('admin-ajax.php'), // URL de l'ajax
-            'paged' => 1 // Page initiale
-        )
-    );
-}
-add_action('wp_enqueue_scripts', 'charger_jquery_et_scripts');
-
-//enqueue jquery
-function charger_jquery_avec_cdn() {
-    // Annuler l'enregistrement de jQuery local
-    wp_deregister_script('jquery');
-
-    // Enregistrer jQuery depuis un CDN
-    wp_register_script('jquery', 'https://code.jquery.com/jquery-3.6.0.min.js', false, null, true);
-
-    // Enqueue jQuery à partir du CDN
-    wp_enqueue_script('jquery');
-}
-add_action('wp_enqueue_scripts', 'charger_jquery_avec_cdn', 1); // Le 1 assure qu'il est en file d'attente avant les autres scripts.
-
-// j query 
-
-function ajouter_jquery_migrate() {
-    wp_enqueue_script('jquery-migrate');
-}
-add_action('wp_enqueue_scripts', 'ajouter_jquery_migrate');
-
-
-//integration code ajax
-
+// Intégration AJAX url
 function charger_photos_via_ajax() {
     $categorie = isset($_POST['categorie']) ? sanitize_text_field($_POST['categorie']) : '';
     $format = isset($_POST['format']) ? sanitize_text_field($_POST['format']) : '';
@@ -186,3 +159,7 @@ function charger_photos_via_ajax() {
 add_action('wp_ajax_filter', 'charger_photos_via_ajax'); // Pour utilisateurs connectés
 add_action('wp_ajax_nopriv_filter', 'charger_photos_via_ajax'); // Pour utilisateurs non connectés
 
+// Fonction pour afficher que wp_enqueue_scripts fonctionne
+add_action('wp_enqueue_scripts', function() {
+    echo '<!-- wp_enqueue_scripts fonctionne -->';
+});

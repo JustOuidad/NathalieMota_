@@ -8,10 +8,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/script.js" type="text/javascript"></script>
-        <!-- Charger jQuery via CDN -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
     <?php wp_head(); ?>
 </head>
 
@@ -26,12 +23,12 @@ if ( !defined( 'ABSPATH' ) ) exit;
                     <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/image/Logo.png" alt="Logo">
                 </a>
             </div>
-	<!-- Menu toggle -->
-    <button class="menu-toggle" aria-controls="nav-menu" aria-expanded="false" aria-label="mobile menu" type="button">
-			<span class="line"></span>
-			<span class="line"></span>
-			<span class="line"></span>
-		</button>
+            <!-- Menu toggle -->
+            <button class="menu-toggle" aria-controls="nav-menu" aria-expanded="false" aria-label="mobile menu" type="button">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </button>
             <!-- Menu -->
             <?php
             if ( has_nav_menu( 'Menu' ) ) {  
@@ -42,10 +39,22 @@ if ( !defined( 'ABSPATH' ) ) exit;
                 ) );
             } 
             ?>
-<!-- Lien ou bouton pour ouvrir la modale de contact -->
-<div class="modal-contact">
-                <button onclick="openModal()">Contact</button>
+            <!-- Lien ou bouton pour ouvrir la modale de contact -->
+            <div class="modal-contact">
+                <button id="openModalButton">Contact</button>
             </div>
         </nav>
     </div>
 </header>
+
+<!-- Modal -->
+<div id="modal-contact" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="cross-icon-modale">&times;</span>
+        <p>Voici un modal de contact !</p>
+    </div>
+</div>
+
+<?php wp_footer(); ?>
+</body>
+</html>
