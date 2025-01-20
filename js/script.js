@@ -30,16 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.style.display = 'none'; // Cache le modal
         }
     });
-  
-    // Affichage d'un message pour confirmer que le script est chargé
-    console.log('Script.js chargé avec succès !');
   });
   
 //AJAX pour le LOAD MORE
 
 jQuery(document).ready(function ($) {
-  // Votre code ici
-  console.log('Script.js chargé avec succès !');
 
   // Exemple de code pour vérifier que jQuery fonctionne
   let currentCategorie = $('.filter-categorie').val();

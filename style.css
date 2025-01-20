@@ -232,6 +232,7 @@ ul, ol, li, a {
     font-size: 16px;
     weight:400;
     color: black !important;
+    background-color: #D8D8D8 !important;
     text-transform: uppercase; 
     cursor: pointer;
     letter-spacing: 2px; 
@@ -289,6 +290,7 @@ ul.footer-menu, ul.footer-links {
 .modal {
     display: none;
     position: fixed;
+    z-index: 1;
     top: 0;
     left: 0;
     width: 100%;
@@ -297,7 +299,13 @@ ul.footer-menu, ul.footer-links {
     justify-content: center;
     align-items: center;
 }
-
+#wpcf7-f26-o1{
+    background-color: white!important;
+    border-color: black 10px !important;
+}
+.wpcf7-f26-o1 #wpcf7-submit{
+    text-align: center !important;
+}
 .modal-content {
     background: white;
     padding: 20px;
@@ -332,7 +340,6 @@ ul.footer-menu, ul.footer-links {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1; 
     text-align: center;
 }
 

@@ -17,6 +17,16 @@ function child_theme_configurator_css() {
 }
 add_action( 'wp_enqueue_scripts', 'child_theme_configurator_css', 10 );
 
+//Desenregistrer le dark mode
+
+function dequeue_dark_mode_toggler_script() {
+    // Vérifiez si le script est enregistré/en file d'attente
+    wp_dequeue_script('twentytwentyone-dark-mode-toggler');
+    wp_deregister_script('twentytwentyone-dark-mode-toggler');
+}
+add_action('wp_enqueue_scripts', 'dequeue_dark_mode_toggler_script', 20);
+
+
 // Enqueue les polices personnalisées
 function enqueue_custom_fonts() {
     wp_enqueue_style('theme-fonts', get_template_directory_uri() . '/style.css', array(), '1.0', 'all');

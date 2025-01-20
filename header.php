@@ -40,21 +40,14 @@ if ( !defined( 'ABSPATH' ) ) exit;
             } 
             ?>
             <!-- Lien ou bouton pour ouvrir la modale de contact -->
-            <div class="modal-contact">
+            <div class="modal-content">
                 <button id="openModalButton">Contact</button>
             </div>
+            <?php get_template_part('templates_part/contact');?>
         </nav>
     </div>
+
 </header>
-
-<!-- Modal -->
-<div id="modal-contact" class="modal" style="display:none;">
-    <div class="modal-content">
-        <span class="cross-icon-modale">&times;</span>
-        <p>Voici un modal de contact !</p>
-    </div>
-</div>
-
 <?php wp_footer(); ?>
 </body>
 </html>
