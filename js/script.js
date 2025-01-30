@@ -82,3 +82,59 @@ jQuery(document).ready(function ($) {
       loadMorePhotos(nextPage);
   });
 });
+jQuery(document).ready(function ($) {
+    let currentCategorie = '';
+    let currentFormat = '';
+    let currentOrder = 'ASC';
+    let page = 1;
+
+    // Fonction pour charger les photos via AJAX
+    function loadMorePhotos(page) {
+        $.ajax({
+            url: ajax_params.ajaxurl, // URL AJAX (passée par wp_localize_script)
+            type: 'POST',
+            data: {
+                action: 'filter',
+                categorie: currentCategorie,
+                format: currentFormat,
+                order: currentOrder,
+                page: page,
+            },
+            success: function (response) {
+                if (page === 1) {
+                    $('.photo-grid').html(response); // Remplace le contenu pour la première page
+                } else {
+                    $('.photo-grid').append(response); // Ajoute les nouvelles photos
+                }
+
+                // Masquer le bouton "Charger plus" s'il n'y a plus de photos
+                if ($('#no-more-posts').length > 0 || $(response).filter('.photo-item').length < 8) {
+                    $('#load-more').hide();
+                } else {
+                    $('#load-more').show().data('page', page);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Erreur AJAX :', error);
+            },
+        });
+    }
+
+    // Charger les photos initiales
+    loadMorePhotos(page);
+
+    // Événement pour les filtres
+    $('.filter-categorie, .filter-format, .filter-order').change(function () {
+        currentCategorie = $('#filter-categorie').val();
+        currentFormat = $('#filter-format').val();
+        currentOrder = $('#filter-order').val();
+        page = 1; // Réinitialiser la page
+        loadMorePhotos(page); // Recharger les photos
+    });
+
+    // Événement pour le bouton "Charger plus"
+    $('#load-more').click(function () {
+        let nextPage = $(this).data('page') + 1;
+        loadMorePhotos(nextPage);
+    });
+});

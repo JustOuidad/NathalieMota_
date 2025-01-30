@@ -23,7 +23,8 @@ get_header(); ?>
     <!-- Inclure le widget hero-header -->
     <?php get_template_part('templates_part/hero-header');?>
 
-
+<!--inclure le filtre-->
+<?php get_template_part('templates_part/filter-part'); ?>
     <!-- Autres éléments de contenu -->
     <?php
 
@@ -39,7 +40,7 @@ $photos_showdown = new WP_Query(array(
 ));
 
 if ($photos_showdown->have_posts()) :
-    echo '<div class="photo-gallery">';
+    echo '<div class="photo-grid">';
     while ($photos_showdown->have_posts()) :
         $photos_showdown->the_post();
         ?>

@@ -156,7 +156,7 @@ function charger_photos_via_ajax() {
         while ($query->have_posts()) {
             $query->the_post();
             echo '<div class="photo-item">';
-            echo '<h3>' . get_the_title() . '</h3>';
+            // echo '<h3>' . get_the_title() . '</h3>';
             echo get_the_post_thumbnail(get_the_ID(), 'medium'); // Affiche la miniature
             echo '</div>';
         }
