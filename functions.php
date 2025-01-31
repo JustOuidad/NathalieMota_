@@ -125,28 +125,28 @@ function charger_photos_via_ajax() {
     $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
 
     $args = array(
-        'post_type' => 'photo', // Remplacez par votre type de contenu (exemple : 'post', 'photo', etc.)
+        'post_type' => 'photo', // Type de contenu
         'posts_per_page' => 8, // Nombre de photos par page
         'paged' => $page,
         'orderby' => 'date',
         'order' => $order,
     );
 
-    // Si une catégorie est filtrée
+    // Filtre par catégorie (ACF)
     if (!empty($categorie)) {
-        $args['tax_query'][] = array(
-            'taxonomy' => 'categorie', // Remplacez par votre taxonomie
-            'field' => 'slug',
-            'terms' => $categorie,
+        $args['meta_query'][] = array(
+            'key' => 'categorie', // Remplace par la clé du champ ACF
+            'value' => $categorie,
+            'compare' => '=',
         );
     }
 
-    // Si un format est filtré
+    // Filtre par format (ACF)
     if (!empty($format)) {
-        $args['tax_query'][] = array(
-            'taxonomy' => 'format', // Remplacez par votre taxonomie
-            'field' => 'slug',
-            'terms' => $format,
+        $args['meta_query'][] = array(
+            'key' => 'field_677d46bff5f3d', // Clé du champ ACF pour les formats
+            'value' => $format,
+            'compare' => '=',
         );
     }
 
@@ -156,7 +156,6 @@ function charger_photos_via_ajax() {
         while ($query->have_posts()) {
             $query->the_post();
             echo '<div class="photo-item">';
-            // echo '<h3>' . get_the_title() . '</h3>';
             echo get_the_post_thumbnail(get_the_ID(), 'medium'); // Affiche la miniature
             echo '</div>';
         }
@@ -168,8 +167,3 @@ function charger_photos_via_ajax() {
 }
 add_action('wp_ajax_filter', 'charger_photos_via_ajax'); // Pour utilisateurs connectés
 add_action('wp_ajax_nopriv_filter', 'charger_photos_via_ajax'); // Pour utilisateurs non connectés
-
-// Fonction pour afficher que wp_enqueue_scripts fonctionne
-add_action('wp_enqueue_scripts', function() {
-    echo '<!-- wp_enqueue_scripts fonctionne -->';
-});

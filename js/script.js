@@ -108,7 +108,7 @@ jQuery(document).ready(function ($) {
                 }
 
                 // Masquer le bouton "Charger plus" s'il n'y a plus de photos
-                if ($('#no-more-posts').length > 0 || $(response).filter('.photo-item').length < 8) {
+                if ($('#no-more-posts').length > 0 || $(response).filter('.photo-item').length < 16) {
                     $('#load-more').hide();
                 } else {
                     $('#load-more').show().data('page', page);

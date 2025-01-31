@@ -1,35 +1,43 @@
 <div class="filters">
     <!-- Menu déroulant pour Catégorie -->
     <select id="filter-categorie" class="filter-categorie">
-        <option value="">Toutes les catégories</option>
+        <option value="">CATÉGORIES</option>
         <?php
-        $categories = get_terms(array(
-            'taxonomy' => 'categorie_devenement', // Remplace par le nom de ta taxonomie pour les catégories
-            'hide_empty' => false,
-        ));
-        foreach ($categories as $categorie) {
-            echo '<option value="' . esc_attr($categorie->slug) . '">' . esc_html($categorie->name) . '</option>';
+        $field = get_field_object('field_677d4676f5f3b'); // Récupère le champ ACF
+        $categories = $field['choices']; // Les choix du champ ACF
+
+        if (!empty($categories) && !is_wp_error($categories)) {
+            foreach ($categories as $value => $label) {
+                echo '<option value="' . esc_attr($value) . '">' . esc_html($label) . '</option>';
+            }
+        } else {
+            echo '<option value="">Aucune catégorie trouvée</option>';
         }
         ?>
     </select>
 
-    <!-- Menu déroulant pour Format -->
-    <select id="filter-format" class="filter-format">
-        <option value="">Tous les formats</option>
-        <?php
-        $formats = get_terms(array(
-            'taxonomy' => 'format', // Remplace par le nom de ta taxonomie pour les formats
-            'hide_empty' => false,
-        ));
-        foreach ($formats as $format) {
-            echo '<option value="' . esc_attr($format->slug) . '">' . esc_html($format->name) . '</option>';
+    
+<!-- Menu déroulant pour Format -->
+<select id="filter-format" class="filter-format">
+    <option value="">FORMATS</option>
+    <?php
+    $field_format = get_field_object('field_677d46bff5f3d'); // Récupère le champ ACF pour les formats
+    $formats = $field_format['choices']; // Les choix du champ ACF
+
+    if (!empty($formats) && !is_wp_error($formats)) {
+        foreach ($formats as $value => $label) {
+            echo '<option value="' . esc_attr($value) . '">' . esc_html($label) . '</option>';
         }
-        ?>
-    </select>
+    } else {
+        echo '<option value="">Aucun format trouvé</option>';
+    }
+    ?>
+</select>
 
     <!-- Menu déroulant pour Trier par -->
     <select id="filter-order" class="filter-order">
-        <option value="ASC">Trier par : Plus récentes</option>
-        <option value="DESC">Trier par : Plus anciennes</option>
+        <option value="">TRIER PAR</option>
+        <option value="ASC">Plus récents</option>
+        <option value="DESC">Plus anciens</option>
     </select>
 </div>
