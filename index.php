@@ -26,8 +26,11 @@ get_header(); ?>
 <!--inclure le filtre-->
 <?php get_template_part('templates_part/filter-part'); ?>
     <!-- Autres éléments de contenu -->
-    <?php
+     
+    <?php get_template_part('lightbox'); ?>
 
+
+<?php
 // Définir le nombre de photos par page et récupérer la page actuelle
 $photos_per_page = 8;
 $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;

@@ -144,7 +144,7 @@ function charger_photos_via_ajax() {
     // Filtre par format (ACF)
     if (!empty($format)) {
         $args['meta_query'][] = array(
-            'key' => 'field_677d46bff5f3d', // Clé du champ ACF pour les formats
+            'key' => 'format', // Clé du champ ACF pour les formats
             'value' => $format,
             'compare' => '=',
         );
