@@ -138,3 +138,36 @@ jQuery(document).ready(function ($) {
         loadMorePhotos(nextPage);
     });
 });
+
+//lightbox
+
+document.addEventListener('DOMContentLoaded', function () {
+    const photoItems = document.querySelectorAll('.photo-item');
+
+    photoItems.forEach(item => {
+        item.addEventListener('click', function () {
+            const imageSrc = item.querySelector('img').src;
+            const reference = 'Référence de la photo'; // Remplace par la référence réelle
+            const categorie = 'Catégorie de la photo'; // Remplace par la catégorie réelle
+
+            // Ouvrir la lightbox
+            openLightbox(imageSrc, reference, categorie);
+        });
+    });
+
+    // Fonction pour ouvrir la lightbox (à adapter à ton code existant)
+    function openLightbox(imageSrc, reference, categorie) {
+        const lightboxImage = document.querySelector('.lightbox__image');
+        const lightboxRef = document.querySelector('.lightbox__infos--Ref');
+        const lightboxCategorie = document.querySelector('.lightbox__infos--Categorie');
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxOverlay = document.querySelector('.lightbox-overlay');
+
+        lightboxImage.src = imageSrc;
+        lightboxRef.textContent = reference;
+        lightboxCategorie.textContent = categorie;
+        lightbox.style.display = 'block';
+        lightboxOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+});
