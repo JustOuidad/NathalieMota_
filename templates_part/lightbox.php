@@ -1,12 +1,5 @@
 <!-- Overlay pour la lightbox -->
 <div class="lightbox-overlay" aria-hidden="true"></div>
-<!-- eye -->
-<div class="photo-item">
-    <img src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-eye.svg' ?>" alt="Image">
-    <div class="overlay">
-        <img src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-eye.svg' ?>" alt="Voir l'image" class="eye-icon">
-    </div>
-</div>
 
 <!-- Lightbox -->
 <div class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-describedby="lightbox-description">
@@ -29,7 +22,7 @@
 
     <!-- Conteneur pour afficher l'image sélectionnée dans la lightbox -->
     <div class="lightbox__open">
-        <img class="lightbox__image" src="" alt="Image de la lightbox" />
+    <img src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-lightbox.svg' ?>" alt="Image de la lightbox" />
     </div>
 
     <!-- Section pour afficher des informations sur l'image -->

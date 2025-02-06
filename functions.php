@@ -133,22 +133,29 @@ function charger_photos_via_ajax() {
     );
 
     // Filtre par catégorie (ACF)
-    if (!empty($categorie)) {
-        $args['meta_query'][] = array(
-            'key' => 'categorie', // Remplace par la clé du champ ACF
-            'value' => $categorie,
-            'compare' => '=',
-        );
-    }
+    
+  $tax_query = array('relation' => 'AND');
 
-    // Filtre par format (ACF)
-    if (!empty($format)) {
-        $args['meta_query'][] = array(
-            'key' => 'format', // Clé du champ ACF pour les formats
-            'value' => $format,
-            'compare' => '=',
-        );
-    }
+  if (!empty($categorie)) {
+      $tax_query[] = array(
+          'taxonomy' => 'categorie', // Assurez-vous que cette taxonomie existe
+          'field'    => 'slug',
+          'terms'    => $categorie,
+      );
+  }
+// Filtre par formats(ACF)
+  if (!empty($format)) {
+      $tax_query[] = array(
+          'taxonomy' => 'formats', // Assurez-vous que cette taxonomie existe
+          'field'    => 'slug',
+          'terms'    => $format,
+      );
+  }
+
+  if (!empty($tax_query)) {
+      $args['tax_query'] = $tax_query;
+  }
+
 
     $query = new WP_Query($args);
 

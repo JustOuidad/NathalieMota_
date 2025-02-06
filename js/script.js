@@ -143,20 +143,20 @@ jQuery(document).ready(function ($) {
 
 document.addEventListener('DOMContentLoaded', function () {
     const photoItems = document.querySelectorAll('.photo-item');
-
+ console.log(photoItems);
     photoItems.forEach(item => {
         item.addEventListener('click', function () {
-            const imageSrc = item.querySelector('img').src;
-            const reference = 'Référence de la photo'; // Remplace par la référence réelle
-            const categorie = 'Catégorie de la photo'; // Remplace par la catégorie réelle
+            const photoData = item.querySelector('.photo-data');
+            const imageSrc = photoData.getAttribute('data-image');
+            const reference = photoData.getAttribute('data-reference');
+            const categorie = photoData.getAttribute('data-categorie');
 
-            // Ouvrir la lightbox
             openLightbox(imageSrc, reference, categorie);
         });
     });
 
-    // Fonction pour ouvrir la lightbox (à adapter à ton code existant)
     function openLightbox(imageSrc, reference, categorie) {
+        console.log('coucou');
         const lightboxImage = document.querySelector('.lightbox__image');
         const lightboxRef = document.querySelector('.lightbox__infos--Ref');
         const lightboxCategorie = document.querySelector('.lightbox__infos--Categorie');

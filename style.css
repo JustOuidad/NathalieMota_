@@ -433,8 +433,6 @@ ul.footer-menu, ul.footer-links {
 }
 
 /*lightbox*/
-
-/* Conteneur de l'image */
 .photo-item {
     position: relative;
     display: inline-block;
@@ -442,29 +440,26 @@ ul.footer-menu, ul.footer-links {
     cursor: pointer;
 }
 
-/* Overlay */
 .photo-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
-    opacity: 0; /* Masqué par défaut */
-    transition: opacity 0.3s ease; /* Animation fluide */
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Icône œil */
 .eye-icon {
-    width: 40px; /* Taille de l'icône */
+    width: 40px;
     height: 40px;
-    filter: brightness(0) invert(1); /* Rendre l'icône blanche */
+    filter: brightness(0) invert(1);
 }
 
-/* Afficher l'overlay au survol */
 .photo-item:hover .photo-overlay {
-    opacity: 1; /* Afficher l'overlay */
+    opacity: 1;
 }
