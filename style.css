@@ -291,41 +291,70 @@ ul.footer-menu, ul.footer-links {
 
 /* Style de base pour le modal */
 /* Style pour le modal */
+/* Styles du modal */
 .modal {
-    display: none;
     position: fixed;
-    z-index: 1;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7); /* Ombre de fond */
+    display: none; /* Cacher par défaut */
     justify-content: center;
     align-items: center;
-}
-#wpcf7-f26-o1{
-    background-color: white!important;
-    border-color: black 10px !important;
-}
-.wpcf7-f26-o1 #wpcf7-submit{
-    text-align: center !important;
-}
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    position: relative;
-    max-width: 500px;
-    margin: 0 auto;
+    z-index: 9999;
+    overflow: hidden;
 }
 
+/* Contenu du modal */
+.modal__content {
+    background-color: #fff;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+}
+
+/* Position de la croix de fermeture */
 .cross-icon-modale {
     position: absolute;
     top: 10px;
     right: 10px;
-    cursor: pointer;
     font-size: 24px;
+    color: #333;
+    cursor: pointer;
 }
+
+/* Centrage des éléments à l'intérieur du formulaire */
+.modal__content form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Espacement entre les champs du formulaire */
+.modal__content form input,
+.modal__content form textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 80%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.modal__content form button {
+    padding: 10px 20px;
+    background-color: #D8D8D8;   ;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal__content form button:hover {
+    background-color: #0056b3;
+}
+
 
 /* Style pour le header personnalisé */
 

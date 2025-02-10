@@ -140,28 +140,45 @@ jQuery(document).ready(function ($) {
 });
 
 //lightbox
-
 document.addEventListener('DOMContentLoaded', function () {
     const photoItems = document.querySelectorAll('.photo-item');
- console.log(photoItems);
+    console.log('Nombre de photos trouvées :', photoItems.length); // Debugging
+
     photoItems.forEach(item => {
         item.addEventListener('click', function () {
+            console.log('Photo cliquée'); // Debugging
+
             const photoData = item.querySelector('.photo-data');
+            if (!photoData) {
+                console.error('Aucun élément .photo-data trouvé dans .photo-item'); // Debugging
+                return;
+            }
+
             const imageSrc = photoData.getAttribute('data-image');
             const reference = photoData.getAttribute('data-reference');
             const categorie = photoData.getAttribute('data-categorie');
+
+            console.log('Données récupérées :', { imageSrc, reference, categorie }); // Debugging
 
             openLightbox(imageSrc, reference, categorie);
         });
     });
 
     function openLightbox(imageSrc, reference, categorie) {
-        console.log('coucou');
+        console.log('Ouverture de la lightbox avec :', { imageSrc, reference, categorie }); // Debugging
+
         const lightboxImage = document.querySelector('.lightbox__image');
         const lightboxRef = document.querySelector('.lightbox__infos--Ref');
         const lightboxCategorie = document.querySelector('.lightbox__infos--Categorie');
         const lightbox = document.querySelector('.lightbox');
         const lightboxOverlay = document.querySelector('.lightbox-overlay');
+
+        console.log('Éléments de la lightbox :', { lightboxImage, lightboxRef, lightboxCategorie, lightbox, lightboxOverlay }); // Debugging
+
+        if (!lightboxImage || !lightboxRef || !lightboxCategorie || !lightbox || !lightboxOverlay) {
+            console.error('Un ou plusieurs éléments de la lightbox sont introuvables'); // Debugging
+            return;
+        }
 
         lightboxImage.src = imageSrc;
         lightboxRef.textContent = reference;
@@ -169,5 +186,20 @@ document.addEventListener('DOMContentLoaded', function () {
         lightbox.style.display = 'block';
         lightboxOverlay.style.display = 'block';
         document.body.style.overflow = 'hidden';
+    }
+
+    // Fermer la lightbox
+    const lightboxClose = document.querySelector('.lightbox__close');
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', function () {
+            const lightbox = document.querySelector('.lightbox');
+            const lightboxOverlay = document.querySelector('.lightbox-overlay');
+
+            if (lightbox && lightboxOverlay) {
+                lightbox.style.display = 'none';
+                lightboxOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
     }
 });

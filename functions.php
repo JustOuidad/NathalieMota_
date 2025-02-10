@@ -174,3 +174,28 @@ function charger_photos_via_ajax() {
 }
 add_action('wp_ajax_filter', 'charger_photos_via_ajax'); // Pour utilisateurs connectés
 add_action('wp_ajax_nopriv_filter', 'charger_photos_via_ajax'); // Pour utilisateurs non connectés
+
+//LIGHTBOX
+
+function custom_photo_rewrite_rule() {
+    add_rewrite_rule(
+        '^photo/([0-9]+)/?$',
+        'index.php?photo_id=$matches[1]',
+        'top'
+    );
+}
+add_action('init', 'custom_photo_rewrite_rule');
+
+function custom_photo_query_vars($vars) {
+    $vars[] = 'photo_id';
+    return $vars;
+}
+add_filter('query_vars', 'custom_photo_query_vars');
+
+function enqueue_photo_block_styles() {
+    if (is_page_template('photo_block.php')) {
+        wp_enqueue_style('photo-block-style', get_stylesheet_directory_uri() . '/assets/css/photo-block.css');
+        wp_enqueue_script('photo-block-script', get_stylesheet_directory_uri() . '/assets/js/photo-block.js', array('jquery'), null, true);
+    }
+}
+add_action('wp_enqueue_scripts', 'enqueue_photo_block_styles');
