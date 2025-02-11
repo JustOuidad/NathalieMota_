@@ -131,13 +131,45 @@ Updated: 2024-12-24 14:38:18
 /* Body and Default Usage */
 body {
     font-family: 'Poppins', sans-serif;
-    font-weight: 400; /* Regular */
+    font-weight: 400; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 1440px;
 }
 
-h1, h2, h3 {
-    font-family: 'Space Mono', sans-serif;
-    font-weight: 700; /* Bold */
-}
+h1 {
+    font-family: "SpaceMono", sans-serif;
+    font-size: 3.28rem;
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+  }
+  
+  .hero > h1 {
+    font-size: 6.86rem;
+    text-align: center;
+  }
+  h2 {
+    color: #000000;
+    font-family: "SpaceMono", sans-serif;
+    font-size: 2.57rem;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 58px;
+    text-transform: uppercase;
+  }
+  
+  h3 {
+    color: #000000;
+    font-family: "SpaceMono", sans-serif;
+    font-size: 1.28rem;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+  }
 
 em, i {
     font-family: 'Space Mono', sans-serif;
@@ -151,20 +183,20 @@ code {
 
 strong, b {
     font-family: 'Space Mono', sans-serif;
-    font-weight: normal; /* Utiliser la version Regular */
+    font-weight: normal; 
 }
 
 ul, ol, li, a {
     font-family: 'Space Mono', sans-serif;
-    font-weight: normal; /* Utiliser la version Regular */
+    font-weight: normal; 
+    font-size: 1rem;
+    font-weight: 300;
 }
 
 
 /* Styles du Header */
 .hero {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     background-color: #ffffff; 
     padding: 20px 50px; 
     font-family: 'Space Mono', monospace; 
@@ -175,22 +207,37 @@ ul, ol, li, a {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 1200px; /* Limite maximale pour centrer */
+    max-width: 1200px; 
+    margin: 0 auto; /* Centrer le conteneur */
 }
 
 /* Logo */
+.logo {
+    flex-grow: 1; /* Permet au logo de prendre l'espace disponible */
+    text-align: center; /* Centre le logo */
+}
+
 .logo img {
     display: block;
-    height: auto; /* Garde les proportions originales */
-    max-height: 100%; /* Taille originale du logo */
-    margin-right: auto; /* Pousse le menu à droite */
+    height: auto; 
+    max-height: 100%; 
+    margin: 0 auto; /* Centre l'image du logo */
+}
+
+/* Alignement global */
+.main-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Espacement égal entre les éléments */
+    width: 100%;
+    font-family: 'Space Mono', monospace;
 }
 
 /* Menu */
 .header-menu {
     list-style: none;
     display: flex;
-    gap: 30px; /* Espacement uniforme entre les liens du menu */
+    gap: 30px; 
     margin: 0;
     padding: 0;
     align-items: center;
@@ -202,65 +249,76 @@ ul, ol, li, a {
 
 .header-menu li a {
     text-decoration: none;
-    font-family: 'Space Mono' !important;
+    font-family: 'Space Mono', monospace;
     font-size: 16px;
-    weight:400;
+    font-weight: 400;
     color: black;
     text-transform: uppercase; 
-    font-weight: normal;
     letter-spacing: 2px; 
-    
 }
 
-#menu-menu {
-    display: flex;
-    justify-content: flex-end; /* Aligne les éléments à droite */
-    padding: 0; /* Optionnel, pour enlever tout padding du <ul> */
-  }
-  
-  #menu-menu li {
-    list-style: none; 
-  }
-  
-  #menu-menu li a {
-    text-decoration: none;
-    padding: 10px;
-    display: block;
-  }
-  
-/* Bouton Contact */
-.modal-contact button {
+/* Style pour le bouton de contact */
+#openModalButton {
     border: none;
-    background: none !important;
-    font-family: 'Space Mono' !important;
+    background: none;
+    font-family: 'Space Mono', monospace;
     font-size: 16px;
-    weight:400;
-    color: black !important;
-    background-color: #D8D8D8 !important;
+    font-weight: 400;
+    color: black;
     text-transform: uppercase; 
     cursor: pointer;
     letter-spacing: 2px; 
     padding: 0;
-  
 }
 
-/* Alignement global */
-.main-navigation {
-    display: flex;
-    align-items: center;
-    gap: 50px; /* Espacement entre le logo et le menu */
-    font-family: 'space mono' !important;
+/* Cacher le bouton toggle en desktop */
+.menu-toggle {
+    display: none;
+    background-color: #E00000;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
 }
 
-.header-menu {
-    list-style: none;
-    display: flex;
-    gap: 30px; /* Espacement uniforme entre les liens du menu */
-    margin: 0;
-    padding: 0;
-    align-items: center;
+/* Style pour le menu en mode mobile/tablette */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block; /* Afficher le bouton toggle */
+    }
+
+    .header-menu {
+        display: none; /* Cacher le menu desktop */
+        flex-direction: column;
+        width: 100%;
+        background-color: #f8f8f8;
+        position: absolute;
+        top: 60px;
+        left: 0;
+    }
+
+    .header-menu li {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .header-menu a {
+        color: #333;
+    }
+
+    /* Lorsque le menu est ouvert */
+    .header-menu.active {
+        display: flex;
+    }
 }
 
+/* Style pour le bouton de contact */
+#openModalButton {
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-left: 20px;
+}
 
 /* Style pour le footer */
 
@@ -289,8 +347,6 @@ ul.footer-menu, ul.footer-links {
 }
 
 
-/* Style de base pour le modal */
-/* Style pour le modal */
 /* Styles du modal */
 .modal {
     position: fixed;
@@ -344,7 +400,7 @@ ul.footer-menu, ul.footer-links {
 
 .modal__content form button {
     padding: 10px 20px;
-    background-color: #D8D8D8;   ;
+    background-color: #D8D8D8;
     color: #fff;
     border: none;
     border-radius: 5px;

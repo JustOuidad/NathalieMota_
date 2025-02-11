@@ -31,6 +31,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
   });
+
+  //MENU
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.querySelector('.menu-toggle');
+    const headerMenu = document.querySelector('.header-menu');
+
+    toggleButton.addEventListener('click', function() {
+        headerMenu.classList.toggle('active');
+    });
+});
   
 //AJAX pour le LOAD MORE
 
