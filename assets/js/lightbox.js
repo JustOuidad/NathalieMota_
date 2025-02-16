@@ -1,98 +1,51 @@
-'use strict';
+document.querySelectorAll('.photo-item').forEach(item => {
+    item.addEventListener('click', function (e) {
+        e.preventDefault();
 
-document.addEventListener('DOMContentLoaded', () => {
-    attachLightboxEvents();
+        const photoId = this.dataset.photoId;
+        console.log("ID de l'image cliquée :", photoId);
 
-    // Réattacher les événements après un rafraîchissement dynamique du contenu
-    document.addEventListener('refreshLightboxEvents', () => {
-        attachLightboxEvents();
+        fetch(lightbox_ajax_object.ajax_url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `action=get_photo_data&security=${lightbox_ajax_object.security}&photoId=${photoId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                openLightbox(data.data);
+            } else {
+                console.error('Erreur de récupération des données.');
+            }
+        })
+        .catch(() => console.error('Erreur d\'AJAX.'));
     });
 });
 
-const attachLightboxEvents = () => {
+
+
+
+
+function openLightbox(photoData) {
+    console.log("Ouverture de la lightbox :", photoData);
+
     const lightboxOverlay = document.querySelector('.lightbox-overlay');
-    const lightboxImage = lightboxOverlay.querySelector('.lightbox-image');
-    const lightboxRef = lightboxOverlay.querySelector('.lightbox-reference');
-    const lightboxCategorie = lightboxOverlay.querySelector('.lightbox-category');
-    const closeBtn = lightboxOverlay.querySelector('.lightbox__close');
-    const prevBtn = lightboxOverlay.querySelector('.lightbox__arrows--previous');
-    const nextBtn = lightboxOverlay.querySelector('.lightbox__arrows--next');
+    if (!lightboxOverlay) {
+        console.error("La lightbox n'existe pas.");
+        return;
+    }
 
-    const images = [];
-    document.querySelectorAll('.photo-item').forEach((item, index) => {
-        const photoId = item.dataset.photoId;
-        const imageUrl = item.dataset.imageUrl;
-        const reference = item.dataset.reference;
-        const category = item.dataset.category;
+    const image = document.querySelector('.lightbox-image');
+    const reference = document.querySelector('.lightbox-reference');
+    const category = document.querySelector('.lightbox-category');
 
-        // Stocker les informations de chaque photo
-        images.push({ id: photoId, url: imageUrl, reference, category });
-
-        // Ouvrir la lightbox au clic sur une photo
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            openLightbox(index);
-        });
-    });
-
-    let currentIndex = 0;
-
-    const openLightbox = (index) => {
-        if (index < 0 || index >= images.length) {
-            console.error(`Index invalide : ${index}`);
-            return;
-        }
-
-        currentIndex = index;
-        const image = images[currentIndex];
-
-        if (!image) {
-            console.error(`Image non trouvée à l'index : ${currentIndex}`);
-            return;
-        }
-
-        // Mettre à jour les éléments de la lightbox avec les données de la photo
-        lightboxImage.src = image.url;
-        lightboxRef.textContent = image.reference;
-        lightboxCategorie.textContent = image.category;
-        lightboxOverlay.dataset.currentPhotoId = image.id;
+    if (image && reference && category) {
+        image.src = photoData.url;
+        reference.textContent = photoData.reference;
+        category.textContent = photoData.category;
+        lightboxOverlay.dataset.currentPhotoId = photoData.id;
         lightboxOverlay.style.display = 'flex';
-
-        // Ajouter les écouteurs d'événements pour la navigation au clavier
-        document.addEventListener('keydown', handleKeydown);
-    };
-
-    const changeImage = (direction) => {
-        const newIndex = (currentIndex + direction + images.length) % images.length;
-        openLightbox(newIndex);
-    };
-
-    const closeLightbox = () => {
-        lightboxOverlay.style.display = 'none';
-        document.removeEventListener('keydown', handleKeydown);
-    };
-
-    const handleKeydown = (e) => {
-        if (e.key === 'ArrowLeft') {
-            changeImage(-1); // Photo précédente
-        } else if (e.key === 'ArrowRight') {
-            changeImage(1); // Photo suivante
-        } else if (e.key === 'Escape') {
-            closeLightbox(); // Fermer la lightbox
-        }
-    };
-
-    // Fermer la lightbox au clic sur le bouton de fermeture
-    closeBtn.addEventListener('click', closeLightbox);
-
-    // Navigation entre les photos
-    prevBtn.addEventListener('click', () => changeImage(-1)); // Photo précédente
-    nextBtn.addEventListener('click', () => changeImage(1)); // Photo suivante
-
-    // Fermer la lightbox au clic en dehors de l'image
-    lightboxOverlay.addEventListener('click', (e) => {
-        if (e.target === lightboxOverlay) {
-            closeLightbox();
-        }
-    });
-};
+    } else {
+        console.error("Éléments de la lightbox non trouvés.");
+    }
+}

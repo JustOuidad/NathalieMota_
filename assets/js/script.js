@@ -1,3 +1,4 @@
+// import Lightbox from './lightbox.js';
 document.addEventListener('DOMContentLoaded', function() {
     // Ouvre le modal quand on clique sur le bouton "Contact"
     const openModalButton = document.querySelector('#openModalButton');
@@ -148,68 +149,112 @@ jQuery(document).ready(function ($) {
         loadMorePhotos(nextPage);
     });
 });
-
+console.log('ok');
 //lightbox
-document.addEventListener('DOMContentLoaded', function () {
-    const photoItems = document.querySelectorAll('.photo-item');
-    console.log('Nombre de photos trouvées :', photoItems.length); // Debugging
+// document.addEventListener('DOMContentLoaded', function () {
+//     const photoItems = document.querySelectorAll('.photo-item');
 
-    photoItems.forEach(item => {
-        item.addEventListener('click', function () {
-            console.log('Photo cliquée'); // Debugging
+//     photoItems.forEach(item => {
+//         item.addEventListener('click', function () {
+//             const imageUrl = item.querySelector('img').src;
+//             const reference = item.dataset.reference;
+//             const category = item.dataset.category;
 
-            const photoData = item.querySelector('.photo-data');
-            if (!photoData) {
-                console.error('Aucun élément .photo-data trouvé dans .photo-item'); // Debugging
-                return;
-            }
+//             openLightbox(imageUrl, reference, category);
+//         });
+//     });
 
-            const imageSrc = photoData.getAttribute('data-image');
-            const reference = photoData.getAttribute('data-reference');
-            const categorie = photoData.getAttribute('data-categorie');
+//     function openLightbox(imageUrl, reference, category) {
+//         const lightbox = document.querySelector('.lightbox');
+//         const lightboxImage = lightbox.querySelector('.lightbox__image');
+//         const lightboxRef = lightbox.querySelector('.lightbox__infos--Ref');
+//         const lightboxCategory = lightbox.querySelector('.lightbox__infos--Categorie');
 
-            console.log('Données récupérées :', { imageSrc, reference, categorie }); // Debugging
+//         // Mettre à jour les éléments de la lightbox
+//         lightboxImage.src = imageUrl;
+//         lightboxRef.textContent = reference;
+//         lightboxCategory.textContent = category;
 
-            openLightbox(imageSrc, reference, categorie);
+//         // Afficher la lightbox
+//         lightbox.style.display = 'block';
+//     }
+
+//     // Fermer la lightbox
+//     const closeLightboxButton = document.querySelector('.lightbox__close');
+//     if (closeLightboxButton) {
+//         closeLightboxButton.addEventListener('click', function () {
+//             const lightbox = document.querySelector('.lightbox');
+//             lightbox.style.display = 'none';
+//         });
+//     }
+// });
+// script.js
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialisation des fonctionnalités
+    initLoadMore();
+    initLightbox();
+});
+
+// Fonction pour gérer le "load more"
+function initLoadMore() {
+    const loadMoreButton = document.querySelector('.load-more');
+    if (loadMoreButton) {
+        loadMoreButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            loadMorePosts();
+        });
+    }
+}
+
+// Fonction pour charger plus de posts via AJAX
+function loadMorePosts() {
+    const paged = ajax_params.paged || 1; // Récupère la page actuelle
+    const ajaxurl = ajax_params.ajaxurl; // URL pour les requêtes AJAX
+
+    fetch(ajaxurl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=filter&paged=${paged}`, // Envoie la page actuelle au serveur
+    })
+    .then(response => response.text())
+    .then(data => {
+        // Ajoute les nouveaux posts à la page
+        document.querySelector('.photo-container').insertAdjacentHTML('beforeend', data);
+        // Met à jour le numéro de page
+        ajax_params.paged = parseInt(paged) + 1;
+    })
+    .catch(error => console.error('Erreur lors du chargement des posts :', error));
+}
+
+// Fonction pour initialiser la lightbox
+function initLightbox() {
+    const lightboxTriggers = document.querySelectorAll('.lightbox-trigger');
+    lightboxTriggers.forEach(function(trigger) {
+        trigger.addEventListener('click', function(event) {
+            event.preventDefault();
+            const imageUrl = this.getAttribute('href');
+            openLightbox(imageUrl);
         });
     });
+}
 
-    function openLightbox(imageSrc, reference, categorie) {
-        console.log('Ouverture de la lightbox avec :', { imageSrc, reference, categorie }); // Debugging
+// Fonction pour ouvrir la lightbox
+function openLightbox(imageUrl) {
+    const lightbox = document.createElement('div');
+    lightbox.classList.add('lightbox');
+    lightbox.innerHTML = `
+        <div class="lightbox-content">
+            <img src="${imageUrl}" alt="Lightbox Image">
+            <span class="close-lightbox">&times;</span>
+        </div>
+    `;
+    document.body.appendChild(lightbox);
 
-        const lightboxImage = document.querySelector('.lightbox__image');
-        const lightboxRef = document.querySelector('.lightbox__infos--Ref');
-        const lightboxCategorie = document.querySelector('.lightbox__infos--Categorie');
-        const lightbox = document.querySelector('.lightbox');
-        const lightboxOverlay = document.querySelector('.lightbox-overlay');
-
-        console.log('Éléments de la lightbox :', { lightboxImage, lightboxRef, lightboxCategorie, lightbox, lightboxOverlay }); // Debugging
-
-        if (!lightboxImage || !lightboxRef || !lightboxCategorie || !lightbox || !lightboxOverlay) {
-            console.error('Un ou plusieurs éléments de la lightbox sont introuvables'); // Debugging
-            return;
-        }
-
-        lightboxImage.src = imageSrc;
-        lightboxRef.textContent = reference;
-        lightboxCategorie.textContent = categorie;
-        lightbox.style.display = 'block';
-        lightboxOverlay.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-
-    // Fermer la lightbox
-    const lightboxClose = document.querySelector('.lightbox__close');
-    if (lightboxClose) {
-        lightboxClose.addEventListener('click', function () {
-            const lightbox = document.querySelector('.lightbox');
-            const lightboxOverlay = document.querySelector('.lightbox-overlay');
-
-            if (lightbox && lightboxOverlay) {
-                lightbox.style.display = 'none';
-                lightboxOverlay.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-    }
-});
+    const closeButton = lightbox.querySelector('.close-lightbox');
+    closeButton.addEventListener('click', function() {
+        lightbox.remove();
+    });
+}

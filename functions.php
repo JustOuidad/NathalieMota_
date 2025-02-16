@@ -54,7 +54,7 @@ function charger_jquery_et_scripts() {
     // Ajouter ton script personnalisé après jQuery
     wp_enqueue_script(
         'custom-script', 
-        get_stylesheet_directory_uri() . 'assets/js/script.js', // Ton fichier script.js
+        get_stylesheet_directory_uri() . '/js/script.js', // Ton fichier script.js
         array('jquery'), // Dépendance à jQuery
         null, 
         true // Charger dans le footer pour éviter les conflits
@@ -177,14 +177,15 @@ add_action('wp_ajax_nopriv_filter', 'charger_photos_via_ajax'); // Pour utilisat
 
 //LIGHTBOX
 function enqueue_custom_scripts() {
-    // Enregistre le script lightbox.js
+    //Enregistre le script lightbox.js
     wp_enqueue_script(
-        'lightbox-script', 
-        get_template_directory_uri() . '/assets/js/lightbox.js', // Chemin vers le fichier JS
-        array('jquery'), 
-        '1.0.0', 
-        true 
+        'lightbox-script', // Handle du script
+        get_stylesheet_directory_uri() . '/js/lightbox.js', // Chemin vers le fichier JS
+        array('jquery'), // Dépendances (ici, jQuery)
+        '1.0.0', // Version du script
+        true // Charger dans le footer
     );
+    
 
     // Localisation des données pour AJAX (si nécessaire)
     wp_localize_script(
