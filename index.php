@@ -20,11 +20,6 @@ get_header(); ?>
     <!-- Inclure la lightbox -->
     <?php get_template_part('templates_part/lightbox'); ?>
 
-
-    <!-- Inclure le photo_block -->
-    <a href="<?= esc_url(home_url('/photo_block.php?photo_id=' . $photo_id)); ?>">
-
-
     <!-- Affichage des photos -->
     <?php
     // Définir le nombre de photos par page et récupérer la page actuelle
@@ -39,22 +34,29 @@ get_header(); ?>
         'orderby' => 'rand',  // Afficher les photos aléatoirement
     ));
 
+    // Vérifie si des posts ont été trouvés
     if ($photos_showdown->have_posts()) :
         echo '<div class="photo-grid">';
         while ($photos_showdown->have_posts()) :
             $photos_showdown->the_post();
             $image_url = get_the_post_thumbnail_url(get_the_ID(), 'full'); // URL de l'image
             $photo_id = get_the_ID(); // ID de la photo
+            $reference = get_field('reference', $photo_id); // Récupérer la référence via ACF
+            $category = get_field('categorie', $photo_id); // Récupérer la catégorie via ACF
             ?>
-            <div class="photo-item">
-                <a href="<?= esc_url(home_url('/photo_block.php?photo_id=' . $photo_id)); ?>">
+            <div class="photo-item" 
+                 data-photo-id="<?= esc_attr($photo_id); ?>" 
+                 data-image-url="<?= esc_url($image_url); ?>" 
+                 data-reference="<?= esc_attr($reference); ?>" 
+                 data-category="<?= esc_attr($category); ?>">
+                <span>
                     <img src="<?= esc_url($image_url) ?>" alt="<?= esc_attr(get_the_title()) ?>" />
                     <div class="photo-overlay">
                         <img class="eye-icon" src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-eye.svg' ?>" alt="Voir l'image" />
                     </div>
-                </a>
+                </span>
             </div>
-            <?php
+        <?php
         endwhile;
         echo '</div>'; // Fermeture de la galerie
 
@@ -64,9 +66,11 @@ get_header(); ?>
             echo '<button id="load-more" class="btn-load-more">Charger plus</button>';
         }
 
+        // Réinitialiser les données de post
         wp_reset_postdata();
     else :
-        echo 'Aucune photo trouvée';
+        // Message affiché si aucun post n'a été trouvé
+        echo '<p>Aucune photo trouvée.</p>';
     endif;
     ?>
 

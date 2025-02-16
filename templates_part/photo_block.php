@@ -3,15 +3,14 @@
  * Template for displaying individual photo information
  */
 
-get_header(); 
+get_header();
 
 // Vérifiez si un ID de photo est passé dans l'URL
-if (isset($_GET['photo_id']) && is_numeric($photo_id = get_query_var('photo_id');
-)) {
+if (isset($_GET['photo_id']) && is_numeric($_GET['photo_id'])) {
     $photo_id = $_GET['photo_id'];
 } else {
-    // Redirection ou affichage d'un message si l'ID est manquant
-    wp_redirect(home_url()); 
+    // Redirection si l'ID est manquant
+    wp_redirect(home_url());
     exit;
 }
 
@@ -39,45 +38,53 @@ $args = array(
 $related_photos = new WP_Query($args);
 ?>
 
-<div id="photo-block" style="display: flex; flex-direction: column; height: 100vh;">
+<div id="photo-block" class="photo-block">
     <!-- Bloc principal 50% gauche avec infos -->
-    <div style="flex: 1; display: flex; flex-direction: row; justify-content: space-between;">
-        <div style="flex: 0.5; padding: 20px;">
-            <h2><?= esc_html($title); ?></h2>
-            <p><strong>Référence:</strong> <?= esc_html($reference); ?></p>
-            <p><strong>Catégorie:</strong> <?= esc_html($categorie); ?></p>
-            <p><strong>Format:</strong> <?= esc_html($format); ?></p>
-            <p><strong>Date de prise de vue:</strong> <?= esc_html($date_prise_vue); ?></p>
-        </div>
-        
-        <!-- Bloc 50% à droite avec la photo -->
-        <div style="flex: 0.5; padding: 20px;">
-            <img src="<?= esc_url($image_url); ?>" alt="<?= esc_attr($title); ?>" style="max-width: 100%; height: auto;">
-        </div>
+    <div class="photo-block__info">
+        <h2><?= esc_html($title); ?></h2>
+        <p><strong>Référence:</strong> <?= esc_html($reference); ?></p>
+        <p><strong>Catégorie:</strong> <?= esc_html($categorie); ?></p>
+        <p><strong>Format:</strong> <?= esc_html($format); ?></p>
+        <p><strong>Date de prise de vue:</strong> <?= esc_html($date_prise_vue); ?></p>
+    </div>
+    
+    <!-- Bloc 50% à droite avec la photo -->
+    <div class="photo-block__image">
+        <img src="<?= esc_url($image_url); ?>" alt="<?= esc_attr($title); ?>" />
     </div>
 
     <!-- Bloc 118px en dessous -->
-    <div style="height: 118px; display: flex; justify-content: space-between; padding: 10px;">
+    <div class="photo-block__navigation">
         <!-- Lien contact à gauche -->
-        <div>
+        <div class="photo-block__contact">
             <a href="#contact-form" id="contact-link" class="btn">Contactez-moi</a>
         </div>
 
         <!-- Navigation des photos à droite -->
-        <div style="display: flex;">
+        <div class="photo-block__arrows">
             <?php
             // Liens précédent et suivant
-            $prev_post = get_previous_post();
-            $next_post = get_next_post();
-            
-        $prev_post = get_adjacent_post(false, '', true, 'photo');
-        $next_post = get_adjacent_post(false, '', false, 'photo');
-?>
+            $prev_post = get_adjacent_post(false, '', true, 'photo');
+            $next_post = get_adjacent_post(false, '', false, 'photo');
+
+            if ($prev_post) :
+                ?>
+                <a href="<?= get_permalink($prev_post); ?>" class="photo-block__arrow photo-block__arrow--prev">
+                    <img src="<?= get_stylesheet_directory_uri() . '/assets/image/arrow-left-white.svg' ?>" alt="Photo précédente" />
+                </a>
+            <?php endif;
+
+            if ($next_post) :
+                ?>
+                <a href="<?= get_permalink($next_post); ?>" class="photo-block__arrow photo-block__arrow--next">
+                    <img src="<?= get_stylesheet_directory_uri() . '/assets/image/arrow-right-white.svg' ?>" alt="Photo suivante" />
+                </a>
+            <?php endif; ?>
         </div>
     </div>
 
     <!-- Photos similaires en bas -->
-    <div style="display: flex; justify-content: space-between; padding: 20px;">
+    <div class="photo-block__related">
         <?php if ($related_photos->have_posts()) : ?>
             <?php while ($related_photos->have_posts()) : $related_photos->the_post(); ?>
                 <div class="photo-item">
@@ -92,11 +99,12 @@ $related_photos = new WP_Query($args);
         <?php wp_reset_postdata(); ?>
     </div>
 </div>
-<?if (!$photo_id || !get_post($photo_id)) {
+
+<?php
+if (!$photo_id || !get_post($photo_id)) {
     wp_redirect(home_url());
     exit;
 }
+
+get_footer();
 ?>
-
-<?php get_footer(); ?>
-

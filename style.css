@@ -196,8 +196,6 @@ ul, ol, li, a {
 
 /* Styles du Header */
 .hero {
-    display: flex;
-    background-color: #ffffff; 
     padding: 20px 50px; 
     font-family: 'Space Mono', monospace; 
 }
@@ -208,27 +206,26 @@ ul, ol, li, a {
     align-items: center;
     width: 100%;
     max-width: 1200px; 
-    margin: 0 auto; /* Centrer le conteneur */
+    margin: 0 auto; 
 }
 
 /* Logo */
 .logo {
-    flex-grow: 1; /* Permet au logo de prendre l'espace disponible */
-    text-align: center; /* Centre le logo */
+    flex-grow: 1; 
+    text-align: center; 
 }
 
 .logo img {
     display: block;
     height: auto; 
-    max-height: 100%; 
-    margin: 0 auto; /* Centre l'image du logo */
+    
 }
 
 /* Alignement global */
 .main-navigation {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Espacement égal entre les éléments */
+    justify-content: space-between; 
     width: 100%;
     font-family: 'Space Mono', monospace;
 }
@@ -513,19 +510,19 @@ ul.footer-menu, ul.footer-links {
 }
 
 /* Cacher initialement les éléments "photo-item" supplémentaires */
-.photo-item.hidden {
+.lightbox-overlay.hidden {
     display: none;
 }
 
 /*lightbox*/
-.photo-item {
+.lightbox {
     position: relative;
     display: inline-block;
     overflow: hidden;
     cursor: pointer;
 }
 
-.photo-overlay {
+.lightbox-overlay{
     position: absolute;
     top: 0;
     left: 0;

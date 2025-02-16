@@ -54,7 +54,7 @@ function charger_jquery_et_scripts() {
     // Ajouter ton script personnalisé après jQuery
     wp_enqueue_script(
         'custom-script', 
-        get_stylesheet_directory_uri() . '/js/script.js', // Ton fichier script.js
+        get_stylesheet_directory_uri() . 'assets/js/script.js', // Ton fichier script.js
         array('jquery'), // Dépendance à jQuery
         null, 
         true // Charger dans le footer pour éviter les conflits
@@ -176,7 +176,27 @@ add_action('wp_ajax_filter', 'charger_photos_via_ajax'); // Pour utilisateurs co
 add_action('wp_ajax_nopriv_filter', 'charger_photos_via_ajax'); // Pour utilisateurs non connectés
 
 //LIGHTBOX
+function enqueue_custom_scripts() {
+    // Enregistre le script lightbox.js
+    wp_enqueue_script(
+        'lightbox-script', 
+        get_template_directory_uri() . '/assets/js/lightbox.js', // Chemin vers le fichier JS
+        array('jquery'), 
+        '1.0.0', 
+        true 
+    );
 
+    // Localisation des données pour AJAX (si nécessaire)
+    wp_localize_script(
+        'lightbox-script', // Identifiant du script
+        'lightbox_ajax_object', // Nom de l'objet JavaScript
+        array(
+            'ajax_url' => admin_url('admin-ajax.php'), // URL pour les requêtes AJAX
+            'security' => wp_create_nonce('lightbox_nonce') // Sécurité pour les requêtes AJAX
+        )
+    );
+}
+add_action('wp_enqueue_scripts', 'enqueue_custom_scripts');
 function custom_photo_rewrite_rule() {
     add_rewrite_rule(
         '^photo/([0-9]+)/?$',
@@ -194,8 +214,10 @@ add_filter('query_vars', 'custom_photo_query_vars');
 
 function enqueue_photo_block_styles() {
     if (is_page_template('photo_block.php')) {
-        wp_enqueue_style('photo-block-style', get_stylesheet_directory_uri() . '/assets/css/photo-block.css');
-        wp_enqueue_script('photo-block-script', get_stylesheet_directory_uri() . '/assets/js/photo-block.js', array('jquery'), null, true);
+        // wp_enqueue_style('photo-block-style', get_stylesheet_directory_uri() . '/css/photo-block.css');
+        // wp_enqueue_script('photo-block-script', get_stylesheet_directory_uri() . 'js/photo-block.js', array('jquery'), null, true);
     }
+    wp_enqueue_script('lightbox-script', get_stylesheet_directory_uri() . '/js/lightbox.js', array('jquery'), null, true);
+
 }
 add_action('wp_enqueue_scripts', 'enqueue_photo_block_styles');

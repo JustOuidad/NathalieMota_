@@ -1,5 +1,5 @@
-<!-- Overlay pour la lightbox -->
-<div class="lightbox-overlay" aria-hidden="true"></div>
+ <!-- Overlay pour la lightbox -->
+ <div class="lightbox-overlay hidden" aria-hidden="true"></div>
 
 <!-- Lightbox -->
 <div class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-describedby="lightbox-description">
@@ -30,4 +30,4 @@
         <p class="lightbox__infos--Ref" aria-label="Référence de la photo">Référence</p>
         <p class="lightbox__infos--Categorie" aria-label="Catégorie de la photo">Catégorie</p>
     </div>
-</div>
+</div> 
