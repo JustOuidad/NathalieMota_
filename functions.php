@@ -218,7 +218,7 @@ function enqueue_photo_block_styles() {
         // wp_enqueue_style('photo-block-style', get_stylesheet_directory_uri() . '/css/photo-block.css');
         // wp_enqueue_script('photo-block-script', get_stylesheet_directory_uri() . 'js/photo-block.js', array('jquery'), null, true);
     }
-    wp_enqueue_script('lightbox-script', get_stylesheet_directory_uri() . '/js/lightbox.js', array('jquery'), null, true);
+    // wp_enqueue_script('lightbox-script', get_stylesheet_directory_uri() . '/js/lightbox.js', array('jquery'), null, true);
 
 }
 add_action('wp_enqueue_scripts', 'enqueue_photo_block_styles');

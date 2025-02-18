@@ -49,3 +49,8 @@ function openLightbox(photoData) {
         console.error("Éléments de la lightbox non trouvés.");
     }
 }
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('lightbox-image')) {
+        console.log('🖼️ Lightbox activé sur', event.target);
+    }
+});
