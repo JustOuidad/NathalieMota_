@@ -1,5 +1,5 @@
 <!-- Overlay pour la lightbox -->
-<div class="lightbox-overlay hidden" aria-hidden="true"></div>
+<div class="lightbox-overlay" aria-hidden="true"></div>
 
 <!-- Lightbox -->
 <div class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-describedby="lightbox-description">
@@ -22,12 +22,12 @@
 
     <!-- Conteneur pour afficher l'image sélectionnée dans la lightbox -->
     <div class="lightbox__open">
-    <img src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-lightbox.svg' ?>" alt="Image de la lightbox" />
+        <img class="lightbox-image" src="" alt="Image de la lightbox" />
     </div>
 
     <!-- Section pour afficher des informations sur l'image -->
     <div class="lightbox__infos">
-        <p class="lightbox__infos--Ref" aria-label="Référence de la photo">Référence</p>
-        <p class="lightbox__infos--Categorie" aria-label="Catégorie de la photo">Catégorie</p>
+        <p class="lightbox__infos--Ref lightbox-reference" aria-label="Référence de la photo">Référence</p>
+        <p class="lightbox__infos--Categorie lightbox-category" aria-label="Catégorie de la photo">Catégorie</p>
     </div>
 </div>

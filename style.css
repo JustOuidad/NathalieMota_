@@ -281,7 +281,7 @@ ul, ol, li, a {
 /* Style pour le menu en mode mobile/tablette */
 @media (max-width: 768px) {
     .menu-toggle {
-        display: block; /* Afficher le bouton toggle */
+        display: block; 
     }
 
     .header-menu {
@@ -351,8 +351,8 @@ ul.footer-menu, ul.footer-links {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Ombre de fond */
-    display: none; /* Cacher par défaut */
+    background-color: rgba(0, 0, 0, 0.7); 
+    display: none; 
     justify-content: center;
     align-items: center;
     z-index: 9999;
@@ -444,17 +444,17 @@ ul.footer-menu, ul.footer-links {
 /* Galerie de photos avec 2 images par ligne */
 .photo-gallery {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);  /* 2 colonnes */
-    grid-gap: 20px;  /* Espacement entre les images */
-    max-width: 1148px; /* Largeur totale de la grille */
+    grid-template-columns: repeat(2, 1fr);  
+    grid-gap: 20px;  
+    max-width: 1148px; 
     margin: 0 auto;
 }
 
 /* Chaque photo */
 .photo-item {
     width: 100%;
-    height: 495px; /* Hauteur fixe de 495px */
-    overflow: hidden;  /* Masque tout ce qui dépasse */
+    height: 495px; 
+    overflow: hidden;  
     position: relative;
 }
 
@@ -462,8 +462,8 @@ ul.footer-menu, ul.footer-links {
 .photo-item img {
     width: 100%;
     height: 100%;
-    object-fit: cover;  /* Recadre l'image pour qu'elle remplisse le cadre sans distorsion */
-    object-position: center;  /* Centre l'image dans son cadre */
+    object-fit: cover;  
+    object-position: center; 
 }
 
 /* Bouton "Afficher plus" */
@@ -488,8 +488,8 @@ ul.footer-menu, ul.footer-links {
 /* Grille de photos */
 .photo-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 photos par ligne */
-    gap: 20px; /* Espacement entre les photos */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px; 
 }
 
 /* Style du bouton "Charger plus" */
@@ -537,22 +537,27 @@ ul.footer-menu, ul.footer-links {
 } */
 
 /* Styles pour l'overlay et l'icône "eye" */
-.photo-overlay {
+/* .photos-items {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+} */
+.picture-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
-    opacity: 0; /* Masqué par défaut */
-    transition: opacity 0.3s ease; /* Animation de transition */
+    background-color: rgba(0, 0, 0, 0.5); 
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.photo-item:hover .photo-overlay {
-    opacity: 1; /* Afficher l'overlay au survol */
+.photos-items:hover .picture-overlay {
+    opacity: 1; 
 }
 
 .eye-icon {

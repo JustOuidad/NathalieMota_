@@ -44,14 +44,14 @@ get_header(); ?>
             $reference = get_field('reference', $photo_id); // Récupérer la référence via ACF
             $category = get_field('categorie', $photo_id); // Récupérer la catégorie via ACF
             ?>
-            <div class="photo-item" 
+            <div class="photos-items" 
                  data-photo-id="<?= esc_attr($photo_id); ?>" 
                  data-image-url="<?= esc_url($image_url); ?>" 
                  data-reference="<?= esc_attr($reference); ?>" 
                  data-category="<?= esc_attr($category); ?>">
                 <span>
                     <img src="<?= esc_url($image_url) ?>" alt="<?= esc_attr(get_the_title()) ?>" />
-                    <div class="photo-overlay">
+                    <div class="picture-overlay">
                         <img class="eye-icon" src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-eye.svg' ?>" alt="Voir l'image" />
                     </div>
                 </span>

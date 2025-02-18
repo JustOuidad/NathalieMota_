@@ -1,30 +1,31 @@
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     // Ouvre le modal quand on clique sur le bouton "Contact"
     const openModalButton = document.querySelector('#openModalButton');
     if (openModalButton) {
-        openModalButton.addEventListener('click', function (event) {
+        openModalButton.addEventListener('click', function(event) {
             event.preventDefault(); // Empêche la redirection vers une autre page
+            
             const modal = document.getElementById('modal-contact');
             if (modal) {
                 modal.style.display = 'flex'; // Affiche le modal
             }
         });
     }
-
+  
     // Ferme le modal quand on clique sur l'icône de fermeture (×)
     const closeModalButton = document.querySelector('.cross-icon-modale');
     if (closeModalButton) {
-        closeModalButton.addEventListener('click', function () {
+        closeModalButton.addEventListener('click', function() {
             const modal = document.getElementById('modal-contact');
             if (modal) {
                 modal.style.display = 'none'; // Cache le modal
             }
         });
     }
-
+  
     // Ferme le modal si l'utilisateur clique en dehors du modal (sur le fond)
-    window.addEventListener('click', function (event) {
+    window.addEventListener('click', function(event) {
         const modal = document.getElementById('modal-contact');
         if (modal && event.target === modal) {
             modal.style.display = 'none'; // Cache le modal
@@ -33,26 +34,26 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // MENU
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const toggleButton = document.querySelector('.menu-toggle');
     const headerMenu = document.querySelector('.header-menu');
 
-    toggleButton.addEventListener('click', function () {
+    toggleButton.addEventListener('click', function() {
         headerMenu.classList.toggle('active');
     });
 });
 
 // AJAX pour le LOAD MORE
 jQuery(document).ready(function ($) {
-    let currentCategorie = $('.filter-categorie').val() || '';
-    let currentFormat = $('.filter-format').val() || '';
-    let currentOrder = $('.filter-order').val() || 'ASC';
-    let page = 1; // Page initiale
-    let totalPhotos = 0; // Compteur de photos chargées
+    let currentCategorie = '';
+    let currentFormat = '';
+    let currentOrder = 'ASC';
+    let page = 1;
+    const photosPerPage = 8;
+    let totalPhotosLoaded = 0; // Variable pour suivre le nombre total de photos chargées
 
+    // Fonction pour charger les photos via AJAX
     function loadMorePhotos(page) {
-        console.log('Chargement de la page :', page); // DEBUG: Vérifier l'incrémentation
-
         $.ajax({
             url: ajax_params.ajaxurl, // URL AJAX (passée par wp_localize_script)
             type: 'POST',
@@ -62,26 +63,20 @@ jQuery(document).ready(function ($) {
                 format: currentFormat,
                 order: currentOrder,
                 page: page,
-            },
-            beforeSend: function () {
-                $('#load-more').text('Chargement...'); // Indication de chargement
+                photosPerPage: photosPerPage,
             },
             success: function (response) {
-                console.log('Réponse AJAX reçue :', response); // DEBUG: Vérifier la réponse du serveur
-
-                let newPhotos = $(response).filter('.photo-item').length; // Nombre de nouvelles photos
-                totalPhotos += newPhotos; // Mettre à jour le compteur total
-
-                console.log('Total des photos affichées :', totalPhotos); // DEBUG: Vérifier le total des photos affichées
+                const newPhotos = $(response).filter('.photo-item').length; // Nombre de nouvelles photos chargées
+                totalPhotosLoaded += newPhotos; // Mettre à jour le nombre total de photos chargées
 
                 if (page === 1) {
-                    $('.photo-grid').html(response); // Remplace les photos initiales
+                    $('.photo-grid').html(response); // Remplace le contenu pour la première page
                 } else {
                     $('.photo-grid').append(response); // Ajoute les nouvelles photos
                 }
 
-                // Vérifie si on a atteint ou dépassé 16 photos ou s'il n'y a plus de photos à charger
-                if (totalPhotos >= 16 || $('#no-more-posts').length > 0) {
+                // Masquer le bouton "Charger plus" s'il n'y a plus de photos ou si 16 photos sont chargées
+                if ($('#no-more-posts').length > 0 || newPhotos < photosPerPage || totalPhotosLoaded >= 16) {
                     $('#load-more').hide();
                 } else {
                     $('#load-more').show().data('page', page);
@@ -90,9 +85,6 @@ jQuery(document).ready(function ($) {
             error: function (xhr, status, error) {
                 console.error('Erreur AJAX :', error);
             },
-            complete: function () {
-                $('#load-more').text('Charger plus'); // Réinitialiser le texte du bouton
-            }
         });
     }
 
@@ -104,9 +96,10 @@ jQuery(document).ready(function ($) {
         currentCategorie = $('#filter-categorie').val();
         currentFormat = $('#filter-format').val();
         currentOrder = $('#filter-order').val();
-        page = 1; // Réinitialiser à la première page
-        totalPhotos = 0; // Réinitialiser le compteur de photos
-        loadMorePhotos(page);
+        page = 1; // Réinitialiser la page
+        totalPhotosLoaded = 0; // Réinitialiser le compteur de photos chargées
+        $('#load-more').hide(); // Masquer le bouton "Load More" lors de l'application des filtres
+        loadMorePhotos(page); // Recharger les photos
     });
 
     // Événement pour le bouton "Charger plus"
@@ -116,129 +109,92 @@ jQuery(document).ready(function ($) {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const eyeIcon = document.querySelector('.eye-icon');
-    if (eyeIcon) {
-        // Vérifier une propriété CSS spécifique
-        const iconStyle = getComputedStyle(eyeIcon);
-        console.log('✅ Style appliqué à .eye-icon :', iconStyle);
-    }
-});
-// import Lightbox from './lightbox.js';
-/* <script src="/js/lightbox.js" defer></script> */
+// Lightbox
 
+// // Importer lightbox.js
+// import { initLightbox } from './lightbox.js';
 
-
-// console.log('Page:', page);
-// console.log('Response:', response);
-// console.log('ok');
-//lightbox
+// // Utiliser la fonction de lightbox
 // document.addEventListener('DOMContentLoaded', function () {
-//     const photoItems = document.querySelectorAll('.photo-item');
-
-//     photoItems.forEach(item => {
-//         item.addEventListener('click', function () {
-//             const imageUrl = item.querySelector('img').src;
-//             const reference = item.dataset.reference;
-//             const category = item.dataset.category;
-
-//             openLightbox(imageUrl, reference, category);
-//         });
-//     });
-
-//     function openLightbox(imageUrl, reference, category) {
-//         const lightbox = document.querySelector('.lightbox');
-//         const lightboxImage = lightbox.querySelector('.lightbox__image');
-//         const lightboxRef = lightbox.querySelector('.lightbox__infos--Ref');
-//         const lightboxCategory = lightbox.querySelector('.lightbox__infos--Categorie');
-
-//         // Mettre à jour les éléments de la lightbox
-//         lightboxImage.src = imageUrl;
-//         lightboxRef.textContent = reference;
-//         lightboxCategory.textContent = category;
-
-//         // Afficher la lightbox
-//         lightbox.style.display = 'block';
-//     }
-
-//     // Fermer la lightbox
-//     const closeLightboxButton = document.querySelector('.lightbox__close');
-//     if (closeLightboxButton) {
-//         closeLightboxButton.addEventListener('click', function () {
-//             const lightbox = document.querySelector('.lightbox');
-//             lightbox.style.display = 'none';
-//         });
-//     }
-// });
-
-
-// script.js
-
-// document.addEventListener('DOMContentLoaded', function() {
-//     // Initialisation des fonctionnalités
-//     initLoadMore();
 //     initLightbox();
 // });
 
-// // Fonction pour gérer le "load more"
-// function initLoadMore() {
-//     const loadMoreButton = document.querySelector('.load-more');
-//     if (loadMoreButton) {
-//         loadMoreButton.addEventListener('click', function(event) {
-//             event.preventDefault();
-//             loadMorePosts();
-//         });
-//     }
-// }
+document.addEventListener('DOMContentLoaded', function () {
+    const photoItems = document.querySelectorAll('.photo-item');
 
-// // Fonction pour charger plus de posts via AJAX
-// function loadMorePosts() {
-//     const paged = ajax_params.paged || 1; // Récupère la page actuelle
-//     const ajaxurl = ajax_params.ajaxurl; // URL pour les requêtes AJAX
+    photoItems.forEach(item => {
+        item.addEventListener('click', function () {
 
-//     fetch(ajaxurl, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/x-www-form-urlencoded',
-//         },
-//         body: `action=filter&paged=${paged}`, // Envoie la page actuelle au serveur
-//     })
-//     .then(response => response.text())
-//     .then(data => {
-//         // Ajoute les nouveaux posts à la page
-//         document.querySelector('.photo-container').insertAdjacentHTML('beforeend', data);
-//         // Met à jour le numéro de page
-//         ajax_params.paged = parseInt(paged) + 1;
-//     })
-//     .catch(error => console.error('Erreur lors du chargement des posts :', error));
-// }
+            const photoData = item.querySelector('.photo-data');
+            if (!photoData) {
+                return;
+            }
 
-// // Fonction pour initialiser la lightbox
-// function initLightbox() {
-//     const lightboxTriggers = document.querySelectorAll('.lightbox-trigger');
-//     lightboxTriggers.forEach(function(trigger) {
-//         trigger.addEventListener('click', function(event) {
-//             event.preventDefault();
-//             const imageUrl = this.getAttribute('href');
-//             openLightbox(imageUrl);
-//         });
-//     });
-// }
+            const imageSrc = photoData.getAttribute('data-image');
+            const reference = photoData.getAttribute('data-reference');
+            const categorie = photoData.getAttribute('data-categorie');
 
-// // Fonction pour ouvrir la lightbox
-// function openLightbox(imageUrl) {
-//     const lightbox = document.createElement('div');
-//     lightbox.classList.add('lightbox');
-//     lightbox.innerHTML = `
-//         <div class="lightbox-content">
-//             <img src="${imageUrl}" alt="Lightbox Image">
-//             <span class="close-lightbox">&times;</span>
-//         </div>
-//     `;
-//     document.body.appendChild(lightbox);
 
-//     const closeButton = lightbox.querySelector('.close-lightbox');
-//     closeButton.addEventListener('click', function() {
-//         lightbox.remove();
-//     });
-// }
+            openLightbox(imageSrc, reference, categorie);
+        });
+    });
+
+    function openLightbox(imageSrc, reference, categorie) {
+
+        const lightboxImage = document.querySelector('.lightbox__image');
+        const lightboxRef = document.querySelector('.lightbox__infos--Ref');
+        const lightboxCategorie = document.querySelector('.lightbox__infos--Categorie');
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxOverlay = document.querySelector('.lightbox-overlay');
+
+
+        if (!lightboxImage || !lightboxRef || !lightboxCategorie || !lightbox || !lightboxOverlay) {
+            return;
+        }
+
+        lightboxImage.src = imageSrc;
+        lightboxRef.textContent = reference;
+        lightboxCategorie.textContent = categorie;
+        lightbox.style.display = 'block';
+        lightboxOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Fermer la lightbox
+    const lightboxClose = document.querySelector('.lightbox__close');
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', function () {
+            const lightbox = document.querySelector('.lightbox');
+            const lightboxOverlay = document.querySelector('.lightbox-overlay');
+
+            if (lightbox && lightboxOverlay) {
+                lightbox.style.display = 'none';
+                lightboxOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
+});
+jQuery(document).ready(function ($) {
+    // Fonction pour appliquer les styles après un chargement AJAX
+    function applyStyles() {
+        $('.photos-items').hover(
+            function () {
+                $(this).find('.picture-overlay').css('opacity', '1');
+            },
+            function () {
+                $(this).find('.picture-overlay').css('opacity', '0');
+            }
+        );
+    }
+
+    // Appliquer les styles initialement
+    applyStyles();
+
+    // Réappliquer les styles après un chargement AJAX
+    $('#load-more').click(function () {
+        setTimeout(function () {
+            applyStyles(); // Réappliquer les styles après un court délai
+        }, 100);
+    });
+});
