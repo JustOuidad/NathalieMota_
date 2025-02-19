@@ -108,11 +108,11 @@ jQuery(document).ready(function ($) {
         loadMorePhotos(nextPage);
     });
 });
-
+ 
 // Lightbox
 
-// // Importer lightbox.js
-// import { initLightbox } from './lightbox.js';
+// Importer lightbox.js
+// // import { initLightbox } from './lightbox.js';
 
 // // Utiliser la fonction de lightbox
 // document.addEventListener('DOMContentLoaded', function () {

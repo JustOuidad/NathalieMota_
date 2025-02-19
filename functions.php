@@ -166,15 +166,16 @@ function charger_photos_via_ajax() {
 
     if ($query->have_posts()) {
         while ($query->have_posts()) {
+
             $query->the_post();
-            echo '<div class="photo-item">';
+            $id = get_the_ID();
+            echo '<div class="photo-item" data-id=' .$id.' >' ;// a travailler 
             echo get_the_post_thumbnail(get_the_ID(), 'medium');
             echo '</div>';
         }
     } else {
         echo '<div id="no-more-posts">Aucune photo supplémentaire.</div>';
     }
-
     wp_die();
 }
 add_action('wp_ajax_filter', 'charger_photos_via_ajax');

@@ -6,4 +6,5 @@
     ) ); ?>
 
     <?php get_template_part('templates_part/contact.php'); ?> <!-- Appel au fichier modal.php -->
+    <script src="<?= get_stylesheet_directory_uri() . '/js/lightbox.js' ?>"></script><!-- Appel au fichier lightbox.php -->
 </footer>
