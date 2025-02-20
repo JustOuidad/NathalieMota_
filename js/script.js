@@ -112,12 +112,20 @@ jQuery(document).ready(function ($) {
 // Lightbox
 
 // Importer lightbox.js
-// // import { initLightbox } from './lightbox.js';
+import { initLightbox } from './lightbox.js';
 
 // // Utiliser la fonction de lightbox
 // document.addEventListener('DOMContentLoaded', function () {
 //     initLightbox();
 // });
+
+jQuery(document).ready(function($) {
+    // Redirection vers la page photo_block.php lors du clic sur une photo
+    $('.photos-items').on('click', function() {
+        const photoId = $(this).data('photo-id'); // Récupère l'ID de la photo
+        window.location.href = '<?= home_url("photo_block") ?>?photo_id=' + photoId; // Redirige vers la page photo_block.php avec l'ID de la photo
+    });
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     const photoItems = document.querySelectorAll('.photo-item');
@@ -194,7 +202,7 @@ jQuery(document).ready(function ($) {
     // Réappliquer les styles après un chargement AJAX
     $('#load-more').click(function () {
         setTimeout(function () {
-            applyStyles(); // Réappliquer les styles après un court délai
+            applyStyles(); 
         }, 100);
     });
 });

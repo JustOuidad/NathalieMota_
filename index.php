@@ -28,10 +28,10 @@ get_header(); ?>
 
     // Requête pour récupérer les photos depuis le champ ACF photo_showdown
     $photos_showdown = new WP_Query(array(
-        'post_type' => 'photo',  // Type de publication personnalisé
-        'posts_per_page' => $photos_per_page,  // Nombre de photos par page
-        'paged' => $paged,  // Page courante
-        'orderby' => 'rand',  // Afficher les photos aléatoirement
+        'post_type' => 'photo',  
+        'posts_per_page' => $photos_per_page,  
+        'paged' => $paged,  
+        'orderby' => 'rand',  
     ));
 
     // Vérifie si des posts ont été trouvés
@@ -39,7 +39,7 @@ get_header(); ?>
         echo '<div class="photo-grid">';
         while ($photos_showdown->have_posts()) :
             $photos_showdown->the_post();
-            $image_url = get_the_post_thumbnail_url(get_the_ID(), 'full'); // URL de l'image
+            $image_url = get_the_post_thumbnail_url(get_the_ID(), 'full'); 
             $photo_id = get_the_ID(); // ID de la photo
             $reference = get_field('reference', $photo_id); // Récupérer la référence via ACF
             $category = get_field('categorie', $photo_id); // Récupérer la catégorie via ACF

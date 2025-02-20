@@ -1,81 +1,50 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const photosItems = document.querySelectorAll('.photos-items');
-    const lightboxOverlay = document.querySelector('.lightbox-overlay');
-    const lightbox = document.querySelector('.lightbox');
-    const lightboxImage = document.querySelector('.lightbox-image');
-    const lightboxReference = document.querySelector('.lightbox-reference');
-    const lightboxCategory = document.querySelector('.lightbox-category');
-    const lightboxClose = document.querySelector('.lightbox__close');
-    const lightboxPrev = document.querySelector('.lightbox__arrows--previous');
-    const lightboxNext = document.querySelector('.lightbox__arrows--next');
+jQuery(document).ready(function($) {
+    // Ouvrir la lightbox
+    $('.photos-items').on('click', function() {
+        const imageUrl = $(this).data('image-url');
+        const reference = $(this).data('reference');
+        const category = $(this).data('category');
 
-    let currentIndex = 0;
-    let photosData = [];
+        $('.lightbox-image').attr('src', imageUrl);
+        $('.lightbox-reference').text('Référence: ' + reference);
+        $('.lightbox-category').text('Catégorie: ' + category);
 
-    // Récupérer les données des photos
-    photosItems.forEach((item, index) => {
-        photosData.push({
-            id: item.dataset.photoId,
-            imageUrl: item.dataset.imageUrl,
-            reference: item.dataset.reference,
-            category: item.dataset.category
-        });
-
-        // Ajouter un écouteur d'événement pour ouvrir la lightbox
-        item.addEventListener('click', () => {
-            openLightbox(index);
-        });
+        $('.lightbox-overlay, .lightbox').fadeIn();
     });
 
-    // Fonction pour ouvrir la lightbox
-    function openLightbox(index) {
-        currentIndex = index;
-        updateLightbox();
-        lightboxOverlay.style.display = 'block';
-        lightbox.style.display = 'block';
-    }
+    // Fermer la lightbox
+    $('.lightbox__close').on('click', function() {
+        $('.lightbox-overlay, .lightbox').fadeOut();
+    });
 
-    // Fonction pour fermer la lightbox
-    function closeLightbox() {
-        lightboxOverlay.style.display = 'none';
-        lightbox.style.display = 'none';
-    }
+    // Navigation entre les images
+    $('.lightbox__arrows--previous').on('click', function() {
+        const currentPhoto = $('.photos-items[data-image-url="' + $('.lightbox-image').attr('src') + '"]');
+        const prevPhoto = currentPhoto.prev('.photos-items');
 
-    // Fonction pour mettre à jour le contenu de la lightbox
-    function updateLightbox() {
-        const currentPhoto = photosData[currentIndex];
-        lightboxImage.src = currentPhoto.imageUrl;
-        lightboxReference.textContent = currentPhoto.reference;
-        lightboxCategory.textContent = currentPhoto.category;
-    }
+        if (prevPhoto.length) {
+            const imageUrl = prevPhoto.data('image-url');
+            const reference = prevPhoto.data('reference');
+            const category = prevPhoto.data('category');
 
-    // Écouteurs d'événements pour les boutons de navigation
-    lightboxPrev.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-        } else {
-            currentIndex = photosData.length - 1;
+            $('.lightbox-image').attr('src', imageUrl);
+            $('.lightbox-reference').text('Référence: ' + reference);
+            $('.lightbox-category').text('Catégorie: ' + category);
         }
-        updateLightbox();
     });
 
-    lightboxNext.addEventListener('click', () => {
-        if (currentIndex < photosData.length - 1) {
-            currentIndex++;
-        } else {
-            currentIndex = 0;
-        }
-        updateLightbox();
-    });
+    $('.lightbox__arrows--next').on('click', function() {
+        const currentPhoto = $('.photos-items[data-image-url="' + $('.lightbox-image').attr('src') + '"]');
+        const nextPhoto = currentPhoto.next('.photos-items');
 
-    // Écouteur d'événement pour fermer la lightbox
-    lightboxClose.addEventListener('click', closeLightbox);
-    lightboxOverlay.addEventListener('click', closeLightbox);
+        if (nextPhoto.length) {
+            const imageUrl = nextPhoto.data('image-url');
+            const reference = nextPhoto.data('reference');
+            const category = nextPhoto.data('category');
 
-    // Fermer la lightbox avec la touche Échap
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeLightbox();
+            $('.lightbox-image').attr('src', imageUrl);
+            $('.lightbox-reference').text('Référence: ' + reference);
+            $('.lightbox-category').text('Catégorie: ' + category);
         }
     });
 });
