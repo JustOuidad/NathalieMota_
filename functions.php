@@ -61,9 +61,10 @@ function theme_enqueue_styles_and_scripts() {
         'lightbox-script',
         get_stylesheet_directory_uri() . '/js/lightbox.js',
         array('jquery'),
-        '1.0.0',
+        null,
         true
     );
+    add_action('wp_enqueue_scripts', 'theme_enqueue_styles_and_scripts');
 
     // Localisation des données pour lightbox AJAX
     wp_localize_script(
@@ -80,16 +81,16 @@ add_action('wp_enqueue_scripts', 'theme_enqueue_styles_and_scripts');
 // ====================================
 // 3. Gestion des templates
 // ====================================
-function utiliser_single_page_comme_home($template) {
+function utiliser_index_comme_home($template) {
     if (is_front_page()) {
-        $custom_template = locate_template('single-page.php');
+        $custom_template = locate_template('index.php'); // Utilise index.php comme template
         if ($custom_template) {
             return $custom_template;
         }
     }
     return $template;
 }
-add_filter('template_include', 'utiliser_single_page_comme_home');
+add_filter('template_include', 'utiliser_index_comme_home');
 
 // ====================================
 // 4. Taxonomies et types de contenu

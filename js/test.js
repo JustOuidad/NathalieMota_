@@ -1,243 +1,113 @@
-// document.addEventListener('DOMContentLoaded', function () {
-//     // Ouvre le modal quand on clique sur le bouton "Contact"
-//     const openModalButton = document.querySelector('#openModalButton');
-//     if (openModalButton) {
-//         openModalButton.addEventListener('click', function (event) {
-//             event.preventDefault(); // Empêche la redirection vers une autre page
-//             const modal = document.getElementById('modal-contact');
-//             if (modal) {
-//                 modal.style.display = 'flex'; // Affiche le modal
-//             }
-//         });
-//     }
+document.addEventListener('DOMContentLoaded', function () {
+    // Variables globales
+    let currentPage = 1; // Page actuelle pour le load more
+    let lightboxIndex = 0; // Index de la photo actuelle dans la lightbox
+    let lightboxPhotos = []; // Tableau des photos pour la lightbox
 
-//     // Ferme le modal quand on clique sur l'icône de fermeture (×)
-//     const closeModalButton = document.querySelector('.cross-icon-modale');
-//     if (closeModalButton) {
-//         closeModalButton.addEventListener('click', function () {
-//             const modal = document.getElementById('modal-contact');
-//             if (modal) {
-//                 modal.style.display = 'none'; // Cache le modal
-//             }
-//         });
-//     }
+    // 1. Modal pour le formulaire de contact
+    const openModalButton = document.querySelector('#openModalButton');
+    const closeModalButton = document.querySelector('.cross-icon-modale');
+    const modal = document.getElementById('modal-contact');
 
-//     // Ferme le modal si l'utilisateur clique en dehors du modal (sur le fond)
-//     window.addEventListener('click', function (event) {
-//         const modal = document.getElementById('modal-contact');
-//         if (modal && event.target === modal) {
-//             modal.style.display = 'none'; // Cache le modal
-//         }
-//     });
-// });
+    if (openModalButton && modal) {
+        openModalButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            modal.style.display = 'flex';
+        });
+    }
 
-// // MENU
-// document.addEventListener('DOMContentLoaded', function () {
-//     const toggleButton = document.querySelector('.menu-toggle');
-//     const headerMenu = document.querySelector('.header-menu');
+    if (closeModalButton && modal) {
+        closeModalButton.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+    }
 
-//     toggleButton.addEventListener('click', function () {
-//         headerMenu.classList.toggle('active');
-//     });
-// });
+    // Fermer le modal si on clique en dehors
+    window.addEventListener('click', function (e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
 
-// // AJAX pour le LOAD MORE
-// jQuery(document).ready(function ($) {
-//     let currentCategorie = $('.filter-categorie').val() || '';
-//     let currentFormat = $('.filter-format').val() || '';
-//     let currentOrder = $('.filter-order').val() || 'ASC';
-//     let page = 1; // Page initiale
-//     let totalPhotos = 0; // Compteur de photos chargées
+    // 2. Load More
+    const loadMoreButton = document.getElementById('load-more');
+    const photoGrid = document.querySelector('.photo-grid');
 
-//     function loadMorePhotos(page) {
-//         console.log('Chargement de la page :', page); // DEBUG: Vérifier l'incrémentation
+    if (loadMoreButton && photoGrid) {
+        loadMoreButton.addEventListener('click', function () {
+            currentPage++;
+            loadMorePhotos(currentPage);
+        });
+    }
 
-//         $.ajax({
-//             url: ajax_params.ajaxurl, // URL AJAX (passée par wp_localize_script)
-//             type: 'POST',
-//             data: {
-//                 action: 'filter',
-//                 categorie: currentCategorie,
-//                 format: currentFormat,
-//                 order: currentOrder,
-//                 page: page,
-//             },
-//             beforeSend: function () {
-//                 $('#load-more').text('Chargement...'); // Indication de chargement
-//             },
-//             success: function (response) {
-//                 console.log('Réponse AJAX reçue :', response); // DEBUG: Vérifier la réponse du serveur
+    function loadMorePhotos(page) {
+        fetch(ajax_params.ajaxurl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'filter',
+                page: page,
+            }),
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data.includes('no-more-posts')) {
+                    loadMoreButton.style.display = 'none'; // Masquer le bouton si plus de photos
+                } else {
+                    photoGrid.insertAdjacentHTML('beforeend', data); // Ajouter les nouvelles photos
+                    lightboxPhotos = Array.from(document.querySelectorAll('.photo-item')); // Mettre à jour les photos pour la lightbox
+                }
+            })
+            .catch(error => console.error('Erreur AJAX :', error));
+    }
 
-//                 let newPhotos = $(response).filter('.photo-item').length; // Nombre de nouvelles photos
-//                 totalPhotos += newPhotos; // Mettre à jour le compteur total
+    // 3. Lightbox
+    const lightbox = document.createElement('div');
+    lightbox.id = 'lightbox';
+    lightbox.innerHTML = `
+        <div class="lightbox-content">
+            <span class="close-lightbox">&times;</span>
+            <img src="" alt="Lightbox Image" class="lightbox-image">
+            <div class="lightbox-nav">
+                <span class="prev">&#10094;</span>
+                <span class="next">&#10095;</span>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(lightbox);
 
-//                 console.log('Total des photos affichées :', totalPhotos); // DEBUG: Vérifier le total des photos affichées
+    // Ouvrir la lightbox
+    document.querySelectorAll('.photo-item').forEach((photo, index) => {
+        photo.addEventListener('click', () => {
+            lightboxIndex = index;
+            updateLightboxImage();
+            lightbox.style.display = 'flex';
+        });
+    });
 
-//                 if (page === 1) {
-//                     $('.photo-grid').html(response); // Remplace les photos initiales
-//                 } else {
-//                     $('.photo-grid').append(response); // Ajoute les nouvelles photos
-//                 }
+    // Fermer la lightbox
+    lightbox.querySelector('.close-lightbox').addEventListener('click', () => {
+        lightbox.style.display = 'none';
+    });
 
-//                 // Vérifie si on a atteint ou dépassé 16 photos ou s'il n'y a plus de photos à charger
-//                 if (totalPhotos >= 16 || $('#no-more-posts').length > 0) {
-//                     $('#load-more').hide();
-//                 } else {
-//                     $('#load-more').show().data('page', page);
-//                 }
-//             },
-//             error: function (xhr, status, error) {
-//                 console.error('Erreur AJAX :', error);
-//             },
-//             complete: function () {
-//                 $('#load-more').text('Charger plus'); // Réinitialiser le texte du bouton
-//             }
-//         });
-//     }
+    // Navigation dans la lightbox
+    lightbox.querySelector('.prev').addEventListener('click', () => {
+        lightboxIndex = (lightboxIndex - 1 + lightboxPhotos.length) % lightboxPhotos.length;
+        updateLightboxImage();
+    });
 
-//     // Charger les photos initiales
-//     loadMorePhotos(page);
+    lightbox.querySelector('.next').addEventListener('click', () => {
+        lightboxIndex = (lightboxIndex + 1) % lightboxPhotos.length;
+        updateLightboxImage();
+    });
 
-//     // Événement pour les filtres
-//     $('.filter-categorie, .filter-format, .filter-order').change(function () {
-//         currentCategorie = $('#filter-categorie').val();
-//         currentFormat = $('#filter-format').val();
-//         currentOrder = $('#filter-order').val();
-//         page = 1; // Réinitialiser à la première page
-//         totalPhotos = 0; // Réinitialiser le compteur de photos
-//         loadMorePhotos(page);
-//     });
-
-//     // Événement pour le bouton "Charger plus"
-//     $('#load-more').click(function () {
-//         let nextPage = $(this).data('page') + 1;
-//         loadMorePhotos(nextPage);
-//     });
-// });
-
-// document.addEventListener("DOMContentLoaded", function () {
-//     const eyeIcon = document.querySelector('.eye-icon');
-//     if (eyeIcon) {
-//         // Vérifier une propriété CSS spécifique
-//         const iconStyle = getComputedStyle(eyeIcon);
-//         console.log('✅ Style appliqué à .eye-icon :', iconStyle);
-//     }
-// });
-// import Lightbox from './lightbox.js';
-/* <script src="/js/lightbox.js" defer></script> */
-
-
-
-// console.log('Page:', page);
-// console.log('Response:', response);
-// console.log('ok');
-//lightbox
-// document.addEventListener('DOMContentLoaded', function () {
-//     const photoItems = document.querySelectorAll('.photo-item');
-
-//     photoItems.forEach(item => {
-//         item.addEventListener('click', function () {
-//             const imageUrl = item.querySelector('img').src;
-//             const reference = item.dataset.reference;
-//             const category = item.dataset.category;
-
-//             openLightbox(imageUrl, reference, category);
-//         });
-//     });
-
-//     function openLightbox(imageUrl, reference, category) {
-//         const lightbox = document.querySelector('.lightbox');
-//         const lightboxImage = lightbox.querySelector('.lightbox__image');
-//         const lightboxRef = lightbox.querySelector('.lightbox__infos--Ref');
-//         const lightboxCategory = lightbox.querySelector('.lightbox__infos--Categorie');
-
-//         // Mettre à jour les éléments de la lightbox
-//         lightboxImage.src = imageUrl;
-//         lightboxRef.textContent = reference;
-//         lightboxCategory.textContent = category;
-
-//         // Afficher la lightbox
-//         lightbox.style.display = 'block';
-//     }
-
-//     // Fermer la lightbox
-//     const closeLightboxButton = document.querySelector('.lightbox__close');
-//     if (closeLightboxButton) {
-//         closeLightboxButton.addEventListener('click', function () {
-//             const lightbox = document.querySelector('.lightbox');
-//             lightbox.style.display = 'none';
-//         });
-//     }
-// });
-
-
-// script.js
-
-// document.addEventListener('DOMContentLoaded', function() {
-//     // Initialisation des fonctionnalités
-//     initLoadMore();
-//     initLightbox();
-// });
-
-// // Fonction pour gérer le "load more"
-// function initLoadMore() {
-//     const loadMoreButton = document.querySelector('.load-more');
-//     if (loadMoreButton) {
-//         loadMoreButton.addEventListener('click', function(event) {
-//             event.preventDefault();
-//             loadMorePosts();
-//         });
-//     }
-// }
-
-// // Fonction pour charger plus de posts via AJAX
-// function loadMorePosts() {
-//     const paged = ajax_params.paged || 1; // Récupère la page actuelle
-//     const ajaxurl = ajax_params.ajaxurl; // URL pour les requêtes AJAX
-
-//     fetch(ajaxurl, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/x-www-form-urlencoded',
-//         },
-//         body: `action=filter&paged=${paged}`, // Envoie la page actuelle au serveur
-//     })
-//     .then(response => response.text())
-//     .then(data => {
-//         // Ajoute les nouveaux posts à la page
-//         document.querySelector('.photo-container').insertAdjacentHTML('beforeend', data);
-//         // Met à jour le numéro de page
-//         ajax_params.paged = parseInt(paged) + 1;
-//     })
-//     .catch(error => console.error('Erreur lors du chargement des posts :', error));
-// }
-
-// // Fonction pour initialiser la lightbox
-// function initLightbox() {
-//     const lightboxTriggers = document.querySelectorAll('.lightbox-trigger');
-//     lightboxTriggers.forEach(function(trigger) {
-//         trigger.addEventListener('click', function(event) {
-//             event.preventDefault();
-//             const imageUrl = this.getAttribute('href');
-//             openLightbox(imageUrl);
-//         });
-//     });
-// }
-
-// // Fonction pour ouvrir la lightbox
-// function openLightbox(imageUrl) {
-//     const lightbox = document.createElement('div');
-//     lightbox.classList.add('lightbox');
-//     lightbox.innerHTML = `
-//         <div class="lightbox-content">
-//             <img src="${imageUrl}" alt="Lightbox Image">
-//             <span class="close-lightbox">&times;</span>
-//         </div>
-//     `;
-//     document.body.appendChild(lightbox);
-
-//     const closeButton = lightbox.querySelector('.close-lightbox');
-//     closeButton.addEventListener('click', function() {
-//         lightbox.remove();
-//     });
-// }
+    // Mettre à jour l'image de la lightbox
+    function updateLightboxImage() {
+        const lightboxImage = lightbox.querySelector('.lightbox-image');
+        const currentPhoto = lightboxPhotos[lightboxIndex];
+        const imageUrl = currentPhoto.querySelector('img').src;
+        lightboxImage.src = imageUrl;
+    }
+});
