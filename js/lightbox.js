@@ -48,3 +48,33 @@ jQuery(document).ready(function($) {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Ouvrir la modale de contact avec la référence préremplie
+    document.querySelectorAll('.open-modal').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const reference = this.getAttribute('data-reference');
+            document.getElementById('modal-contact').style.display = 'flex';
+            document.getElementById('photo-reference').value = reference; // Préremplir le champ référence
+        });
+    });
+
+    // Afficher les miniatures au survol des liens de navigation
+    document.querySelectorAll('.prev-photo, .next-photo').forEach(function (link) {
+        link.addEventListener('mouseenter', function () {
+            const thumbnail = this.getAttribute('data-thumbnail');
+            const tooltip = document.createElement('div');
+            tooltip.className = 'navigation-tooltip';
+            tooltip.innerHTML = `<img src="${thumbnail}" alt="Thumbnail">`;
+            this.appendChild(tooltip);
+        });
+
+        link.addEventListener('mouseleave', function () {
+            const tooltip = this.querySelector('.navigation-tooltip');
+            if (tooltip) {
+                tooltip.remove();
+            }
+        });
+    });
+});
