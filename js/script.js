@@ -206,7 +206,18 @@
 //         }, 100);
 //     });
 // });
+//Menu-Toggle
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const menuContainer = document.querySelector('.menu-container');
 
+    menuToggle.addEventListener('click', function() {
+        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', !isExpanded);
+        menuContainer.classList.toggle('active');
+    });
+});
+//Tableaux Variables
 document.addEventListener('DOMContentLoaded', function () {
     // Variables globales
     let currentPage = 1; // Page actuelle pour le load more
@@ -296,10 +307,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 // Mettre à jour les photos pour la lightbox
-                lightboxPhotos = Array.from(document.querySelectorAll('.photo-item'));
+                lightboxPhotos = Array.from(document.querySelectorAll('.photos-items'));
 
                 // Masquer le bouton "Load More" s'il n'y a plus de photos
-                if (data.includes('no-more-posts') || lightboxPhotos.length >= 16) {
+                if (data.includes('no-more-posts') || lightboxPhotos.length === 16) {
                     loadMoreButton.style.display = 'none';
                 } else {
                     loadMoreButton.style.display = 'block';
@@ -311,27 +322,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Erreur AJAX :', error));
     }
 
-    // Charger les photos initiales
-    loadMorePhotos(currentPage);
-
-    // 4. Lightbox
-    const lightbox = document.createElement('div');
-    lightbox.id = 'lightbox';
-    lightbox.innerHTML = `
-        <div class="lightbox-content">
-            <span class="close-lightbox">&times;</span>
-            <img src="" alt="Lightbox Image" class="lightbox-image">
-            <div class="lightbox-nav">
-                <span class="prev">&#10094;</span>
-                <span class="next">&#10095;</span>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(lightbox);
-
     // Ouvrir la lightbox
     function initLightbox() {
-        document.querySelectorAll('.photo-item').forEach((photo, index) => {
+        document.querySelectorAll('.photos-items').forEach((photo, index) => {
             photo.addEventListener('click', () => {
                 lightboxIndex = index;
                 updateLightboxImage();
@@ -340,30 +333,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Fermer la lightbox
-    lightbox.querySelector('.close-lightbox').addEventListener('click', () => {
-        lightbox.style.display = 'none';
-    });
-
-    // Navigation dans la lightbox
-    lightbox.querySelector('.prev').addEventListener('click', () => {
-        lightboxIndex = (lightboxIndex - 1 + lightboxPhotos.length) % lightboxPhotos.length;
-        updateLightboxImage();
-    });
-
-    lightbox.querySelector('.next').addEventListener('click', () => {
-        lightboxIndex = (lightboxIndex + 1) % lightboxPhotos.length;
-        updateLightboxImage();
-    });
-
-    // Mettre à jour l'image de la lightbox
-    function updateLightboxImage() {
-        const lightboxImage = lightbox.querySelector('.lightbox-image');
-        const currentPhoto = lightboxPhotos[lightboxIndex];
-        const imageUrl = currentPhoto.querySelector('img').src;
-        lightboxImage.src = imageUrl;
-    }
-
+ 
     // Initialiser la lightbox
     initLightbox();
 });

@@ -36,7 +36,7 @@ get_header(); ?>
 
     // Vérifie si des posts ont été trouvés
     if ($photos_showdown->have_posts()) :
-        echo '<div class="photo-grid">';
+        echo '<div class="photo-grid" data-max-pages="<?= $photos_showdown->max_num_pages; ?>">';
         while ($photos_showdown->have_posts()) :
             $photos_showdown->the_post();
             $image_url = get_the_post_thumbnail_url(get_the_ID(), 'full'); 
@@ -51,9 +51,26 @@ get_header(); ?>
                  data-category="<?= esc_attr($category); ?>">
                 <span>
                     <img src="<?= esc_url($image_url) ?>" alt="<?= esc_attr(get_the_title()) ?>" />
-                    <div class="picture-overlay">
-                        <img class="eye-icon" src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-eye.svg' ?>" alt="Voir l'image" />
-                    </div>
+                    <?php
+// Exemple de boucle WordPress pour afficher les photos
+if ( have_posts() ) :
+    while ( have_posts() ) : the_post();
+        $photo_id = get_the_ID(); // Récupère l'ID de la photo
+        $photo_title = get_the_title(); // Récupère le titre de la photo
+        $photo_categories = get_the_terms($photo_id, 'category'); // Récupère les catégories de la photo
+        $photo_category = !empty($photo_categories) ? $photo_categories[0]->name : 'Non classé'; // Prend la première catégorie
+?>
+        <div class="picture-overlay">
+            <img class="eye-icon" src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-eye.svg' ?>" alt="Voir l'image" />
+            <div class="overlay-info">
+                <span class="photo-title"><?= esc_html($photo_title); ?></span>
+                <span class="photo-category"><?= esc_html($photo_category); ?></span>
+            </div>
+        </div>
+<?php
+    endwhile;
+endif;
+?>
                 </span>
             </div>
         <?php
