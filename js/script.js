@@ -205,21 +205,21 @@
 //             applyStyles(); 
 //         }, 100);
 //     });
-// });
-//Menu-Toggle
-document.addEventListener('DOMContentLoaded', function() {
+// });// Menu-Toggle
+document.addEventListener('DOMContentLoaded', function () {
+    // Menu-Toggle
     const menuToggle = document.querySelector('.menu-toggle');
     const menuContainer = document.querySelector('.menu-container');
 
-    menuToggle.addEventListener('click', function() {
-        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-        menuToggle.setAttribute('aria-expanded', !isExpanded);
-        menuContainer.classList.toggle('active');
-    });
-});
-//Tableaux Variables
-document.addEventListener('DOMContentLoaded', function () {
-    // Variables globales
+    if (menuToggle && menuContainer) {
+        menuToggle.addEventListener('click', function () {
+            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+            menuToggle.setAttribute('aria-expanded', !isExpanded);
+            menuContainer.classList.toggle('active');
+        });
+    }
+
+    // Tableaux Variables
     let currentPage = 1; // Page actuelle pour le load more
     let lightboxIndex = 0; // Index de la photo actuelle dans la lightbox
     let lightboxPhotos = []; // Tableau des photos pour la lightbox
@@ -269,16 +269,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const orderFilter = document.getElementById('filter-order');
 
     if (categorieFilter && formatFilter && orderFilter) {
-        categorieFilter.addEventListener('change', applyFilters);
-        formatFilter.addEventListener('change', applyFilters);
-        orderFilter.addEventListener('change', applyFilters);
+        categorieFilter.addEventListener('change', function () {
+            currentCategorie = this.value;
+            applyFilters();
+        });
+
+        formatFilter.addEventListener('change', function () {
+            currentFormat = this.value;
+            applyFilters();
+        });
+
+        orderFilter.addEventListener('change', function () {
+            currentOrder = this.value;
+            applyFilters();
+        });
     }
 
     // Appliquer les filtres
     function applyFilters() {
-        currentCategorie = categorieFilter.value;
-        currentFormat = formatFilter.value;
-        currentOrder = orderFilter.value;
         currentPage = 1; // Réinitialiser la page
         loadMorePhotos(currentPage, true); // Recharger les photos avec les nouveaux filtres
     }
@@ -291,49 +299,49 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
-                action: 'filter',
-                categorie: currentCategorie,
-                format: currentFormat,
-                order: currentOrder,
-                page: page,
+                action: 'charger_photos_via_ajax',
+                categorie: currentCategorie || '', // Filtre catégorie
+                format: currentFormat || '', // Filtre format
+                order: currentOrder || 'ASC', // Filtre ordre
+                page: page || 1, // Page actuelle
             }),
         })
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Erreur serveur :', response.status, response.statusText);
+                    return response.text().then(text => { throw new Error(text); });
+                }
+                return response.text();
+            })
             .then(data => {
+                console.log('Réponse du serveur :', data);
+
+                // Mettre à jour le contenu de la grille de photos
                 if (replaceContent) {
-                    photoGrid.innerHTML = data; // Remplacer le contenu pour la première page
+                    photoGrid.innerHTML = data; // Remplacer le contenu existant
                 } else {
-                    photoGrid.insertAdjacentHTML('beforeend', data); // Ajouter les nouvelles photos
+                    photoGrid.innerHTML += data; // Ajouter les nouvelles photos
                 }
 
                 // Mettre à jour les photos pour la lightbox
-                lightboxPhotos = Array.from(document.querySelectorAll('.photos-items'));
+                lightboxPhotos = Array.from(document.querySelectorAll('.photo-grid .photos-items'));
 
                 // Masquer le bouton "Load More" s'il n'y a plus de photos
-                if (data.includes('no-more-posts') || lightboxPhotos.length === 16) {
+                if (data.includes('no-more-posts') || lightboxPhotos.length < 8) {
                     loadMoreButton.style.display = 'none';
                 } else {
                     loadMoreButton.style.display = 'block';
                 }
-
-                // Réattacher les événements de la lightbox aux nouvelles photos
-                initLightbox();
             })
             .catch(error => console.error('Erreur AJAX :', error));
     }
 
-    // Ouvrir la lightbox
-    function initLightbox() {
-        document.querySelectorAll('.photos-items').forEach((photo, index) => {
-            photo.addEventListener('click', () => {
-                lightboxIndex = index;
-                updateLightboxImage();
-                lightbox.style.display = 'flex';
-            });
-        });
+    // Mettre à jour l'image de la lightbox
+    function updateLightboxImage() {
+        const lightboxImage = document.querySelector('.lightbox-image');
+        if (lightboxPhotos[lightboxIndex]) {
+            const imageUrl = lightboxPhotos[lightboxIndex].getAttribute('data-image-url');
+            lightboxImage.src = imageUrl;
+        }
     }
-
- 
-    // Initialiser la lightbox
-    initLightbox();
 });

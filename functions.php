@@ -22,11 +22,6 @@ function theme_enqueue_styles_and_scripts() {
 
     // Enqueue les polices personnalisées
     wp_enqueue_style('theme-fonts', get_template_directory_uri() . '/style.css', array(), '1.0', 'all');
-    function theme_enqueue_styles() {
-        // Charger le style principal du thème
-        wp_enqueue_style('main-style', get_stylesheet_uri(), array(), '1.0', 'all');
-    }
-    add_action('wp_enqueue_scripts', 'theme_enqueue_styles');
 
     // Désenregistrer le script du dark mode
     wp_dequeue_script('twentytwentyone-dark-mode-toggler');
@@ -56,7 +51,7 @@ function theme_enqueue_styles_and_scripts() {
         )
     );
 
-    //Enqueue le script lightbox
+    // Enqueue le script lightbox
     wp_enqueue_script(
         'lightbox-script',
         get_stylesheet_directory_uri() . '/js/lightbox.js',
@@ -64,7 +59,6 @@ function theme_enqueue_styles_and_scripts() {
         null,
         true
     );
-    add_action('wp_enqueue_scripts', 'theme_enqueue_styles_and_scripts');
 
     // Localisation des données pour lightbox AJAX
     wp_localize_script(
@@ -128,11 +122,13 @@ add_action('init', 'create_custom_post_type');
 // 5. Fonctionnalités AJAX
 // ====================================
 function charger_photos_via_ajax() {
+    // Récupérer les paramètres AJAX
     $categorie = isset($_POST['categorie']) ? sanitize_text_field($_POST['categorie']) : '';
     $format = isset($_POST['format']) ? sanitize_text_field($_POST['format']) : '';
     $order = isset($_POST['order']) ? sanitize_text_field($_POST['order']) : 'ASC';
     $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
 
+    // Arguments de la requête WP_Query
     $args = array(
         'post_type' => 'photo',
         'posts_per_page' => 8,
@@ -141,10 +137,8 @@ function charger_photos_via_ajax() {
         'order' => $order,
     );
 
-    $tax_query = array('relation' => 'AND');
-
     if (!empty($categorie)) {
-        $tax_query[] = array(
+        $args['tax_query'][] = array(
             'taxonomy' => 'categorie',
             'field' => 'slug',
             'terms' => $categorie,
@@ -152,35 +146,49 @@ function charger_photos_via_ajax() {
     }
 
     if (!empty($format)) {
-        $tax_query[] = array(
+        $args['tax_query'][] = array(
             'taxonomy' => 'formats',
             'field' => 'slug',
             'terms' => $format,
         );
     }
 
-    if (!empty($tax_query)) {
-        $args['tax_query'] = $tax_query;
-    }
+    $photos_query = new WP_Query($args);
 
-    $query = new WP_Query($args);
+    if ($photos_query->have_posts()) :
+        while ($photos_query->have_posts()) : $photos_query->the_post();
+            $image_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
+            $photo_id = get_the_ID();
+            $reference = get_field('reference', $photo_id);
+            $category = get_field('categorie', $photo_id);
+            $photo_title = get_the_title();
+            ?>
+            <div class="photos-items" 
+                 data-photo-id="<?= esc_attr($photo_id); ?>" 
+                 data-image-url="<?= esc_url($image_url); ?>" 
+                 data-reference="<?= esc_attr($reference); ?>" 
+                 data-category="<?= esc_attr($category); ?>">
+                <span>
+                    <img src="<?= esc_url($image_url) ?>" alt="<?= esc_attr(get_the_title()) ?>" />
+                    <div class="picture-overlay">
+                        <img class="eye-icon" src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-eye.svg' ?>" alt="Voir l'image" />
+                        <div class="overlay-info">
+                            <span class="photo-title"><?= esc_html($photo_title); ?></span>
+                            <span class="photo-category"><?= esc_html($category); ?></span>
+                        </div>
+                    </div>
+                </span>
+            </div>
+            <?php
+        endwhile;
+    else :
+        echo 'Aucune photo trouvée.';
+    endif;
 
-    if ($query->have_posts()) {
-        while ($query->have_posts()) {
-
-            $query->the_post();
-            $id = get_the_ID();
-            echo '<div class="photo-item" data-id=' .$id.' >' ;// a travailler 
-            echo get_the_post_thumbnail(get_the_ID(), 'medium');
-            echo '</div>';
-        }
-    } else {
-        echo '<div id="no-more-posts">Aucune photo supplémentaire.</div>';
-    }
     wp_die();
 }
-add_action('wp_ajax_filter', 'charger_photos_via_ajax');
-add_action('wp_ajax_nopriv_filter', 'charger_photos_via_ajax');
+add_action('wp_ajax_charger_photos_via_ajax', 'charger_photos_via_ajax');
+add_action('wp_ajax_nopriv_charger_photos_via_ajax', 'charger_photos_via_ajax');
 
 // ====================================
 // 6. Réécriture d'URL et gestion des query vars
@@ -210,4 +218,3 @@ function enqueue_photo_block_styles() {
     }
 }
 add_action('wp_enqueue_scripts', 'enqueue_photo_block_styles');
-
