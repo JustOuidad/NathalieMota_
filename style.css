@@ -469,15 +469,15 @@ ul.footer-menu, ul.footer-links {
 /* Style de base pour la galerie */
 .photo-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 photos par ligne */
-    gap: 20px; /* Espace entre les photos */
-    max-width: 1148px; /* Largeur maximale de la grille */
-    margin: 0 auto; /* Centrer la grille */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px; 
+    max-width: 1148px; 
+    margin: 0 auto; 
 }
 
 .photos-items {
-    width: 100%; /* Prendre toute la largeur de la cellule */
-    height: 30vh !important; /* Hauteur relative à la hauteur de la vue */
+    width: 100%; 
+    height: 30vh !important; 
     position: relative;
     overflow: hidden;
     display: flex;
@@ -520,60 +520,95 @@ ul.footer-menu, ul.footer-links {
     z-index: 10;
     filter: brightness(0) invert(1); 
 }
+/* Overlay */
 .lightbox-overlay {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8); /* Fond noir transparent à 80 % */
-    display: none;
+    background: rgba(0, 0, 0, 0.8); 
     z-index: 1000;
 }
 
+/* Lightbox (plein écran) */
 .lightbox {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    padding: 20px;
     display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 1001;
+    background: transparent; /* Pas de fond pour la lightbox */
+}
+
+/* Conteneur de l'image dans la lightbox */
+.lightbox__open {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Image dans la lightbox */
+.lightbox-image {
     max-width: 90%;
     max-height: 90%;
-    overflow: auto;
+    object-fit: contain; /* Garde les proportions de l'image */
+    z-index: 1002; /* Priorité à l'image */
 }
 
-.lightbox-image {
-    max-width: 100%;
-    height: auto;
-}
-
+/* Bouton fermer la lightbox */
 .lightbox__close {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
+    top: 20px;
+    right: 20px;
+    background: none; /* Pas d'arrière-plan */
     border: none;
     cursor: pointer;
+    z-index: 1003; /* Au-dessus de l'image */
 }
 
+/* Boutons de navigation (flèches) */
 .lightbox__arrows {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
+    background: none; /* Pas d'arrière-plan */
     border: none;
     cursor: pointer;
+    z-index: 1003; /* Au-dessus de l'image */
 }
 
 .lightbox__arrows--previous {
-    left: 10px;
+    left: 20px;
 }
 
 .lightbox__arrows--next {
-    right: 10px;
+    right: 20px;
+}
+
+/* Icônes des boutons (flèches et croix) */
+.lightbox__close img,
+.lightbox__arrows img {
+    filter: brightness(0) invert(1); 
+    background-color: none !important;
+}
+
+/* Flèches de navigation */
+.lightbox__arrows img {
+    width: 49px !important; /* Largeur des flèches */
+    height: 18px; /* Hauteur des flèches */
+    background-color:none !important ;
+}
+
+/* Croix de fermeture */
+.lightbox__close img {
+    width: 22px; /* Largeur de la croix */
+    height: 22px; /* Hauteur de la croix */
 }
 
 /*photo_block*/

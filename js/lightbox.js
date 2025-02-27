@@ -1,24 +1,27 @@
 jQuery(document).ready(function($) {
     // Ouvrir la lightbox
-    $('.photos-items').on('click', function() {
+    $('.photo-grid').on('click', '.photos-items', function() {
         const imageUrl = $(this).data('image-url');
         const reference = $(this).data('reference');
         const category = $(this).data('category');
 
+        // Mettre à jour l'image et les informations dans la lightbox
         $('.lightbox-image').attr('src', imageUrl);
         $('.lightbox-reference').text('Référence: ' + reference);
         $('.lightbox-category').text('Catégorie: ' + category);
 
+        // Afficher la lightbox
         $('.lightbox-overlay, .lightbox').fadeIn();
     });
 
     // Fermer la lightbox
-    $('.lightbox__close').on('click', function() {
+    $('.lightbox__close, .lightbox-overlay').on('click', function() {
         $('.lightbox-overlay, .lightbox').fadeOut();
     });
 
     // Navigation entre les images
-    $('.lightbox__arrows--previous').on('click', function() {
+    $('.lightbox__arrows--previous').on('click', function(e) {
+        e.stopPropagation(); // Empêcher la propagation de l'événement
         const currentPhoto = $('.photos-items[data-image-url="' + $('.lightbox-image').attr('src') + '"]');
         const prevPhoto = currentPhoto.prev('.photos-items');
 
@@ -33,7 +36,8 @@ jQuery(document).ready(function($) {
         }
     });
 
-    $('.lightbox__arrows--next').on('click', function() {
+    $('.lightbox__arrows--next').on('click', function(e) {
+        e.stopPropagation(); // Empêcher la propagation de l'événement
         const currentPhoto = $('.photos-items[data-image-url="' + $('.lightbox-image').attr('src') + '"]');
         const nextPhoto = currentPhoto.next('.photos-items');
 
@@ -46,35 +50,5 @@ jQuery(document).ready(function($) {
             $('.lightbox-reference').text('Référence: ' + reference);
             $('.lightbox-category').text('Catégorie: ' + category);
         }
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    // Ouvrir la modale de contact avec la référence préremplie
-    document.querySelectorAll('.open-modal').forEach(function (link) {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const reference = this.getAttribute('data-reference');
-            document.getElementById('modal-contact').style.display = 'flex';
-            document.getElementById('photo-reference').value = reference; // Préremplir le champ référence
-        });
-    });
-
-    // Afficher les miniatures au survol des liens de navigation
-    document.querySelectorAll('.prev-photo, .next-photo').forEach(function (link) {
-        link.addEventListener('mouseenter', function () {
-            const thumbnail = this.getAttribute('data-thumbnail');
-            const tooltip = document.createElement('div');
-            tooltip.className = 'navigation-tooltip';
-            tooltip.innerHTML = `<img src="${thumbnail}" alt="Thumbnail">`;
-            this.appendChild(tooltip);
-        });
-
-        link.addEventListener('mouseleave', function () {
-            const tooltip = this.querySelector('.navigation-tooltip');
-            if (tooltip) {
-                tooltip.remove();
-            }
-        });
     });
 });
