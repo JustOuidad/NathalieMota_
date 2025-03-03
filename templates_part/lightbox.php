@@ -25,7 +25,8 @@
 
     <!-- Section pour afficher des informations sur l'image -->
     <div class="lightbox__infos">
-        <p class="lightbox__infos--Ref lightbox-reference" aria-label="Référence de la photo">Référence</p>
-        <p class="lightbox__infos--Categorie lightbox-category" aria-label="Catégorie de la photo">Catégorie</p>
+        <p class="lightbox__infos--Ref lightbox-title" aria-label="Titre de la photo"></p>
+        <p class="lightbox__infos--Categorie lightbox-category" aria-label="Catégorie de la photo"></p>
+
     </div>
 </div>

@@ -2,13 +2,15 @@ jQuery(document).ready(function($) {
     // Ouvrir la lightbox
     $('.photo-grid').on('click', '.photos-items', function() {
         const imageUrl = $(this).data('image-url');
-        const reference = $(this).data('reference');
+        // const reference = $(this).data('reference');
+        const name = $(this).data('title');
         const category = $(this).data('category');
 
         // Mettre à jour l'image et les informations dans la lightbox
         $('.lightbox-image').attr('src', imageUrl);
-        $('.lightbox-reference').text('Référence: ' + reference);
-        $('.lightbox-category').text('Catégorie: ' + category);
+        // $('.lightbox-reference').text( reference);
+        $('.lightbox-category').text( category);
+        $('.lightbox-title').text( name);
 
         // Afficher la lightbox
         $('.lightbox-overlay, .lightbox').fadeIn();
@@ -31,8 +33,8 @@ jQuery(document).ready(function($) {
             const category = prevPhoto.data('category');
 
             $('.lightbox-image').attr('src', imageUrl);
-            $('.lightbox-reference').text('Référence: ' + reference);
-            $('.lightbox-category').text('Catégorie: ' + category);
+            $('.lightbox-reference').text( reference);
+            $('.lightbox-category').text( category);
         }
     });
 

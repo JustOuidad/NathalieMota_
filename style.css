@@ -561,6 +561,30 @@ ul.footer-menu, ul.footer-links {
     z-index: 1002; /* Priorité à l'image */
 }
 
+/* Conteneur des informations (titre et catégorie) */
+.lightbox__infos {
+    position: absolute;
+    bottom: 10px; /* Ajustez cette valeur pour déplacer les infos plus haut ou plus bas */
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px; /* Espacement à gauche et à droite */
+    color: white; /* Couleur du texte */
+    font-size: 16px; /* Taille du texte */
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent pour améliorer la lisibilité */
+}
+
+/* Style du titre de la photo */
+.photo-title {
+    align-self: flex-end; /* Aligne le titre en bas à gauche */
+}
+
+/* Style de la catégorie de la photo */
+.photo-category {
+    align-self: flex-end; /* Aligne la catégorie en bas à droite */
+}
+
 /* Bouton fermer la lightbox */
 .lightbox__close {
     position: absolute;
@@ -570,6 +594,8 @@ ul.footer-menu, ul.footer-links {
     border: none;
     cursor: pointer;
     z-index: 1003; /* Au-dessus de l'image */
+    background:none !important;
+    
 }
 
 /* Boutons de navigation (flèches) */
@@ -581,10 +607,12 @@ ul.footer-menu, ul.footer-links {
     border: none;
     cursor: pointer;
     z-index: 1003; /* Au-dessus de l'image */
+    background:none !important;
 }
 
 .lightbox__arrows--previous {
     left: 20px;
+    
 }
 
 .lightbox__arrows--next {
@@ -595,14 +623,14 @@ ul.footer-menu, ul.footer-links {
 .lightbox__close img,
 .lightbox__arrows img {
     filter: brightness(0) invert(1); 
-    background-color: none !important;
+    
 }
 
 /* Flèches de navigation */
 .lightbox__arrows img {
-    width: 49px !important; /* Largeur des flèches */
+    
     height: 18px; /* Hauteur des flèches */
-    background-color:none !important ;
+
 }
 
 /* Croix de fermeture */
@@ -697,84 +725,3 @@ ul.footer-menu, ul.footer-links {
         height: 50vh; 
     }
 }
-
-/*lightbox*/
-/* .lightbox {
-    position: relative;
-    display: inline-block;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.lightbox-overlay{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-} */
-
-/* Styles pour l'overlay et l'icône "eye" */
-/* .photos-items {
-    position: relative;
-    display: inline-block;
-    margin: 10px;
-}
-.picture-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); 
-    opacity: 0; 
-    transition: opacity 0.3s ease; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.photos-items:hover .picture-overlay {
-    opacity: 1; 
-}
-
-.eye-icon {
-    width: 40px !important;
-    height: 40px !important;
-    object-fit: contain !important;
-    z-index:10;
-    filter: brightness(0) invert(1); 
-}
-
-.lightbox-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-}
-
-.lightbox {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1001;
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 90%;
-    max-height: 90%;
-    overflow: auto;
-}
-*/

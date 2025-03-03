@@ -163,11 +163,12 @@ function charger_photos_via_ajax() {
             $category = get_field('categorie', $photo_id);
             $photo_title = get_the_title();
             ?>
-            <div class="photos-items" 
+            <div class="photos-items"  
                  data-photo-id="<?= esc_attr($photo_id); ?>" 
                  data-image-url="<?= esc_url($image_url); ?>" 
                  data-reference="<?= esc_attr($reference); ?>" 
-                 data-category="<?= esc_attr($category); ?>">
+                 data-category="<?= esc_attr($category); ?>"
+                 data-title="<?= esc_attr($photo_title); ?>">
                 <span>
                     <img src="<?= esc_url($image_url) ?>" alt="<?= esc_attr(get_the_title()) ?>" />
                     <div class="picture-overlay">
