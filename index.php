@@ -45,19 +45,22 @@ get_header(); ?>
             $reference = get_field('reference', $photo_id); // Récupérer la référence via ACF
             $category = get_field('categorie', $photo_id); // Récupérer la catégorie via ACF
             $photo_title = get_the_title(); // Récupérer le titre de la photo
+            
 
             // Vérifiez que les données sont bien définies avant de les afficher
             if ($image_url && $photo_id && $reference && $category && $photo_title) :
                 ?>
-                <div class="photos-items" 
+                <div class="photos-items mobile-single-column" 
                      data-photo-id="<?= esc_attr($photo_id); ?>" 
                      data-image-url="<?= esc_url($image_url); ?>" 
                      data-reference="<?= esc_attr($reference); ?>" 
-                     data-category="<?= esc_attr($category); ?>">
+                     data-category="<?= esc_attr($category); ?>"
+                     data-title="<?= esc_attr($photo_title); ?>">
                     <span>
                         <img src="<?= esc_url($image_url) ?>" alt="<?= esc_attr(get_the_title()) ?>" />
                         <div class="picture-overlay">
                             <img class="eye-icon" src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-eye.svg' ?>" alt="Voir l'image" />
+                            <img class="icon-lightbox" src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-full.svg' ?>" alt="Voir l'image" />
                             <div class="overlay-info">
                                 <span class="photo-title"><?= esc_html($photo_title); ?></span>
                                 <span class="photo-category"><?= esc_html($category); ?></span>

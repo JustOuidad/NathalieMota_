@@ -271,54 +271,76 @@ display:flex;
     padding: 0;
 }
 
-/* Cacher le bouton toggle en desktop */
-.menu-toggle {
-    display: none;
-    background-color: #E00000;
-    color: #FFFFFF;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-}
-
-/* Style pour le menu en mode mobile/tablette */
-@media (max-width: 768px) {
-    .menu-toggle {
-        display: block; 
-    }
-
-    .header-menu {
-        display: none; /* Cacher le menu desktop */
-        flex-direction: column;
-        width: 100%;
-        background-color: #f8f8f8;
-        position: absolute;
-        top: 60px;
-        left: 0;
-    }
-
-    .header-menu li {
-        text-align: center;
-        margin: 10px 0;
-    }
-
-    .header-menu a {
-        color: #333;
-    }
-
-    /* Lorsque le menu est ouvert */
-    .header-menu.active {
-        display: flex;
-    }
-}
-
-/* Style pour le bouton de contact */
 #openModalButton {
     border: none;
     padding: 10px 20px;
     cursor: pointer;
     margin-left: 20px;
 }
+
+/* Style de base pour le bouton toggle */
+.menu-toggle {
+    display: none; /* Caché par défaut sur les grands écrans */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1000;
+}
+
+.menu-toggle .line {
+    width: 100%;
+    height: 3px;
+    background: #000;
+    transition: all 0.3s ease;
+}
+
+/* Style pour le menu container */
+.menu-container {
+    display: flex;
+    align-items: center;
+    z-index: 1000 !important;
+}
+
+/* Style pour le menu mobile */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex; /* Afficher le bouton toggle sur les petits écrans */
+        background:none !important;
+    }
+
+    .menu-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: none; /* Caché par défaut */
+    }
+
+    .menu-container.active {
+        display: flex; /* Afficher le menu lorsqu'il est activé */
+    }
+
+    .header-menu {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .header-menu li {
+        margin: 10px 0;
+    }
+}
+
+
 
 /* Style pour le footer */
 
@@ -411,6 +433,96 @@ ul.footer-menu, ul.footer-links {
     background-color: #0056b3;
 }
 
+/*Filtres Media*/
+/* Styles pour le conteneur des filtres */
+.filters {
+    display: flex;
+    justify-content: space-between; /* Espace entre les filtres gauche et droite */
+    align-items: center; /* Alignement vertical au centre */
+    padding: 20px;
+    background-color: #f9f9f9; /* Fond légèrement gris pour le conteneur */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère pour un effet de profondeur */
+}
+
+/* Conteneur des filtres à gauche */
+.filters-left {
+    display: flex;
+    gap: 20px; /* Espace entre CATÉGORIES et FORMATS */
+}
+
+/* Conteneur des filtres à droite */
+.filters-right {
+    display: flex;
+}
+
+/* Styles pour les menus déroulants */
+.filter-categorie, .filter-format, .filter-order {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 16px;
+    color: #555;
+    cursor: pointer;
+    width: 200px; /* Largeur fixe pour les menus déroulants */
+    appearance: none; /* Supprime le style par défaut du navigateur */
+    -webkit-appearance: none; /* Pour les navigateurs WebKit */
+    -moz-appearance: none; /* Pour Firefox */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23555" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* Icône de flèche */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
+/* Effet au survol du menu déroulant */
+.filter-categorie:hover, .filter-format:hover, .filter-order:hover {
+    border-color: #E00000; /* Bordure rouge au survol */
+    background-color: #f8f8f8; /* Fond légèrement gris au survol */
+}
+
+/* Styles pour les options des menus déroulants */
+.filter-categorie option, .filter-format option, .filter-order option {
+    padding: 10px;
+    background-color: #fff;
+    color: #555;
+}
+
+/* Effet au survol des options (ne fonctionne pas sur tous les navigateurs) */
+.filter-categorie option:hover, .filter-format option:hover, .filter-order option:hover {
+    background-color: #E00000 !important; /* Couleur de survol */
+    color: #fff !important; /* Texte en blanc */
+}
+
+/* Style pour le texte des options sélectionnées */
+.filter-categorie option:checked, .filter-format option:checked, .filter-order option:checked {
+    background-color: #E00000; /* Fond rouge pour l'option sélectionnée */
+    color: #fff; /* Texte en blanc */
+}
+
+/* Style pour le texte des options au focus */
+.filter-categorie:focus, .filter-format:focus, .filter-order:focus {
+    outline: none; /* Supprime la bordure par défaut */
+    border-color: #E00000; /* Bordure rouge au focus */
+    box-shadow: 0 0 5px rgba(224, 0, 0, 0.5); /* Ombre rouge au focus */
+}
+/* Styles spécifiques pour les écrans desktop (min-width: 769px) */
+@media (min-width: 769px) {
+    .filters {
+        flex-direction: row; 
+        justify-content: space-between; 
+        align-items: center; 
+    }
+
+    .filters-left {
+        flex-direction: row; 
+        gap: 20px; 
+    }
+
+    .filters-right {
+        flex-direction: row;
+    }
+}
 
 /* Style pour le header personnalisé */
 
@@ -465,6 +577,27 @@ ul.footer-menu, ul.footer-links {
     display: none;
 }
 
+/* Media Queries pour des ajustements supplémentaires si nécessaire */
+@media (max-width: 768px) {
+    .hero-image {
+        height: 70vh !important;
+    }
+
+    .hero-image img {
+        object-fit: cover !important;
+    }
+
+    .hero-text h1 {
+        font-size: 35px; 
+        margin-top: 50% !important;
+    }
+}
+
+@media (max-width: 820px) {
+    .hero-text h1 {
+        font-size: 55px; 
+        margin-top: -50% !important;
+    }}
 
 /* Style de base pour la galerie */
 .photo-grid {
@@ -520,6 +653,19 @@ ul.footer-menu, ul.footer-links {
     z-index: 10;
     filter: brightness(0) invert(1); 
 }
+
+.icon-full {
+    width: 34px !important;
+    height: 34px !important;
+    object-fit: contain !important;
+    z-index: 10;
+    filter: brightness(0) invert(1);
+    position: absolute; 
+    top: 0 !important; 
+    right: 0 !important; 
+    background: none !important; 
+    border: none !important; 
+}
 /* Overlay */
 .lightbox-overlay {
     display: none;
@@ -541,7 +687,7 @@ ul.footer-menu, ul.footer-links {
     width: 100%;
     height: 100%;
     z-index: 1001;
-    background: transparent; /* Pas de fond pour la lightbox */
+    background: transparent; 
 }
 
 /* Conteneur de l'image dans la lightbox */
@@ -557,32 +703,32 @@ ul.footer-menu, ul.footer-links {
 .lightbox-image {
     max-width: 90%;
     max-height: 90%;
-    object-fit: contain; /* Garde les proportions de l'image */
-    z-index: 1002; /* Priorité à l'image */
+    object-fit: contain; 
+    z-index: 1002; 
 }
 
 /* Conteneur des informations (titre et catégorie) */
 .lightbox__infos {
     position: absolute;
-    bottom: 10px; /* Ajustez cette valeur pour déplacer les infos plus haut ou plus bas */
+    bottom: 10px; 
     left: 0;
     right: 0;
     display: flex;
     justify-content: space-between;
-    padding: 0 20px; /* Espacement à gauche et à droite */
-    color: white; /* Couleur du texte */
-    font-size: 16px; /* Taille du texte */
-    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent pour améliorer la lisibilité */
+    padding: 0 20px; 
+    color: white; 
+    font-size: 16px; 
+    
 }
 
 /* Style du titre de la photo */
 .photo-title {
-    align-self: flex-end; /* Aligne le titre en bas à gauche */
+    align-self: flex-end; 
 }
 
 /* Style de la catégorie de la photo */
 .photo-category {
-    align-self: flex-end; /* Aligne la catégorie en bas à droite */
+    align-self: flex-end; 
 }
 
 /* Bouton fermer la lightbox */
@@ -590,10 +736,10 @@ ul.footer-menu, ul.footer-links {
     position: absolute;
     top: 20px;
     right: 20px;
-    background: none; /* Pas d'arrière-plan */
+    background: none; 
     border: none;
     cursor: pointer;
-    z-index: 1003; /* Au-dessus de l'image */
+    z-index: 1003; 
     background:none !important;
     
 }
@@ -603,10 +749,10 @@ ul.footer-menu, ul.footer-links {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: none; /* Pas d'arrière-plan */
+    background: none;
     border: none;
     cursor: pointer;
-    z-index: 1003; /* Au-dessus de l'image */
+    z-index: 1003; 
     background:none !important;
 }
 
@@ -719,9 +865,7 @@ ul.footer-menu, ul.footer-links {
 
 
 /* Mobile : 1 photo par ligne */
-@media (max-width: 767px) {
-    .photos-items {
-        width: 100%;  
-        height: 50vh; 
-    }
-}
+
+
+/*Photo Block*/
+

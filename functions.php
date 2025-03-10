@@ -173,6 +173,7 @@ function charger_photos_via_ajax() {
                     <img src="<?= esc_url($image_url) ?>" alt="<?= esc_attr(get_the_title()) ?>" />
                     <div class="picture-overlay">
                         <img class="eye-icon" src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-eye.svg' ?>" alt="Voir l'image" />
+                        <img class="icon-lightbox" src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-full.svg' ?>" alt="Voir l'image" />
                         <div class="overlay-info">
                             <span class="photo-title"><?= esc_html($photo_title); ?></span>
                             <span class="photo-category"><?= esc_html($category); ?></span>

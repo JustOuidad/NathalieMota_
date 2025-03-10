@@ -6,6 +6,7 @@ jQuery(document).ready(function($) {
         const name = $(this).data('title');
         const category = $(this).data('category');
 
+        
         // Mettre à jour l'image et les informations dans la lightbox
         $('.lightbox-image').attr('src', imageUrl);
         // $('.lightbox-reference').text( reference);
@@ -31,6 +32,7 @@ jQuery(document).ready(function($) {
             const imageUrl = prevPhoto.data('image-url');
             const reference = prevPhoto.data('reference');
             const category = prevPhoto.data('category');
+            const name = $(this).data('title');
 
             $('.lightbox-image').attr('src', imageUrl);
             $('.lightbox-reference').text( reference);
@@ -53,4 +55,15 @@ jQuery(document).ready(function($) {
             $('.lightbox-category').text('Catégorie: ' + category);
         }
     });
+});
+//Photo Block
+// Ouvrir la page photo_block.php lorsqu'on clique sur l'image dans la lightbox
+$('.lightbox-image').on('click', function () {
+    const currentPhoto = $('.photos-items[data-image-url="' + $(this).attr('src') + '"]');
+    if (currentPhoto.length) {
+        const photoId = currentPhoto.data('photo-id');
+        if (photoId) {
+            window.location.href = `Photo/${photoId}`;
+        }
+    }
 });

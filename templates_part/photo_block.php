@@ -1,113 +1,105 @@
 <?php
 /*
-Template Name: Photo Block
+Template Name: Single Photo Template
+Template Post Type: photo
+Description: Template pour afficher les photographies
 */
 
 get_header();
 
-// Récupérer l'ID de la photo depuis l'URL
-$photo_id = isset($_GET['photo_id']) ? intval($_GET['photo_id']) : 0;
+// Vérifiez si un ID de photo est passé dans l'URL
+if (isset($_GET['photo_id']) && is_numeric($_GET['photo_id'])) {
+    $photo_id = intval($_GET['photo_id']);
+} else {
+    // Redirection si l'ID est manquant
+    wp_redirect(home_url());
+    exit;
+}
+var_dump($photo_id);
+// Récupérer les détails de la photo
+$image_url = get_the_post_thumbnail_url($photo_id, 'full');
+$title = get_the_title($photo_id);
+$reference = get_field('reference', $photo_id); // Référence via ACF
+$categorie = get_field('categorie', $photo_id); // Catégorie via ACF
+$format = get_field('format', $photo_id); // Format via ACF
 
-if ($photo_id) {
-    // Récupérer les informations de la photo
-    $photo_title = get_the_title($photo_id);
-    $photo_reference = get_field('reference', $photo_id);
-    $photo_category = get_the_terms($photo_id, 'categorie')[0]->name;
-    $photo_format = get_the_terms($photo_id, 'formats')[0]->name;
-    $photo_date = get_the_date('d/m/Y', $photo_id);
-    $photo_image = get_the_post_thumbnail_url($photo_id, 'full');
+// Récupérer les photos dans la même catégorie
+$args = array(
+    'post_type' => 'photo',
+    'posts_per_page' => 2, // Afficher 2 photos
+    'post__not_in' => array($photo_id), // Exclure la photo actuelle
+    'meta_query' => array(
+        array(
+            'key' => 'categorie',
+            'value' => $categorie,
+            'compare' => '='
+        )
+    )
+);
+$related_photos = new WP_Query($args);
+?>
 
-    // Récupérer les photos précédente et suivante
-    $args = array(
-        'post_type' => 'photo',
-        'posts_per_page' => -1,
-        'orderby' => 'date',
-        'order' => 'ASC',
-    );
-    $all_photos = get_posts($args);
-    $current_index = array_search($photo_id, array_column($all_photos, 'ID'));
-    $prev_photo = $all_photos[$current_index - 1] ?? null;
-    $next_photo = $all_photos[$current_index + 1] ?? null;
+<div id="photo-block" class="photo-block">
+    <!-- Bloc principal 50% gauche avec infos -->
+    <div class="photo-block__info">
+        <h2><?= esc_html($title); ?></h2>
+        <p><strong>Référence:</strong> <?= esc_html($reference); ?></p>
+        <p><strong>Catégorie:</strong> <?= esc_html($categorie); ?></p>
+        <p><strong>Format:</strong> <?= esc_html($format); ?></p>
+    </div>
+    
+    <!-- Bloc 50% à droite avec la photo -->
+    <div class="photo-block__image">
+        <img src="<?= esc_url($image_url); ?>" alt="<?= esc_attr($title); ?>" />
+    </div>
 
-    // Récupérer les photos apparentées (même catégorie)
-    $related_args = array(
-        'post_type' => 'photo',
-        'posts_per_page' => 2,
-        'post__not_in' => array($photo_id),
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'categorie',
-                'field' => 'term_id',
-                'terms' => get_the_terms($photo_id, 'categorie')[0]->term_id,
-            ),
-        ),
-    );
-    $related_photos = get_posts($related_args);
-    ?>
-
-    <div class="photo-block-container">
-        <!-- Bloc 50 % de largeur à gauche : Informations de la photo -->
-        <div class="photo-info">
-            <h1><?php echo esc_html($photo_title); ?></h1>
-            <p><strong>Référence :</strong> <?php echo esc_html($photo_reference); ?></p>
-            <p><strong>Catégorie :</strong> <?php echo esc_html($photo_category); ?></p>
-            <p><strong>Format :</strong> <?php echo esc_html($photo_format); ?></p>
-            <p><strong>Date :</strong> <?php echo esc_html($photo_date); ?></p>
+    <!-- Bloc 118px en dessous -->
+    <div class="photo-block__navigation">
+        <!-- Lien contact à gauche -->
+        <div class="photo-block__contact">
+            <a href="#contact-form" id="contact-link" class="btn">Contactez-moi</a>
         </div>
 
-        <!-- Bloc 50 % de largeur à droite : Photo en grand format -->
-        <div class="photo-image">
-            <img src="<?php echo esc_url($photo_image); ?>" alt="<?php echo esc_attr($photo_title); ?>">
-        </div>
+        <!-- Navigation des photos à droite -->
+        <div class="photo-block__arrows">
+            <?php
+            // Liens précédent et suivant
+            $prev_post = get_adjacent_post(false, '', true, 'photo');
+            $next_post = get_adjacent_post(false, '', false, 'photo');
 
-        <!-- Bloc 118 px de hauteur en dessous : Interactions -->
-        <div class="photo-interactions">
-            <!-- Lien de contact -->
-            <div class="contact-link">
-                <a href="#modal-contact" class="open-modal" data-reference="<?php echo esc_attr($photo_reference); ?>">
-                    Contact
+            if ($prev_post) :
+                ?>
+                <a href="<?= get_permalink($prev_post); ?>" class="photo-block__arrow photo-block__arrow--prev">
+                    <img src="<?= get_stylesheet_directory_uri() . '/assets/image/arrow-left-white.png'; ?>" alt="Photo précédente" />
                 </a>
-            </div>
+            <?php endif;
 
-            <!-- Navigation entre les photos -->
-            <div class="photo-navigation">
-                <?php if ($prev_photo) : ?>
-                    <a href="<?php echo get_permalink($prev_photo->ID); ?>" class="prev-photo" data-thumbnail="<?php echo get_the_post_thumbnail_url($prev_photo->ID, 'thumbnail'); ?>">
-                        &larr; Précédente
-                    </a>
-                <?php endif; ?>
-
-                <?php if ($next_photo) : ?>
-                    <a href="<?php echo get_permalink($next_photo->ID); ?>" class="next-photo" data-thumbnail="<?php echo get_the_post_thumbnail_url($next_photo->ID, 'thumbnail'); ?>">
-                        Suivante &rarr;
-                    </a>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <!-- Photos apparentées -->
-        <div class="related-photos">
-            <h2>Vous aimerez aussi</h2>
-            <div class="related-grid">
-                <?php foreach ($related_photos as $related_photo) : ?>
-                    <div class="related-photo-item">
-                        <a href="<?php echo get_permalink($related_photo->ID); ?>">
-                            <?php echo get_the_post_thumbnail($related_photo->ID, 'medium'); ?>
-                            <div class="photo-hover-icons">
-                                <span class="eye-icon">👁️</span>
-                                <span class="fullscreen-icon">🔍</span>
-                            </div>
-                        </a>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+            if ($next_post) :
+                ?>
+                <a href="<?= get_permalink($next_post); ?>" class="photo-block__arrow photo-block__arrow--next">
+                    <img src="<?= get_stylesheet_directory_uri() . '/assets/image/arrow-right-white.png'; ?>" alt="Photo suivante" />
+                </a>
+            <?php endif; ?>
         </div>
     </div>
 
-    <?php
-} else {
-    echo '<p>Aucune photo trouvée.</p>';
-}
+    <!-- Photos associées -->
+    <div class="photo-block__related">
+        <h2>VOUS AIMEREZ AUSSI</h2>
+        <?php if ($related_photos->have_posts()) : ?>
+            <div class="photo-block__related-grid">
+                <?php while ($related_photos->have_posts()) : $related_photos->the_post(); ?>
+                    <div class="photo-block__related-item">
+                        <a href="<?= get_permalink(); ?>">
+                            <img src="<?= get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>" alt="<?= esc_attr(get_the_title()); ?>" />
+                        </a>
+                    </div>
+                <?php endwhile; ?>
+            </div>
+        <?php else : ?>
+            <p>Aucune photo associée trouvée.</p>
+        <?php endif; ?>
+    </div>
+</div>
 
-get_footer();
-?>
+<?php get_footer(); ?>

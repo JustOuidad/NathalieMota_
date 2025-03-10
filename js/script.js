@@ -1,4 +1,38 @@
-// Menu-Toggle
+// Hero-Header
+document.addEventListener("DOMContentLoaded", function() {
+    const heroImage = document.querySelector('.hero-image img');
+
+    if (heroImage) {
+        // Attendre que l'image soit chargée
+        heroImage.onload = function() {
+            const container = document.querySelector('.hero-image');
+            const containerWidth = container.offsetWidth;
+            const containerHeight = container.offsetHeight;
+            const imgWidth = heroImage.naturalWidth;
+            const imgHeight = heroImage.naturalHeight;
+
+            // Calculer le ratio de l'image et du conteneur
+            const imgRatio = imgWidth / imgHeight;
+            const containerRatio = containerWidth / containerHeight;
+
+            // Ajuster l'image en fonction du ratio
+            if (imgRatio > containerRatio) {
+                heroImage.style.width = 'auto';
+                heroImage.style.height = '100%';
+            } else {
+                heroImage.style.width = '100%';
+                heroImage.style.height = 'auto';
+            }
+        };
+
+        // Si l'image est déjà chargée (cas du cache)
+        if (heroImage.complete) {
+            heroImage.onload();
+        }
+    }
+}); 
+
+//Menu
 document.addEventListener('DOMContentLoaded', function () {
     // Menu-Toggle
     const menuToggle = document.querySelector('.menu-toggle');
@@ -120,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 lightboxPhotos = Array.from(document.querySelectorAll('.photo-grid .photos-items'));
 
                 // Masquer le bouton "Load More" s'il n'y a plus de photos
-                if (data.includes('no-more-posts') || lightboxPhotos.length < 8) {
+                if (data.includes('no-more-posts') || lightboxPhotos.length === 16) {
                     loadMoreButton.style.display = 'none';
                 } else {
                     loadMoreButton.style.display = 'block';
@@ -136,5 +170,24 @@ document.addEventListener('DOMContentLoaded', function () {
             const imageUrl = lightboxPhotos[lightboxIndex].getAttribute('data-image-url');
             lightboxImage.src = imageUrl;
         }
+    }
+});
+//Photo block
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Gérer le clic sur la photo dans la lightbox
+    const lightboxImage = document.querySelector('.lightbox-image'); // Sélectionnez l'image de la lightbox
+    if (lightboxImage) {
+        lightboxImage.addEventListener('click', function () {
+            // Récupérer l'ID de la photo actuellement affichée dans la lightbox
+            const currentPhoto = lightboxPhotos[lightboxIndex];
+            if (currentPhoto) {
+                const photoId = currentPhoto.getAttribute('data-photo-id');
+                if (photoId) {
+                    // Rediriger vers la page photo_block.php avec l'ID de la photo
+                    window.location.href = `photo_block.php?photo_id=${photoId}`;
+                }
+            }
+        });
     }
 });
