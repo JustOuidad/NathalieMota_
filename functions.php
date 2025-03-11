@@ -12,7 +12,15 @@ function register_my_menus() {
     ));
 }
 add_action('after_setup_theme', 'register_my_menus');
+//Choices pour menu deroulant
+function enqueue_choices_assets() {
+    // Charger le CSS de Choices.js
+    wp_enqueue_style('choices-css', 'https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css');
 
+    // Charger le JS de Choices.js
+    wp_enqueue_script('choices-js', 'https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js', array(), null, true);
+}
+add_action('wp_enqueue_scripts', 'enqueue_choices_assets');
 // ====================================
 // 2. Gestion des styles et scripts
 // ====================================

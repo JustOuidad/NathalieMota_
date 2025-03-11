@@ -191,3 +191,57 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialiser Choices.js sur les menus déroulants
+    const categorieFilter = new Choices('#filter-categorie', {
+        searchEnabled: false, // Désactiver la recherche
+        itemSelectText: '', // Supprimer le texte "Appuyez pour sélectionner"
+    });
+
+    const formatFilter = new Choices('#filter-format', {
+        searchEnabled: false,
+        itemSelectText: '',
+    });
+
+    const orderFilter = new Choices('#filter-order', {
+        searchEnabled: false,
+        itemSelectText: '',
+    });
+});
+//Choices pour menu deroulant
+document.addEventListener('DOMContentLoaded', function () {
+    const customSelects = document.querySelectorAll('.custom-select');
+
+    customSelects.forEach(select => {
+        const selectedOption = select.querySelector('.selected-option');
+        const options = select.querySelector('.options');
+        const optionsList = options.querySelectorAll('li');
+
+        // Ouvrir/fermer le menu déroulant
+        selectedOption.addEventListener('click', () => {
+            select.classList.toggle('open');
+        });
+
+        // Sélectionner une option
+        optionsList.forEach(option => {
+            option.addEventListener('click', () => {
+                // Mettre à jour l'option sélectionnée
+                selectedOption.querySelector('span').textContent = option.textContent;
+                select.classList.remove('open');
+
+                // Récupérer la valeur de l'option
+                const value = option.getAttribute('data-value');
+                console.log('Valeur sélectionnée :', value);
+
+                // Vous pouvez maintenant utiliser cette valeur pour filtrer ou d'autres actions
+            });
+        });
+
+        // Fermer le menu déroulant si on clique à l'extérieur
+        document.addEventListener('click', (event) => {
+            if (!select.contains(event.target)) {
+                select.classList.remove('open');
+            }
+        });
+    });
+});

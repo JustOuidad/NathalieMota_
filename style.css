@@ -387,19 +387,9 @@ ul.footer-menu, ul.footer-links {
 /* Contenu du modal */
 .modal__content {
     background-color: #fff;
-    max-width: 500px;
+    max-width: 597px;
     width: 100%;
     position: relative;
-}
-
-/* Position de la croix de fermeture */
-.cross-icon-modale {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    color: #333;
-    cursor: pointer;
 }
 
 /* Centrage des éléments à l'intérieur du formulaire */
@@ -428,83 +418,81 @@ ul.footer-menu, ul.footer-links {
     border-radius: 5px;
     cursor: pointer;
 }
+.label{
+color:#313144;    
+}
 
 .modal__content form button:hover {
     background-color: #0056b3;
 }
 
 /*Filtres Media*/
-/* Styles pour le conteneur des filtres */
+/* Conteneur principal des filtres */
 .filters {
     display: flex;
-    justify-content: space-between; /* Espace entre les filtres gauche et droite */
-    align-items: center; /* Alignement vertical au centre */
-    padding: 20px;
-    background-color: #f9f9f9; /* Fond légèrement gris pour le conteneur */
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère pour un effet de profondeur */
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 15px;
 }
 
-/* Conteneur des filtres à gauche */
+/* Filtres à gauche */
 .filters-left {
     display: flex;
-    gap: 20px; /* Espace entre CATÉGORIES et FORMATS */
+    gap: 20px;
 }
 
-/* Conteneur des filtres à droite */
+/* Filtres à droite */
 .filters-right {
     display: flex;
+    gap: 20px;
 }
 
-/* Styles pour les menus déroulants */
-.filter-categorie, .filter-format, .filter-order {
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    font-size: 16px;
-    color: #555;
-    cursor: pointer;
-    width: 200px; /* Largeur fixe pour les menus déroulants */
-    appearance: none; /* Supprime le style par défaut du navigateur */
-    -webkit-appearance: none; /* Pour les navigateurs WebKit */
-    -moz-appearance: none; /* Pour Firefox */
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%23555" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* Icône de flèche */
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
+
+/* Styles pour Choices.js */
+.choices {
+    width: 260px;
+    margin-bottom: 10px;
 }
 
-/* Effet au survol du menu déroulant */
-.filter-categorie:hover, .filter-format:hover, .filter-order:hover {
-    border-color: #E00000; /* Bordure rouge au survol */
-    background-color: #f8f8f8; /* Fond légèrement gris au survol */
+.choices__inner {
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    padding: 10px !important;
+    background-color: #fff !important;
+    box-shadow: none !important;
 }
 
-/* Styles pour les options des menus déroulants */
-.filter-categorie option, .filter-format option, .filter-order option {
-    padding: 10px;
-    background-color: #fff;
-    color: #555;
+.choices__list--single {
+    padding: 0 !important;
+}
+.choices__list--single .choices__item{
+    color: #313144 !important; 
 }
 
-/* Effet au survol des options (ne fonctionne pas sur tous les navigateurs) */
-.filter-categorie option:hover, .filter-format option:hover, .filter-order option:hover {
-    background-color: #E00000 !important; /* Couleur de survol */
-    color: #fff !important; /* Texte en blanc */
+.choices__arrow {
+    border-color: #313144 transparent transparent transparent !important;
 }
 
-/* Style pour le texte des options sélectionnées */
-.filter-categorie option:checked, .filter-format option:checked, .filter-order option:checked {
-    background-color: #E00000; /* Fond rouge pour l'option sélectionnée */
-    color: #fff; /* Texte en blanc */
+.choices__list--dropdown {
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
 }
 
-/* Style pour le texte des options au focus */
-.filter-categorie:focus, .filter-format:focus, .filter-order:focus {
-    outline: none; /* Supprime la bordure par défaut */
-    border-color: #E00000; /* Bordure rouge au focus */
-    box-shadow: 0 0 5px rgba(224, 0, 0, 0.5); /* Ombre rouge au focus */
+.choices__list--dropdown .choices__item {
+    padding: 10px !important;
+    color:#313144 !important;
+    background-color: #fff !important;
+}
+
+.choices__list--dropdown .choices__item--selectable:hover {
+    background-color: #E00000 !important;
+    color: #ffff !important;
+}
+.choices__inner{
+    color: #313144 !important; 
 }
 /* Styles spécifiques pour les écrans desktop (min-width: 769px) */
 @media (min-width: 769px) {
