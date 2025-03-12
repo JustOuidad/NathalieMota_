@@ -280,26 +280,40 @@ display:flex;
 
 /* Style de base pour le bouton toggle */
 .menu-toggle {
-    display: none; /* Caché par défaut sur les grands écrans */
+    display: none; 
     flex-direction: column;
     justify-content: space-around;
     width: 30px;
     height: 24px;
     background: transparent;
     border: none;
-    cursor: pointer;
     padding: 0;
     z-index: 1000;
+    background: none !important; 
 }
 
+/* Style pour les lignes du bouton toggle */
 .menu-toggle .line {
     width: 100%;
     height: 3px;
-    background: #000;
-    transition: all 0.3s ease;
+    background: #000; 
+    transition: all 0.3s ease; 
 }
 
-/* Style pour le menu container */
+/* Style pour le bouton toggle en mode "ouvert" (croix) */
+.menu-toggle.active .line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px); 
+}
+
+.menu-toggle.active .line:nth-child(2) {
+    opacity: 0; 
+}
+
+.menu-toggle.active .line:nth-child(3) {
+    transform: rotate(-50deg) translate(7px, -6px); 
+}
+
+/* Style pour le conteneur du menu */
 .menu-container {
     display: flex;
     align-items: center;
@@ -308,38 +322,62 @@ display:flex;
 
 /* Style pour le menu mobile */
 @media (max-width: 768px) {
+    /* Afficher le bouton toggle sur les petits écrans */
     .menu-toggle {
-        display: flex; /* Afficher le bouton toggle sur les petits écrans */
-        background:none !important;
+        display: flex;
+        background: none !important;
     }
 
+    /* Style pour le conteneur du menu en mode mobile */
     .menu-container {
         position: absolute;
-        top: 100%;
+        top: 5%;
         left: 0;
         width: 100%;
-        background: #fff;
+        height:812px ;
+        background: #fff; 
         flex-direction: column;
-        align-items: flex-start;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        display: none; /* Caché par défaut */
+        padding: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+        display: none; 
     }
 
+    /* Style pour le conteneur du menu lorsqu'il est actif (ouvert) */
     .menu-container.active {
-        display: flex; /* Afficher le menu lorsqu'il est activé */
+        display: flex;
+        align-items: center;
+        padding: 15px; 
+        background-color: #E00000; 
     }
 
+    /* Style pour le bouton "Contact" dans le menu actif */
+    .menu-container.active #openModalButton {
+        margin-left: 0; 
+        color: #fff; 
+        font-size: 65px;
+    }
+
+    /* Style pour le menu principal en mode mobile */
     .header-menu {
         flex-direction: column;
         width: 100%;
+        top:80px !important;
     }
 
+    /* Style pour les éléments du menu en mode mobile */
     .header-menu li {
-        margin: 10px 0;
+        margin: 8px 0; 
+        color: #fff; 
+        
+    }
+
+    /* Style pour les liens du menu en mode mobile */
+    .header-menu li a {
+        color: #fff; 
+        text-decoration: none; 
+        font-size: 65px !important;
     }
 }
-
 
 
 /* Style pour le footer */
@@ -355,6 +393,7 @@ ul.footer-menu, ul.footer-links {
     display: flex; 
     justify-content: center; 
     gap: 20px; 
+    color:#000000;
 }
 
 /* Supprimer les styles des liens */
@@ -367,7 +406,23 @@ ul.footer-menu li a, ul.footer-links li a {
 ul.footer-menu, ul.footer-links {
     background-color: #ffff; 
 }
+/* Version mobile (écrans de moins de 769px) */
+@media (max-width: 768px) {
+    ul.footer-menu, ul.footer-links {
+        flex-direction: column;
+        align-items: center; 
+        gap: 10px; 
+    }
+}
 
+/* Version desktop (écrans de 769px et plus) */
+@media (min-width: 769px) {
+    ul.footer-menu, ul.footer-links {
+        display: flex; 
+        justify-content: center; 
+        gap: 20px;
+    }
+}
 
 /* Styles du modal */
 .modal {
@@ -422,11 +477,6 @@ ul.footer-menu, ul.footer-links {
 color:#313144;    
 }
 
-.modal__content form button:hover {
-    background-color: #0056b3;
-}
-
-/*Filtres Media*/
 /* Conteneur principal des filtres */
 .filters {
     display: flex;
@@ -494,21 +544,22 @@ color:#313144;
 .choices__inner{
     color: #313144 !important; 
 }
-/* Styles spécifiques pour les écrans desktop (min-width: 769px) */
-@media (min-width: 769px) {
+
+/* Version mobile (écrans de moins de 769px) */
+@media (max-width: 768px) {
     .filters {
-        flex-direction: row; 
-        justify-content: space-between; 
-        align-items: center; 
+        flex-direction: column; 
+        gap: 15px; 
     }
 
     .filters-left {
-        flex-direction: row; 
-        gap: 20px; 
+        flex-direction: column;
+        gap: 10px; 
     }
 
     .filters-right {
-        flex-direction: row;
+        flex-direction: column; 
+        gap: 10px; 
     }
 }
 
@@ -568,7 +619,7 @@ color:#313144;
 /* Media Queries pour des ajustements supplémentaires si nécessaire */
 @media (max-width: 768px) {
     .hero-image {
-        height: 70vh !important;
+        height: 50vh !important;
     }
 
     .hero-image img {
@@ -584,7 +635,7 @@ color:#313144;
 @media (max-width: 820px) {
     .hero-text h1 {
         font-size: 55px; 
-        margin-top: -50% !important;
+        margin-top: -60% !important;
     }}
 
 /* Style de base pour la galerie */
@@ -642,7 +693,7 @@ color:#313144;
     filter: brightness(0) invert(1); 
 }
 
-.icon-full {
+.icon-lightbox {
     width: 34px !important;
     height: 34px !important;
     object-fit: contain !important;
@@ -763,14 +814,14 @@ color:#313144;
 /* Flèches de navigation */
 .lightbox__arrows img {
     
-    height: 18px; /* Hauteur des flèches */
+    height: 18px; 
 
 }
 
 /* Croix de fermeture */
 .lightbox__close img {
-    width: 22px; /* Largeur de la croix */
-    height: 22px; /* Hauteur de la croix */
+    width: 22px; 
+    height: 22px; 
 }
 
 /*photo_block*/

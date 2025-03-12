@@ -43,7 +43,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
                 ?>
                 <!-- Lien ou bouton pour ouvrir la modale de contact -->
                 <div class="modal-content">
-                    <button id="openModalButton">Contact</button>
+                <button id="openModalButton">Contact</button>
                 </div>
             </div>
             <?php get_template_part('templates_part/contact');?>

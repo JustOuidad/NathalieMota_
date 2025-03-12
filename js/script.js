@@ -37,15 +37,20 @@ document.addEventListener('DOMContentLoaded', function () {
     // Menu-Toggle
     const menuToggle = document.querySelector('.menu-toggle');
     const menuContainer = document.querySelector('.menu-container');
-
+    
     if (menuToggle && menuContainer) {
         menuToggle.addEventListener('click', function () {
+            // Basculer l'état "ouvert/fermé" du menu
             const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
             menuToggle.setAttribute('aria-expanded', !isExpanded);
+    
+            // Basculer la classe "active" sur le conteneur du menu
             menuContainer.classList.toggle('active');
+    
+            // Basculer la classe "active" sur le bouton toggle pour la croix
+            menuToggle.classList.toggle('active');
         });
     }
-
     // Tableaux Variables
     let currentPage = 1; // Page actuelle pour le load more
     let lightboxIndex = 0; // Index de la photo actuelle dans la lightbox
