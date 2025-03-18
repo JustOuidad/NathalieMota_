@@ -137,6 +137,7 @@ body {
     justify-content: center;
     margin: 0 auto;
     max-width: 1440px;
+    color:#000000;
 }
 
 h1 {
@@ -193,6 +194,9 @@ ul, ol, li, a {
     font-weight: 300;
 }
 
+p{
+    color:#000000;
+}
 
 /* Styles du Header */
 .hero {
@@ -346,7 +350,8 @@ display:flex;
     .menu-container.active {
         display: flex;
         align-items: center;
-        padding: 15px; 
+        padding: 50px; 
+        top:95px;
         background-color: #E00000; 
     }
 
@@ -375,7 +380,7 @@ display:flex;
     .header-menu li a {
         color: #fff; 
         text-decoration: none; 
-        font-size: 65px !important;
+        font-size: 60px !important;
     }
 }
 
@@ -903,8 +908,93 @@ color:#313144;
 }
 
 
-/* Mobile : 1 photo par ligne */
-
-
 /*Photo Block*/
+.photo-page{
+    max-width: 1400px;
+}
+/* Conteneur principal pour la photo et les détails */
+.photo-display-wrapper {
+    display: flex;
+    max-width: 100%;
+    justify-content: space-around;
+    align-items: flex-end;
+    margin-top: 20px;
+}
 
+/* Style pour les détails de la photo (à gauche) */
+.text-area-block__details {
+    flex: 1; 
+    margin-right: 40px; 
+}
+
+.photo-labels {
+    font-size: 16px;
+    margin-bottom: 10px; 
+}
+
+/* Style pour la photo (à droite) */
+.photo-display {
+    flex: 0 0 563px; 
+    max-width: 100%; 
+    height: auto; 
+    overflow: hidden; 
+}
+
+.photo-display img {
+    width: 563px;
+    height: 844px;
+    object-fit: cover; 
+    display: block; 
+}
+
+/* Style pour le bouton de contact */
+.photo-contact-button {
+    margin-top: 20px;
+    margin-left: 100px;
+    text-align: left;
+    display:flex;
+    gap:80px;
+}
+
+.photo-contact-button p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+
+.custom-line {
+    width: 150%; 
+    height: 1px; 
+    background-color: black; 
+    margin-top: 20px; 
+    margin-bottom: 1px; 
+    
+}
+
+/* Modal Photo_block*/
+#openContactModal {
+    width: 272px; 
+    height: 50px; 
+    background-color: #D8D8D8; 
+    border: none; 
+    box-shadow: none; 
+    cursor: pointer; 
+    font-size: 16px; 
+    color: #000000; 
+    text-align: center; 
+    line-height: 50px; 
+    padding: 0; 
+    margin: 0; 
+}
+
+#openContactModal:hover {
+    background-color: #D8D8D8;
+}
+.custom-line-2 {
+    width: calc(100% - 50px); /* Largeur totale moins les marges */
+    height: 1px; 
+    background-color: #000000 !important; 
+    margin-top: 25px; 
+    margin-bottom: 20px; 
+    margin-left: 25px;
+}

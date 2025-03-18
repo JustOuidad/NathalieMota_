@@ -218,13 +218,13 @@ function custom_photo_query_vars($vars) {
 }
 add_filter('query_vars', 'custom_photo_query_vars');
 
-// ====================================
-// 7. Styles et scripts spécifiques aux templates
-// ====================================
-function enqueue_photo_block_styles() {
-    if (is_page_template('photo_block.php')) {
-        wp_enqueue_style('photo-block-style', get_stylesheet_directory_uri() . '/css/photo-block.css');
-        wp_enqueue_script('photo-block-script', get_stylesheet_directory_uri() . 'js/photo-block.js', array('jquery'), null, true);
-    }
+function register_photo_block_template() {
+    $post_type_object = get_post_type_object('photo');
+    $post_type_object->template = array(
+        array('core/paragraph', array(
+            'placeholder' => 'Ajoutez une description de la photo ici...',
+        )),
+    );
+    $post_type_object->template_lock = 'all';
 }
-add_action('wp_enqueue_scripts', 'enqueue_photo_block_styles');
+add_action('init', 'register_photo_block_template');

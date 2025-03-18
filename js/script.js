@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeModalButton = document.querySelector('.cross-icon-modale');
     const modal = document.getElementById('modal-contact');
 
+    
     if (openModalButton && modal) {
         openModalButton.addEventListener('click', function (e) {
             e.preventDefault();
@@ -190,18 +191,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 const photoId = currentPhoto.getAttribute('data-photo-id');
                 if (photoId) {
                     // Rediriger vers la page photo_block.php avec l'ID de la photo
-                    window.location.href = `photo_block.php?photo_id=${photoId}`;
+                    window.location.href = `photos/${photoId}`;
                 }
             }
         });
     }
 });
+
 document.addEventListener('DOMContentLoaded', function () {
     // Initialiser Choices.js sur les menus déroulants
     const categorieFilter = new Choices('#filter-categorie', {
         searchEnabled: false, // Désactiver la recherche
         itemSelectText: '', // Supprimer le texte "Appuyez pour sélectionner"
     });
+    console.log ('choices me casse les couilles');
 
     const formatFilter = new Choices('#filter-format', {
         searchEnabled: false,
@@ -248,5 +251,64 @@ document.addEventListener('DOMContentLoaded', function () {
                 select.classList.remove('open');
             }
         });
+    });
+});
+//Photo_Block Modal
+// document.addEventListener("DOMContentLoaded", function () {
+//     const openContactModalButton = document.getElementById('openContactModal');
+//     const modalContact = document.getElementById('modal-contact');
+//     const closeModalButton = modalContact.querySelector('.close-modal');
+
+//     if (openContactModalButton && modalContact) {
+//         openContactModalButton.addEventListener('click', function (e) {
+//             e.preventDefault();
+//             modalContact.style.display = 'flex';
+//         });
+//     }
+
+//     if (closeModalButton && modalContact) {
+//         closeModalButton.addEventListener('click', function () {
+//             modalContact.style.display = 'none';
+//         });
+//     }
+
+//     window.addEventListener('click', function (e) {
+//         if (e.target === modalContact) {
+//             modalContact.style.display = 'none';
+//         }
+//     });
+// });
+document.addEventListener("DOMContentLoaded", function () {
+    // Sélection des éléments
+    const openContactModalButton = document.getElementById('openContactModal');
+    const modalContact = document.getElementById('modal-contact');
+    const closeModalButton = modalContact.querySelector('.close-modal');
+    const refPhotoField = document.getElementById('reference_photo'); // Champ "RÉF PHOTO"
+
+    // Ouvrir le modal et pré-remplir la référence
+    if (openContactModalButton && modalContact && refPhotoField) {
+        openContactModalButton.addEventListener('click', function (e) {
+            e.preventDefault(); // Empêche le comportement par défaut du bouton
+
+            // Récupérer la référence de la photo depuis l'attribut data-reference
+            const reference = openContactModalButton.getAttribute('data-reference');
+            refPhotoField.value = reference; // Injecter la référence dans le champ "RÉF PHOTO"
+
+            modalContact.style.display = 'flex'; // Affiche le modal
+        });
+    }
+
+    // Fermer le modal avec le bouton de fermeture
+    if (closeModalButton && modalContact) {
+        closeModalButton.addEventListener('click', function () {
+            modalContact.style.display = 'none'; // Cache le modal
+        });
+    }
+
+    // Fermer le modal si on clique en dehors du contenu
+    window.addEventListener('click', function (e) {
+        if (e.target === modalContact) {
+            modalContact.style.display = 'none'; // Cache le modal
+        }
     });
 });

@@ -5,101 +5,75 @@ Template Post Type: photo
 Description: Template pour afficher les photographies
 */
 
-get_header();
+get_header();?>
 
-// Vérifiez si un ID de photo est passé dans l'URL
-if (isset($_GET['photo_id']) && is_numeric($_GET['photo_id'])) {
-    $photo_id = intval($_GET['photo_id']);
-} else {
-    // Redirection si l'ID est manquant
-    wp_redirect(home_url());
-    exit;
-}
-var_dump($photo_id);
-// Récupérer les détails de la photo
-$image_url = get_the_post_thumbnail_url($photo_id, 'full');
-$title = get_the_title($photo_id);
-$reference = get_field('reference', $photo_id); // Référence via ACF
-$categorie = get_field('categorie', $photo_id); // Catégorie via ACF
-$format = get_field('format', $photo_id); // Format via ACF
-
-// Récupérer les photos dans la même catégorie
-$args = array(
-    'post_type' => 'photo',
-    'posts_per_page' => 2, // Afficher 2 photos
-    'post__not_in' => array($photo_id), // Exclure la photo actuelle
-    'meta_query' => array(
-        array(
-            'key' => 'categorie',
-            'value' => $categorie,
-            'compare' => '='
-        )
-    )
-);
-$related_photos = new WP_Query($args);
-?>
-
-<div id="photo-block" class="photo-block">
-    <!-- Bloc principal 50% gauche avec infos -->
-    <div class="photo-block__info">
-        <h2><?= esc_html($title); ?></h2>
-        <p><strong>Référence:</strong> <?= esc_html($reference); ?></p>
-        <p><strong>Catégorie:</strong> <?= esc_html($categorie); ?></p>
-        <p><strong>Format:</strong> <?= esc_html($format); ?></p>
-    </div>
-    
-    <!-- Bloc 50% à droite avec la photo -->
-    <div class="photo-block__image">
-        <img src="<?= esc_url($image_url); ?>" alt="<?= esc_attr($title); ?>" />
-    </div>
-
-    <!-- Bloc 118px en dessous -->
-    <div class="photo-block__navigation">
-        <!-- Lien contact à gauche -->
-        <div class="photo-block__contact">
-            <a href="#contact-form" id="contact-link" class="btn">Contactez-moi</a>
-        </div>
-
-        <!-- Navigation des photos à droite -->
-        <div class="photo-block__arrows">
+<main id="site-content" role="main">
+    <section id="photo-page">
+        <div class="photo-display-wrapper">
             <?php
-            // Liens précédent et suivant
-            $prev_post = get_adjacent_post(false, '', true, 'photo');
-            $next_post = get_adjacent_post(false, '', false, 'photo');
+            if (have_posts()) :
+                while (have_posts()) : the_post();
+                    // Récupérer les champs ACF
+                    $reference = get_field('reference');
+                    $categorie = get_field('categorie');
+                    $format = get_field('format');
+                    $type = get_field('type');
+                    $annee = get_field('annee'); // Récupère l'année via ACF
+                    $photo_image = get_the_post_thumbnail_url(get_the_ID(), 'full');
+            ?>
 
-            if ($prev_post) :
-                ?>
-                <a href="<?= get_permalink($prev_post); ?>" class="photo-block__arrow photo-block__arrow--prev">
-                    <img src="<?= get_stylesheet_directory_uri() . '/assets/image/arrow-left-white.png'; ?>" alt="Photo précédente" />
-                </a>
-            <?php endif;
-
-            if ($next_post) :
-                ?>
-                <a href="<?= get_permalink($next_post); ?>" class="photo-block__arrow photo-block__arrow--next">
-                    <img src="<?= get_stylesheet_directory_uri() . '/assets/image/arrow-right-white.png'; ?>" alt="Photo suivante" />
-                </a>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <!-- Photos associées -->
-    <div class="photo-block__related">
-        <h2>VOUS AIMEREZ AUSSI</h2>
-        <?php if ($related_photos->have_posts()) : ?>
-            <div class="photo-block__related-grid">
-                <?php while ($related_photos->have_posts()) : $related_photos->the_post(); ?>
-                    <div class="photo-block__related-item">
-                        <a href="<?= get_permalink(); ?>">
-                            <img src="<?= get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>" alt="<?= esc_attr(get_the_title()); ?>" />
-                        </a>
+            <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+                <div class="text-area-block">
+                    <h2 class="entry-meta__title-h1"><?php the_title(); ?></h2>
+                    <div class="text-area-block__details">
+                        <!-- Afficher les champs ACF -->
+                        <p class="photo-labels">Référence: <?php echo esc_html($reference); ?></p>
+                        <p class="photo-labels">Catégorie: <?php echo esc_html($categorie); ?></p>
+                        <p class="photo-labels">Format: <?php echo esc_html($format); ?></p>
+                        <p class="photo-labels">Type: <?php echo esc_html($type); ?></p>
+                        <p class="photo-labels">Année: 
+                            <?php
+                            if ($annee) {
+                                // Si le champ ACF est une date au format YYYY-MM-DD
+                                if (strlen($annee) > 4) {
+                                    echo esc_html(date('Y', strtotime($annee)));
+                                } else {
+                                    echo esc_html($annee);
+                                }
+                            } else {
+                                // Fallback : utilise la date de publication du post
+                                echo esc_html(get_the_date('Y'));
+                            }
+                            ?>
+                        </p>
                     </div>
-                <?php endwhile; ?>
-            </div>
-        <?php else : ?>
-            <p>Aucune photo associée trouvée.</p>
-        <?php endif; ?>
-    </div>
+                </div>    <div class="custom-line"></div> <!-- Ligne noire -->
+            </article>
+        
+            <article class="photo-display">
+                <img src="<?php echo esc_url($photo_image); ?>" alt="<?php the_title(); ?>" />
+            </article>
+
+            <?php
+                endwhile;
+            endif;
+            ?>
+        </div>
+
+    
+        <div class="right-contact">
+    <div class="photo-contact-button">
+        <p>Cette photo vous intéresse ?</p>
+        <button id="openContactModal" data-reference="<?php echo esc_attr($reference); ?>">Contact</button>    </div>
 </div>
 
-<?php get_footer(); ?>
+<div id="modal-contact" class="modal" style="display:none;">
+    <div class="modal__content">
+        <?php echo do_shortcode('[contact-form-7 id="98f838c" title="Formulaire de contact 1"]'); ?>
+        <span class="close-modal">&times;</span>
+    </div>
+</div>
+<div class="custom-line-2"></div> <!-- Ligne noire 2 -->
+</article>
+       <?
+get_footer();
