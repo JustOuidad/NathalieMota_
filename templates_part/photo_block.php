@@ -61,7 +61,7 @@ get_header();?>
         </div>
 
     
-        <div class="right-contact">
+        <div class="left-contact">
     <div class="photo-contact-button">
         <p>Cette photo vous intéresse ?</p>
         <button id="openContactModal" data-reference="<?php echo esc_attr($reference); ?>">Contact</button>    </div>
@@ -72,6 +72,36 @@ get_header();?>
         <?php echo do_shortcode('[contact-form-7 id="98f838c" title="Formulaire de contact 1"]'); ?>
         <span class="close-modal">&times;</span>
     </div>
+</div>
+<?php
+// Récupérer l'ID de la photo active
+$active_photo_id = get_the_ID(); // Si vous êtes sur une page de détail de photo
+$active_photo_url = get_the_post_thumbnail_url($active_photo_id, 'medium'); // URL de la photo active
+
+// Récupérer l'ID de la photo précédente et suivante
+$previous_photo = get_previous_post();
+$previous_photo_id = $previous_photo ? $previous_photo->ID : null;
+
+$next_photo = get_next_post();
+$next_photo_id = $next_photo ? $next_photo->ID : null;
+?>
+
+<div class="right-contact">
+    <!-- Photo active -->
+    <div class="photo-container">
+        <img id="current-photo" src="<?php echo esc_url($active_photo_url); ?>" alt="Photo active" width="81" height="71" />
+    </div>
+    
+      <!-- Flèches de navigation avec images -->
+      <div class="navigation-arrows">
+        <button id="prev-photo" data-photo-id="<?php echo esc_attr($previous_photo_id); ?>">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/image/Line6.png" alt="Flèche gauche" />
+        </button>
+        <button id="next-photo" data-photo-id="<?php echo esc_attr($next_photo_id); ?>">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/image/Line7.png" alt="Flèche droite" />
+        </button>
+    </div>
+</div>
 </div>
 <div class="custom-line-2"></div> <!-- Ligne noire 2 -->
 </article>

@@ -998,3 +998,17 @@ color:#313144;
     margin-bottom: 20px; 
     margin-left: 25px;
 }
+#prev-photo,
+#next-photo {
+    background: none; /* Supprime le fond */
+    border: none; /* Supprime la bordure */
+    padding: 0; /* Supprime le padding par défaut */
+    margin: 0; /* Supprime la marge par défaut */
+    cursor: pointer; /* Change le curseur en pointeur */
+}
+
+#prev-photo img,
+#next-photo img {
+    background: none; /* Supprime le fond */
+    border: none; /* Supprime la bordure */
+}

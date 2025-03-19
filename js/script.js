@@ -253,31 +253,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-//Photo_Block Modal
-// document.addEventListener("DOMContentLoaded", function () {
-//     const openContactModalButton = document.getElementById('openContactModal');
-//     const modalContact = document.getElementById('modal-contact');
-//     const closeModalButton = modalContact.querySelector('.close-modal');
 
-//     if (openContactModalButton && modalContact) {
-//         openContactModalButton.addEventListener('click', function (e) {
-//             e.preventDefault();
-//             modalContact.style.display = 'flex';
-//         });
-//     }
-
-//     if (closeModalButton && modalContact) {
-//         closeModalButton.addEventListener('click', function () {
-//             modalContact.style.display = 'none';
-//         });
-//     }
-
-//     window.addEventListener('click', function (e) {
-//         if (e.target === modalContact) {
-//             modalContact.style.display = 'none';
-//         }
-//     });
-// });
 document.addEventListener("DOMContentLoaded", function () {
     // Sélection des éléments
     const openContactModalButton = document.getElementById('openContactModal');
@@ -309,6 +285,71 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener('click', function (e) {
         if (e.target === modalContact) {
             modalContact.style.display = 'none'; // Cache le modal
+        }
+    });
+});
+//Carousel Mini
+document.addEventListener("DOMContentLoaded", function () {
+    const prevButton = document.getElementById('prev-photo');
+    const nextButton = document.getElementById('next-photo');
+    const currentPhotoImg = document.getElementById('current-photo');
+
+    // Vérifier que tous les éléments existent
+    if (!prevButton || !nextButton || !currentPhotoImg) {
+        console.error('Erreur : Un ou plusieurs éléments de navigation sont manquants.');
+        return; // Arrêter l'exécution du script
+    }
+
+    // Fonction pour charger une photo par son ID via AJAX
+    function loadPhotoById(photoId) {
+        if (!photoId) {
+            console.error('Aucun ID de photo fourni.');
+            return; // Arrêter la fonction si l'ID est manquant
+        }
+
+        fetch(ajax_params.ajaxurl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'get_photo_by_id', // Action WordPress pour récupérer la photo
+                photo_id: photoId,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Mettre à jour l'image active
+                    currentPhotoImg.src = data.data.photo_url;
+
+                    // Mettre à jour les IDs des photos précédentes et suivantes
+                    prevButton.setAttribute('data-photo-id', data.data.previous_photo_id || '');
+                    nextButton.setAttribute('data-photo-id', data.data.next_photo_id || '');
+                } else {
+                    console.error('Erreur :', data.data);
+                }
+            })
+            .catch(error => console.error('Erreur AJAX :', error));
+    }
+
+    // Gérer le clic sur la flèche précédente
+    prevButton.addEventListener('click', function () {
+        const previousPhotoId = prevButton.getAttribute('data-photo-id');
+        if (previousPhotoId) {
+            loadPhotoById(previousPhotoId);
+        } else {
+            console.error('Aucune photo précédente trouvée.');
+        }
+    });
+
+    // Gérer le clic sur la flèche suivante
+    nextButton.addEventListener('click', function () {
+        const nextPhotoId = nextButton.getAttribute('data-photo-id');
+        if (nextPhotoId) {
+            loadPhotoById(nextPhotoId);
+        } else {
+            console.error('Aucune photo suivante trouvée.');
         }
     });
 });

@@ -228,3 +228,63 @@ function register_photo_block_template() {
     $post_type_object->template_lock = 'all';
 }
 add_action('init', 'register_photo_block_template');
+
+function get_photo_by_id() {
+    // Récupérer l'ID de la photo depuis la requête AJAX
+    $photo_id = isset($_POST['photo_id']) ? intval($_POST['photo_id']) : 0;
+
+    if (!$photo_id) {
+        wp_send_json(array(
+            'success' => false,
+            'data' => 'ID de photo invalide.',
+        ));
+    }
+
+    // Récupérer la photo actuelle
+    $photo = get_post($photo_id);
+    if (!$photo) {
+        wp_send_json(array(
+            'success' => false,
+            'data' => 'Photo non trouvée.',
+        ));
+    }
+
+    // Récupérer l'URL de la photo
+    $photo_url = get_the_post_thumbnail_url($photo_id, 'medium');
+
+    // Récupérer la photo suivante
+    $next_photo = get_posts(array(
+        'post_type' => 'photo',
+        'posts_per_page' => 1,
+        'orderby' => 'date',
+        'order' => 'ASC',
+        'date_query' => array(
+            'after' => $photo->post_date, // Photos après la date de la photo actuelle
+        ),
+    ));
+    $next_photo_id = $next_photo ? $next_photo[0]->ID : null;
+
+    // Récupérer la photo précédente
+    $previous_photo = get_posts(array(
+        'post_type' => 'photo',
+        'posts_per_page' => 1,
+        'orderby' => 'date',
+        'order' => 'DESC',
+        'date_query' => array(
+            'before' => $photo->post_date, // Photos avant la date de la photo actuelle
+        ),
+    ));
+    $previous_photo_id = $previous_photo ? $previous_photo[0]->ID : null;
+
+    // Renvoyer les données au format JSON
+    wp_send_json(array(
+        'success' => true,
+        'data' => array(
+            'photo_url' => $photo_url,
+            'previous_photo_id' => $previous_photo_id,
+            'next_photo_id' => $next_photo_id,
+        ),
+    ));
+}
+add_action('wp_ajax_get_photo_by_id', 'get_photo_by_id');
+add_action('wp_ajax_nopriv_get_photo_by_id', 'get_photo_by_id');
