@@ -5,7 +5,7 @@ Template Post Type: photo
 Description: Template pour afficher les photographies
 */
 
-get_header();?>
+get_header(); ?>
 
 <main id="site-content" role="main">
     <section id="photo-page">
@@ -47,9 +47,10 @@ get_header();?>
                             ?>
                         </p>
                     </div>
-                </div>    <div class="custom-line"></div> <!-- Ligne noire -->
+                </div>
+                <div class="custom-line"></div> <!-- Ligne noire -->
             </article>
-        
+
             <article class="photo-display">
                 <img src="<?php echo esc_url($photo_image); ?>" alt="<?php the_title(); ?>" />
             </article>
@@ -60,50 +61,85 @@ get_header();?>
             ?>
         </div>
 
-    
         <div class="left-contact">
-    <div class="photo-contact-button">
-        <p>Cette photo vous intéresse ?</p>
-        <button id="openContactModal" data-reference="<?php echo esc_attr($reference); ?>">Contact</button>    </div>
-</div>
+            <div class="photo-contact-button">
+                <p>Cette photo vous intéresse ?</p>
+                <button id="openContactModal" data-reference="<?php echo esc_attr($reference); ?>">Contact</button>
+            </div>
+        </div>
 
-<div id="modal-contact" class="modal" style="display:none;">
-    <div class="modal__content">
-        <?php echo do_shortcode('[contact-form-7 id="98f838c" title="Formulaire de contact 1"]'); ?>
-        <span class="close-modal">&times;</span>
-    </div>
-</div>
-<?php
-// Récupérer l'ID de la photo active
-$active_photo_id = get_the_ID(); // Si vous êtes sur une page de détail de photo
-$active_photo_url = get_the_post_thumbnail_url($active_photo_id, 'medium'); // URL de la photo active
+        <div id="modal-contact" class="modal" style="display:none;">
+            <div class="modal__content">
+                <?php echo do_shortcode('[contact-form-7 id="98f838c" title="Formulaire de contact 1"]'); ?>
+                <span class="close-modal">&times;</span>
+            </div>
+        </div>
 
-// Récupérer l'ID de la photo précédente et suivante
-$previous_photo = get_previous_post();
-$previous_photo_id = $previous_photo ? $previous_photo->ID : null;
+        <?php
+        // Récupérer l'ID de la photo active
+        $active_photo_id = get_the_ID(); // Correction : utilisez get_the_ID() pour récupérer l'ID de la photo active
 
-$next_photo = get_next_post();
-$next_photo_id = $next_photo ? $next_photo->ID : null;
-?>
+        // Récupérer l'ID de la photo suivante
+        $next_photo = get_adjacent_post(false, '', false); // Photo suivante
+        $next_photo_id = $next_photo ? $next_photo->ID : null;
+        $next_photo_url = $next_photo ? get_the_post_thumbnail_url($next_photo_id, 'medium') : '';
+        ?>
 
-<div class="right-contact">
-    <!-- Photo active -->
-    <div class="photo-container">
-        <img id="current-photo" src="<?php echo esc_url($active_photo_url); ?>" alt="Photo active" width="81" height="71" />
-    </div>
-    
-      <!-- Flèches de navigation avec images -->
-      <div class="navigation-arrows">
-        <button id="prev-photo" data-photo-id="<?php echo esc_attr($previous_photo_id); ?>">
-            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/image/Line6.png" alt="Flèche gauche" />
-        </button>
-        <button id="next-photo" data-photo-id="<?php echo esc_attr($next_photo_id); ?>">
-            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/image/Line7.png" alt="Flèche droite" />
-        </button>
-    </div>
-</div>
-</div>
-<div class="custom-line-2"></div> <!-- Ligne noire 2 -->
-</article>
-       <?
-get_footer();
+        <div class="right-contact">
+            <!-- Photo suivante dans photo-container -->
+            <div class="photo-container">
+                <?php if ($next_photo_id) : ?>
+                    <a href="<?php echo esc_url(home_url('/Photo/' . $next_photo_id)); ?>">
+                        <img id="next-photo" src="<?php echo esc_url($next_photo_url); ?>" alt="Photo suivante" width="81" height="71" data-photo-id="<?php echo esc_attr($next_photo_id); ?>" />
+                    </a>
+                <?php else : ?>
+                    <p>Aucune photo suivante.</p>
+                <?php endif; ?>
+            </div>
+            
+            <!-- Flèches de navigation avec images -->
+            <div class="navigation-arrows">
+                <button id="prev-photo" data-photo-id="<?php echo esc_attr($previous_photo_id); ?>">
+                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/image/Line6.png" alt="Flèche gauche" />
+                </button>
+                <button id="next-photo" data-photo-id="<?php echo esc_attr($next_photo_id); ?>">
+                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/image/Line7.png" alt="Flèche droite" />
+                </button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Gérer le clic sur les flèches
+    const prevButton = document.getElementById('prev-photo');
+    const nextButton = document.getElementById('next-photo');
+
+    if (prevButton) {
+        prevButton.addEventListener('click', function () {
+            const previousPhotoId = prevButton.getAttribute('data-photo-id');
+            if (previousPhotoId) {
+                // Redirige vers la page Photo de la photo précédente
+                window.location.href = `<?php echo esc_url(home_url('/Photo/')); ?>${previousPhotoId}`;
+            } else {
+                console.error('Aucune photo précédente trouvée.');
+            }
+        });
+    }
+
+    if (nextButton) {
+        nextButton.addEventListener('click', function () {
+            const nextPhotoId = nextButton.getAttribute('data-photo-id');
+            if (nextPhotoId) {
+                // Redirige vers la page Photo de la photo suivante
+                window.location.href = `<?php echo esc_url(home_url('/Photo/')); ?>${nextPhotoId}`;
+            } else {
+                console.error('Aucune photo suivante trouvée.');
+            }
+        });
+    }
+});
+</script>
+
+<?php get_footer(); ?>

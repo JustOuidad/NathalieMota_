@@ -1012,3 +1012,7 @@ color:#313144;
     background: none; /* Supprime le fond */
     border: none; /* Supprime la bordure */
 }
+.photo-container{
+    /* display: flex; */
+    align-items: flex-end;
+}
