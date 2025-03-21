@@ -56,7 +56,7 @@ jQuery(document).ready(function($) {
         }
     });
 });
-//Photo Block
+
 // Ouvrir la page photo_block.php lorsqu'on clique sur l'image dans la lightbox
 $('.lightbox-image').on('click', function () {
     const currentPhoto = $('.photos-items[data-image-url="' + $(this).attr('src') + '"]');
@@ -66,4 +66,40 @@ $('.lightbox-image').on('click', function () {
             window.location.href = `Photo/${photoId}`;
         }
     }
+});
+$(document).ready(function () {
+    // Ouvrir la lightbox pour related-photo-item
+    $('.related-photo-grid').on('click', '.related-photo-item', function () {
+        const imageUrl = $(this).data('image-url');
+        const reference = $(this).data('reference');
+        const category = $(this).data('category');
+        const name = $(this).data('title');
+
+        $('.lightbox-image').attr('src', imageUrl);
+        $('.lightbox-reference').text('Référence: ' + reference);
+        $('.lightbox-category').text('Catégorie: ' + category);
+        $('.lightbox-title').text(name);
+
+        $('.lightbox-overlay, .lightbox').fadeIn();
+    });
+
+    // Fermer la lightbox
+    $('.lightbox__close, .lightbox-overlay').on('click', function () {
+        $('.lightbox-overlay, .lightbox').fadeOut();
+    });
+
+    // Rediriger vers la page de la photo
+    $('.lightbox-image').on('click', function () {
+        const currentPhoto = $('.related-photo-item[data-image-url="' + $(this).attr('src') + '"]');
+        if (currentPhoto.length) {
+            const permalink = currentPhoto.data('permalink');
+            if (permalink) {
+                window.location.href = permalink;
+            } else {
+                console.error("Aucun permalien trouvé pour cette photo.");
+            }
+        } else {
+            console.error("Photo non trouvée dans .related-photo-item.");
+        }
+    });
 });

@@ -288,7 +288,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
-//Carousel Mini
+//Fonction Photo-Container
 document.addEventListener("DOMContentLoaded", function () {
     const prevButton = document.getElementById('prev-photo');
     const nextButton = document.getElementById('next-photo');
@@ -353,3 +353,64 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+//Photo Container
+document.addEventListener('DOMContentLoaded', function () {
+    const prevButton = document.getElementById('prev-photo');
+    const nextButton = document.getElementById('next-photo');
+    const photoContainer = document.querySelector('.photo-container');
+    const mainPhoto = document.getElementById('main-photo');
+
+    // Créer une image pour la photo de survol
+    const hoverPhoto = document.createElement('img');
+    hoverPhoto.alt = "Photo de survol";
+    hoverPhoto.classList.add('photo-hover');
+    hoverPhoto.style.opacity = 0; // Cachée par défaut
+    photoContainer.appendChild(hoverPhoto);
+
+    // Fonction pour afficher la photo précédente ou suivante dans le photo-container
+    function showThumbnail(button) {
+        const thumbnailUrl = button.getAttribute('data-thumbnail-url');
+        if (thumbnailUrl) {
+            hoverPhoto.src = thumbnailUrl; // Change la source de l'image de survol
+            hoverPhoto.style.opacity = 1; // Affiche l'image de survol
+            mainPhoto.style.opacity = 0; // Cache la photo principale
+        }
+    }
+
+    // Fonction pour restaurer la photo principale
+    function restoreMainPhoto() {
+        hoverPhoto.style.opacity = 0; // Cache l'image de survol
+        mainPhoto.style.opacity = 1; // Affiche la photo principale
+    }
+
+    // Gérer le survol des flèches
+    if (prevButton) {
+        prevButton.addEventListener('mouseenter', () => showThumbnail(prevButton));
+        prevButton.addEventListener('mouseleave', restoreMainPhoto);
+        prevButton.addEventListener('click', function (event) {
+            event.preventDefault(); // Empêche le comportement par défaut du bouton
+            const previousPhotoPermalink = prevButton.getAttribute('data-permalink');
+            if (previousPhotoPermalink) {
+                window.location.href = previousPhotoPermalink; // Redirige vers la page de la photo précédente
+            } else {
+                console.error('Aucune photo précédente trouvée.');
+            }
+        });
+    }
+
+    if (nextButton) {
+        nextButton.addEventListener('mouseenter', () => showThumbnail(nextButton));
+        nextButton.addEventListener('mouseleave', restoreMainPhoto);
+        nextButton.addEventListener('click', function (event) {
+            event.preventDefault(); // Empêche le comportement par défaut du bouton
+            const nextPhotoPermalink = nextButton.getAttribute('data-permalink');
+            if (nextPhotoPermalink) {
+                window.location.href = nextPhotoPermalink; // Redirige vers la page de la photo suivante
+            } else {
+                console.error('Aucune photo suivante trouvée.');
+            }
+        });
+    }
+});
+
+
