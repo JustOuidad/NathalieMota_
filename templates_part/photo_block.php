@@ -51,7 +51,6 @@ get_header(); ?>
                 </div>
                 <div class="custom-line"></div> 
             </article>
-
             <article class="photo-display">
                 <img src="<?php echo esc_url($photo_image); ?>" alt="<?php the_title(); ?>" />
             </article>
@@ -61,6 +60,7 @@ get_header(); ?>
             endif;
             ?>
         </div>
+        <div class="custom-line-3"></div> 
         <div class="left-contact">
             <div class="photo-contact-button">
                 <p>Cette photo vous intéresse ?</p>
@@ -114,6 +114,7 @@ get_header(); ?>
         </div>
     </section>
 </main>
+<div class="custom-line-2"></div> 
 <?php
 // Récupérer l'ID de la photo principale
 $photo_block_id = get_the_ID();

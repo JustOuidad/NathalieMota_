@@ -196,6 +196,7 @@ function charger_photos_via_ajax() {
     endif;
 
     wp_die();
+    echo '</div>'; // Fermeture de la galerie
 }
 add_action('wp_ajax_charger_photos_via_ajax', 'charger_photos_via_ajax');
 add_action('wp_ajax_nopriv_charger_photos_via_ajax', 'charger_photos_via_ajax');

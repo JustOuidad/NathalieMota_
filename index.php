@@ -26,6 +26,9 @@ get_header(); ?>
     $photos_per_page = 8;
     $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
+    // Vérifier si des filtres sont appliqués
+    $is_filtered = isset($_GET['category_filter']) || isset($_GET['reference_filter']); // Exemple de vérification de filtres
+
     // Requête pour récupérer les photos depuis le champ ACF photo_showdown
     $photos_showdown = new WP_Query(array(
         'post_type' => 'photo',  
@@ -73,9 +76,9 @@ get_header(); ?>
         endwhile;
         echo '</div>'; // Fermeture de la galerie
 
-        // Pagination : Afficher le bouton "Afficher plus"
+        // Pagination : Afficher le bouton "Afficher plus" uniquement si aucun filtre n'est appliqué
         $total_pages = $photos_showdown->max_num_pages;
-        if ($paged < $total_pages) {
+        if ($paged < $total_pages && !$is_filtered) {
             echo '<button id="load-more" class="btn-load-more">Charger plus</button>';
         }
 

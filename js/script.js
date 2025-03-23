@@ -52,32 +52,38 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     // Tableaux Variables
-    let currentPage = 1; // Page actuelle pour le load more
-    let lightboxIndex = 0; // Index de la photo actuelle dans la lightbox
-    let lightboxPhotos = []; // Tableau des photos pour la lightbox
-    let currentCategorie = ''; // Filtre catégorie
-    let currentFormat = ''; // Filtre format
-    let currentOrder = 'ASC'; // Filtre ordre de tri
+    let currentPage = 1; 
+    let lightboxIndex = 0; 
+    let lightboxPhotos = []; 
+    let currentCategorie = ''; 
+    let currentFormat = ''; 
+    let currentOrder = 'ASC'; 
 
     // 1. Modal pour le formulaire de contact
     const openModalButton = document.querySelector('#openModalButton');
-    const closeModalButton = document.querySelector('.cross-icon-modale');
     const modal = document.getElementById('modal-contact');
-
     
+    // Ouvrir le modal
     if (openModalButton && modal) {
         openModalButton.addEventListener('click', function (e) {
             e.preventDefault();
             modal.style.display = 'flex';
         });
     }
-
+    
+    // Créer et ajouter la croix dynamiquement
+    const closeModalButton = document.createElement('span');
+    closeModalButton.classList.add('cross-icon-modale');
+    closeModalButton.innerHTML = '&times;'; 
+    modal.querySelector('.modal__content').appendChild(closeModalButton);
+    
+    // Fermer le modal en cliquant sur la croix
     if (closeModalButton && modal) {
         closeModalButton.addEventListener('click', function () {
             modal.style.display = 'none';
         });
     }
-
+    
     // Fermer le modal si on clique en dehors
     window.addEventListener('click', function (e) {
         if (e.target === modal) {
@@ -121,7 +127,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Appliquer les filtres
     function applyFilters() {
         currentPage = 1; // Réinitialiser la page
-        loadMorePhotos(currentPage, true); // Recharger les photos avec les nouveaux filtres
+    
+        // Masquer le bouton "Load More" si des filtres sont appliqués
+        if (currentCategorie || currentFormat || currentOrder !== 'ASC') {
+            loadMoreButton.style.display = 'none';
+        }
+    
+        // Recharger les photos avec les nouveaux filtres
+        loadMorePhotos(currentPage, true);
     }
 
     // Charger les photos via AJAX
@@ -133,10 +146,10 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: new URLSearchParams({
                 action: 'charger_photos_via_ajax',
-                categorie: currentCategorie || '', // Filtre catégorie
-                format: currentFormat || '', // Filtre format
-                order: currentOrder || 'ASC', // Filtre ordre
-                page: page || 1, // Page actuelle
+                categorie: currentCategorie || '', 
+                format: currentFormat || '', 
+                order: currentOrder || 'ASC', 
+                page: page || 1, 
             }),
         })
             .then(response => {
@@ -148,19 +161,19 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(data => {
                 console.log('Réponse du serveur :', data);
-
+            
                 // Mettre à jour le contenu de la grille de photos
                 if (replaceContent) {
-                    photoGrid.innerHTML = data; // Remplacer le contenu existant
+                    photoGrid.innerHTML = data; 
                 } else {
-                    photoGrid.innerHTML += data; // Ajouter les nouvelles photos
+                    photoGrid.innerHTML += data; 
                 }
-
+            
                 // Mettre à jour les photos pour la lightbox
                 lightboxPhotos = Array.from(document.querySelectorAll('.photo-grid .photos-items'));
-
-                // Masquer le bouton "Load More" s'il n'y a plus de photos
-                if (data.includes('no-more-posts') || lightboxPhotos.length === 16) {
+            
+                // Masquer le bouton "Load More" s'il n'y a plus de photos OU si des filtres sont appliqués
+                if (data.includes('no-more-posts') || lightboxPhotos.length === 16 || currentCategorie || currentFormat || currentOrder !== 'ASC') {
                     loadMoreButton.style.display = 'none';
                 } else {
                     loadMoreButton.style.display = 'block';
@@ -182,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     // Gérer le clic sur la photo dans la lightbox
-    const lightboxImage = document.querySelector('.lightbox-image'); // Sélectionnez l'image de la lightbox
+    const lightboxImage = document.querySelector('.lightbox-image'); 
     if (lightboxImage) {
         lightboxImage.addEventListener('click', function () {
             // Récupérer l'ID de la photo actuellement affichée dans la lightbox
@@ -201,10 +214,10 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     // Initialiser Choices.js sur les menus déroulants
     const categorieFilter = new Choices('#filter-categorie', {
-        searchEnabled: false, // Désactiver la recherche
-        itemSelectText: '', // Supprimer le texte "Appuyez pour sélectionner"
+        searchEnabled: false, 
+        itemSelectText: '', 
     });
-    console.log ('choices me casse les couilles');
+  
 
     const formatFilter = new Choices('#filter-format', {
         searchEnabled: false,
@@ -240,8 +253,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Récupérer la valeur de l'option
                 const value = option.getAttribute('data-value');
                 console.log('Valeur sélectionnée :', value);
-
-                // Vous pouvez maintenant utiliser cette valeur pour filtrer ou d'autres actions
             });
         });
 
@@ -259,32 +270,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const openContactModalButton = document.getElementById('openContactModal');
     const modalContact = document.getElementById('modal-contact');
     const closeModalButton = modalContact.querySelector('.close-modal');
-    const refPhotoField = document.getElementById('reference_photo'); // Champ "RÉF PHOTO"
+    const refPhotoField = document.getElementById('reference_photo'); 
 
     // Ouvrir le modal et pré-remplir la référence
     if (openContactModalButton && modalContact && refPhotoField) {
         openContactModalButton.addEventListener('click', function (e) {
-            e.preventDefault(); // Empêche le comportement par défaut du bouton
+            e.preventDefault(); 
 
             // Récupérer la référence de la photo depuis l'attribut data-reference
             const reference = openContactModalButton.getAttribute('data-reference');
             refPhotoField.value = reference; // Injecter la référence dans le champ "RÉF PHOTO"
 
-            modalContact.style.display = 'flex'; // Affiche le modal
+            modalContact.style.display = 'flex'; 
         });
     }
 
     // Fermer le modal avec le bouton de fermeture
     if (closeModalButton && modalContact) {
         closeModalButton.addEventListener('click', function () {
-            modalContact.style.display = 'none'; // Cache le modal
+            modalContact.style.display = 'none'; 
         });
     }
 
     // Fermer le modal si on clique en dehors du contenu
     window.addEventListener('click', function (e) {
         if (e.target === modalContact) {
-            modalContact.style.display = 'none'; // Cache le modal
+            modalContact.style.display = 'none'; 
         }
     });
 });
@@ -313,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
-                action: 'get_photo_by_id', // Action WordPress pour récupérer la photo
+                action: 'get_photo_by_id', 
                 photo_id: photoId,
             }),
         })
@@ -364,23 +375,23 @@ document.addEventListener('DOMContentLoaded', function () {
     const hoverPhoto = document.createElement('img');
     hoverPhoto.alt = "Photo de survol";
     hoverPhoto.classList.add('photo-hover');
-    hoverPhoto.style.opacity = 0; // Cachée par défaut
+    hoverPhoto.style.opacity = 0; 
     photoContainer.appendChild(hoverPhoto);
 
     // Fonction pour afficher la photo précédente ou suivante dans le photo-container
     function showThumbnail(button) {
         const thumbnailUrl = button.getAttribute('data-thumbnail-url');
         if (thumbnailUrl) {
-            hoverPhoto.src = thumbnailUrl; // Change la source de l'image de survol
-            hoverPhoto.style.opacity = 1; // Affiche l'image de survol
-            mainPhoto.style.opacity = 0; // Cache la photo principale
+            hoverPhoto.src = thumbnailUrl; 
+            hoverPhoto.style.opacity = 1; 
+            mainPhoto.style.opacity = 0; 
         }
     }
 
     // Fonction pour restaurer la photo principale
     function restoreMainPhoto() {
-        hoverPhoto.style.opacity = 0; // Cache l'image de survol
-        mainPhoto.style.opacity = 1; // Affiche la photo principale
+        hoverPhoto.style.opacity = 0; 
+        mainPhoto.style.opacity = 1; 
     }
 
     // Gérer le survol des flèches
@@ -391,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault(); // Empêche le comportement par défaut du bouton
             const previousPhotoPermalink = prevButton.getAttribute('data-permalink');
             if (previousPhotoPermalink) {
-                window.location.href = previousPhotoPermalink; // Redirige vers la page de la photo précédente
+                window.location.href = previousPhotoPermalink; 
             } else {
                 console.error('Aucune photo précédente trouvée.');
             }
@@ -405,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault(); // Empêche le comportement par défaut du bouton
             const nextPhotoPermalink = nextButton.getAttribute('data-permalink');
             if (nextPhotoPermalink) {
-                window.location.href = nextPhotoPermalink; // Redirige vers la page de la photo suivante
+                window.location.href = nextPhotoPermalink; 
             } else {
                 console.error('Aucune photo suivante trouvée.');
             }
@@ -413,4 +424,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+// Fonction pour cacher .right-contact en version mobile et tablette
+function hideRightContactOnMobile() {
+    const rightContact = document.querySelector('.right-contact');
+    if (window.innerWidth <= 1024) { 
+        rightContact.style.display = 'none';
+    } else {
+        rightContact.style.display = 'block'; 
+    }
+}
 
+// Exécuter la fonction au chargement de la page et lors du redimensionnement de la fenêtre
+window.addEventListener('load', hideRightContactOnMobile);
+window.addEventListener('resize', hideRightContactOnMobile);
