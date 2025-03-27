@@ -5,14 +5,14 @@ jQuery(document).ready(function($) {
     // Ouvrir la lightbox
     $('.photo-grid').on('click', '.photos-items', function() {
         const imageUrl = $(this).data('image-url');
-        const name = $(this).data('title');
+        const reference = $(this).data('reference');
         const category = $(this).data('category');
         const photoId = $(this).data('photo-id'); // ID de la photo cliquée
 
         // Mettre à jour l'image et les informations dans la lightbox
         $('.lightbox-image').attr('src', imageUrl);
         $('.lightbox-category').text(category);
-        $('.lightbox-title').text(name);
+        $('.lightbox-reference').text(reference);
 
         // Stocker l'ID de la photo actuelle et mettre à jour l'index
         currentIndex = loadedPhotos.indexOf(photoId);
@@ -60,13 +60,13 @@ jQuery(document).ready(function($) {
         const targetPhoto = $('.photos-items[data-photo-id="' + photoId + '"]');
         if (targetPhoto.length) {
             const imageUrl = targetPhoto.data('image-url');
-            const name = targetPhoto.data('title');
+            const reference = targetPhoto.data('reference');
             const category = targetPhoto.data('category');
 
             // Mettre à jour la lightbox avec la nouvelle photo
             $('.lightbox-image').attr('src', imageUrl);
             $('.lightbox-category').text(category);
-            $('.lightbox-title').text(name);
+            $('.lightbox-reference').text(reference);
         }
     }
 
@@ -101,14 +101,12 @@ jQuery(document).ready(function($) {
             const imageUrl = $(this).data('image-url');
             const reference = $(this).data('reference');
             const category = $(this).data('category');
-            const name = $(this).data('title');
             const filter = $(this).data('filter'); // Récupérer le filtre commun
     
             // Mettre à jour l'image et les informations dans la lightbox
             $('.lightbox-image').attr('src', imageUrl);
             $('.lightbox-reference').text('Référence: ' + reference);
             $('.lightbox-category').text('Catégorie: ' + category);
-            $('.lightbox-title').text(name);
     
             // Charger les photos partageant le même filtre
             loadRelatedPhotos(filter);
@@ -159,13 +157,11 @@ jQuery(document).ready(function($) {
             if (targetPhoto.length) {
                 const reference = targetPhoto.data('reference');
                 const category = targetPhoto.data('category');
-                const name = targetPhoto.data('title');
     
                 // Mettre à jour la lightbox avec la nouvelle photo
                 $('.lightbox-image').attr('src', imageUrl);
                 $('.lightbox-reference').text('Référence: ' + reference);
                 $('.lightbox-category').text('Catégorie: ' + category);
-                $('.lightbox-title').text(name);
             }
         }
     

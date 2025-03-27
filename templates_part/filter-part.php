@@ -1,16 +1,18 @@
 <div class="filters">
     <!-- Filtres à gauche (CATÉGORIES et FORMATS) -->
     <div class="filters-left">
-        <!-- Menu déroulant pour Catégorie -->
+        <!-- Menu déroulant pour Catégorie (Taxonomie WordPress) -->
         <select id="filter-categorie" class="filter-categorie">
             <option value="">CATÉGORIES</option>
             <?php
-            $field = get_field_object('field_677d4676f5f3b'); // Récupère le champ ACF
-            $categories = $field['choices']; // Les choix du champ ACF
+            $categories = get_terms([
+                'taxonomy' => 'categorie',
+                'hide_empty' => false, // Affiche même les catégories non utilisées
+            ]);
 
             if (!empty($categories) && !is_wp_error($categories)) {
-                foreach ($categories as $value => $label) {
-                    echo '<option value="' . esc_attr($value) . '">' . esc_html($label) . '</option>';
+                foreach ($categories as $categorie) {
+                    echo '<option value="' . esc_attr($categorie->slug) . '">' . esc_html($categorie->name) . '</option>';
                 }
             } else {
                 echo '<option value="">Aucune catégorie trouvée</option>';
@@ -18,16 +20,18 @@
             ?>
         </select>
 
-        <!-- Menu déroulant pour Format -->
+        <!-- Menu déroulant pour Format (Taxonomie WordPress) -->
         <select id="filter-format" class="filter-format">
             <option value="">FORMATS</option>
             <?php
-            $field_format = get_field_object('field_677d46bff5f3d'); // Récupère le champ ACF pour les formats
-            $formats = $field_format['choices']; // Les choix du champ ACF
+            $formats = get_terms([
+                'taxonomy' => 'formats',
+                'hide_empty' => false,
+            ]);
 
             if (!empty($formats) && !is_wp_error($formats)) {
-                foreach ($formats as $value => $label) {
-                    echo '<option value="' . esc_attr($value) . '">' . esc_html($label) . '</option>';
+                foreach ($formats as $format) {
+                    echo '<option value="' . esc_attr($format->slug) . '">' . esc_html($format->name) . '</option>';
                 }
             } else {
                 echo '<option value="">Aucun format trouvé</option>';
@@ -35,6 +39,7 @@
             ?>
         </select>
     </div>
+
 
     <!-- Filtre à droite (TRIER PAR) -->
     <div class="filters-right">

@@ -65,7 +65,7 @@ get_header(); ?>
                             <img class="eye-icon" src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-eye.svg' ?>" alt="Voir l'image" />
                             <img class="icon-lightbox" src="<?= get_stylesheet_directory_uri() . '/assets/image/icon-full.png' ?>" alt="Voir l'image" />
                             <div class="overlay-info">
-                                <span class="photo-title"><?= esc_html($photo_title); ?></span>
+                                <span class="lightbox-reference"><?= esc_html($reference); ?></span>
                                 <span class="photo-category"><?= esc_html($category); ?></span>
                             </div>
                         </div>

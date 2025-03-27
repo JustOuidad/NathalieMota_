@@ -193,22 +193,71 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 //Photo block
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Gérer le clic sur la photo dans la lightbox
-    const lightboxImage = document.querySelector('.lightbox-image'); 
-    if (lightboxImage) {
-        lightboxImage.addEventListener('click', function () {
-            // Récupérer l'ID de la photo actuellement affichée dans la lightbox
-            const currentPhoto = lightboxPhotos[lightboxIndex];
-            if (currentPhoto) {
-                const photoId = currentPhoto.getAttribute('data-photo-id');
+// Gestion du clic sur l'eye-icon
+document.addEventListener('DOMContentLoaded', function() {
+    // Écouteur pour les eye-icon existants au chargement
+    document.querySelectorAll('.eye-icon').forEach(icon => {
+        icon.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const photoItem = this.closest('.photos-items');
+            if (photoItem) {
+                const photoId = photoItem.getAttribute('data-photo-id');
                 if (photoId) {
-                    // Rediriger vers la page photo_block.php avec l'ID de la photo
-                    window.location.href = `photos/${photoId}`;
+                    window.location.href = `Photo/${photoId}`;
                 }
             }
         });
-    }
+    });
+
+    // Pour les photos chargées en AJAX (via Load More)
+    $(document).on('click', '.eye-icon', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const photoItem = $(this).closest('.photos-items');
+        if (photoItem.length) {
+            const photoId = photoItem.data('photo-id');
+            if (photoId) {
+                window.location.href = `Photo/${photoId}`;
+            }
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion du clic sur l'eye-icon dans la galerie de photos apparentées
+    document.querySelectorAll('.related-photo-item .eye-icon').forEach(icon => {
+        icon.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const photoItem = this.closest('.related-photo-item');
+            if (photoItem) {
+                const permalink = photoItem.getAttribute('data-permalink');
+                if (permalink) {
+                    window.location.href = permalink;
+                }
+            }
+        });
+    });
+
+    // Optionnel: Si vous voulez aussi gérer le clic sur l'élément photo lui-même
+    document.querySelectorAll('.related-photo-item img:not(.eye-icon):not(.icon-lightbox)').forEach(img => {
+        img.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const photoItem = this.closest('.related-photo-item');
+            if (photoItem) {
+                const permalink = photoItem.getAttribute('data-permalink');
+                if (permalink) {
+                    window.location.href = permalink;
+                }
+            }
+        });
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -307,14 +356,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Vérifier que tous les éléments existent
     if (!prevButton || !nextButton || !currentPhotoImg) {
-        console.error('Erreur : Un ou plusieurs éléments de navigation sont manquants.');
+        
         return; // Arrêter l'exécution du script
     }
 
     // Fonction pour charger une photo par son ID via AJAX
     function loadPhotoById(photoId) {
         if (!photoId) {
-            console.error('Aucun ID de photo fourni.');
+        
             return; // Arrêter la fonction si l'ID est manquant
         }
 
@@ -350,7 +399,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (previousPhotoId) {
             loadPhotoById(previousPhotoId);
         } else {
-            console.error('Aucune photo précédente trouvée.');
+            console.log('Aucune photo précédente trouvée.');
         }
     });
 
@@ -360,7 +409,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (nextPhotoId) {
             loadPhotoById(nextPhotoId);
         } else {
-            console.error('Aucune photo suivante trouvée.');
+            console.log('Aucune photo suivante trouvée.');
         }
     });
 });
